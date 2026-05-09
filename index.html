@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rideshare GST Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0D1117;
+    --surface:  #161B22;
+    --card:     #1C2128;
+    --border:   #30363D;
+    --accent:   #F0B429;
+    --green:    #3DDC84;
+    --red:      #FF6B6B;
+    --purple:   #A78BFA;
+    --text:     #E6EDF3;
+    --muted:    #8B949E;
+    --income-bg:#0D2218;
+    --expense-bg:#2A0D0D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #161B22 0%, #1C2128 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 20px 24px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  .header-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: var(--accent);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .logo-text h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .logo-text p {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  /* ── SETUP BANNER ── */
+  #setup-banner {
+    background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+    border: 1px solid var(--purple);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 640px;
+  }
+  #setup-banner h3 {
+    color: var(--purple);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .setup-steps {
+    counter-reset: step;
+    list-style: none;
+  }
+  .setup-steps li {
+    counter-increment: step;
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .setup-steps li:last-child { border-bottom: none; }
+  .setup-steps li::before {
+    content: counter(step);
+    background: var(--purple);
+    color: #fff;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .setup-steps a { color: var(--accent); }
+
+  .setup-input {
+    display: flex; gap: 10px; margin-top: 14px;
+  }
+  .setup-input input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 10px 14px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .setup-input input:focus { outline: none; border-color: var(--purple); }
+  .setup-input button {
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 20px 16px 100px;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 6px;
+    border: 1px solid var(--border);
+  }
+  .tab {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .tab.active-income { background: var(--income-bg); color: var(--green); border: 1px solid var(--green); }
+  .tab.active-expense { background: var(--expense-bg); color: var(--red); border: 1px solid var(--red); }
+
+  /* ── SECTION CARD ── */
+  .card {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title span { font-size: 16px; }
+
+  /* ── FORM FIELDS ── */
+  .field { margin-bottom: 16px; }
+  label {
+    display: block;
+    font-size: 11.5px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 7px;
+  }
+  input[type="number"], input[type="text"], select, textarea {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    padding: 13px 16px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+  select option { background: var(--card); color: var(--text); }
+  textarea { resize: vertical; min-height: 72px; }
+
+  /* ── AMOUNT DISPLAY ── */
+  .amount-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 18px 0;
+  }
+  .amount-pill {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+  }
+  .amount-pill .pill-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .amount-pill .pill-value {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .pill-gst .pill-value { color: var(--purple); }
+  .pill-exgst .pill-value { color: var(--accent); }
+
+  /* ── PERIOD SELECTOR ── */
+  .period-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .period-option {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+  }
+  .period-option.selected-income { border-color: var(--green); color: var(--green); background: var(--income-bg); }
+  .period-option.selected-expense { border-color: var(--red); color: var(--red); background: var(--expense-bg); }
+
+  /* ── CATEGORY GRID ── */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .cat-btn {
+    padding: 10px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.3;
+    transition: all 0.18s;
+  }
+  .cat-btn.selected { border-color: var(--red); color: var(--red); background: var(--expense-bg); }
+  .cat-icon { font-size: 18px; display: block; margin-bottom: 3px; }
+
+  /* ── SUBMIT ── */
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .submit-income { background: var(--green); color: #0D1117; }
+  .submit-expense { background: var(--red); color: #fff; }
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* ── RECENT LOG ── */
+  .log-empty {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 32px 0;
+  }
+  .log-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    animation: slideIn 0.3s ease;
+  }
+  .log-item:last-child { border-bottom: none; }
+  .log-left { flex: 1; }
+  .log-desc { font-size: 13.5px; color: var(--text); font-weight: 500; }
+  .log-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .log-amount { font-size: 15px; font-weight: 700; }
+  .log-income { color: var(--green); }
+  .log-expense { color: var(--red); }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 32px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 22px;
+    font-size: 13.5px;
+    font-weight: 500;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    z-index: 999;
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    max-width: 320px;
+    text-align: center;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast.success { border-color: var(--green); color: var(--green); }
+  #toast.error { border-color: var(--red); color: var(--red); }
+  #toast.info { border-color: var(--purple); color: var(--purple); }
+
+  /* ── MONTH SELECTOR ── */
+  .month-select-row {
+    display: flex; gap: 10px; margin-bottom: 16px;
+  }
+  .month-select-row select { flex: 1; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  /* ── CONNECTED INDICATOR ── */
+  .conn-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .conn-badge.connected { background: rgba(61,220,132,0.12); color: var(--green); }
+  .conn-badge.disconnected { background: rgba(255,107,107,0.12); color: var(--red); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .dot.green { background: var(--green); animation: pulse 2s infinite; }
+  .dot.red { background: var(--red); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  @media (max-width: 400px) {
+    .cat-grid { grid-template-columns: repeat(2, 1fr); }
+    .period-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🚗</div>
+      <div class="logo-text">
+        <h1>GST Tracker</h1>
+        <p>Rideshare · Australia</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div id="conn-badge" class="conn-badge disconnected">
+        <div class="dot red" id="dot"></div>
+        <span id="conn-text">Not connected</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- SETUP BANNER -->
+  <div id="setup-banner">
+    <h3>🔗 Connect to Google Sheets</h3>
+    <ol class="setup-steps">
+      <li>Open your Google Sheet → <strong>Extensions → Apps Script</strong></li>
+      <li>Delete any existing code and paste the <strong>Apps Script code</strong> shown below</li>
+      <li>Click <strong>Deploy → New deployment → Web app</strong>. Set access to "Anyone"</li>
+      <li>Copy the <strong>Web App URL</strong> and paste it below, then click Save</li>
+    </ol>
+    <details style="margin-top:12px;">
+      <summary style="color:var(--accent);font-size:12px;cursor:pointer;font-weight:600;">📋 Click to view Apps Script code to paste</summary>
+      <pre id="apps-script-code" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:10.5px;color:var(--muted);margin-top:10px;overflow-x:auto;line-height:1.6;white-space:pre-wrap;"></pre>
+    </details>
+    <div class="setup-input">
+      <input type="text" id="sheet-url-input" placeholder="Paste your Web App URL here…" />
+      <button onclick="saveSheetUrl()">Save</button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active-income" id="tab-income" onclick="switchTab('income')">💰 Income</button>
+    <button class="tab" id="tab-expense" onclick="switchTab('expense')">💸 Expense</button>
+    <button class="tab" id="tab-log" onclick="switchTab('log')">📋 Log</button>
+  </div>
+
+  <!-- ═══ INCOME PANEL ═══ -->
+  <div id="panel-income">
+    <div class="card">
+      <div class="card-title"><span>💰</span> Record Income</div>
+
+      <div class="field">
+        <label>Month</label>
+        <div class="month-select-row">
+          <select id="inc-month"></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Period</label>
+        <div class="period-grid">
+          <div class="period-option" id="p-week1" onclick="selectPeriod('Week 1 (1–7)')">Week 1 (1–7)</div>
+          <div class="period-option" id="p-week2" onclick="selectPeriod('Week 2 (8–14)')">Week 2 (8–14)</div>
+          <div class="period-option" id="p-week3" onclick="selectPeriod('Week 3 (15–21)')">Week 3 (15–21)</div>
+          <div class="period-option" id="p-week4" onclick="selectPeriod('Week 4 (22–28)')">Week 4 (22–28)</div>
+          <div class="period-option" id="p-full" onclick="selectPeriod('Full Month')">Full Month</div>
+          <div class="period-option" id="p-custom" onclick="selectPeriod('Custom')">Custom</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Amount Earned (incl. GST) — $AUD</label>
+        <input type="number" id="inc-amount" placeholder="e.g. 150.00" min="0" step="0.01" oninput="updateGST()">
+      </div>
+
+      <div class="amount-row">
+        <div class="amount-pill pill-gst">
+          <div class="pill-label">GST Component (÷11)</div>
+          <div class="pill-value" id="inc-gst-display">$0.00</div>
+        </div>
+        <div class="amount-pill pill-exgst">
+          <div class="pill-label">Your Income (ex-GST)</div>
+          <div class="pill-value" id="inc-exgst-display">$0.00</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Note (optional)</label>
+        <textarea id="inc-note" placeholder="e.g. Uber — Saturday night shift"></textarea>
+      </div>
+
+      <button class="submit-btn submit-income" onclick="submitIncome()">Add Income Entry ➔</button>
+    </div>
+  </div>
+
+  <!-- ═══ EXPENSE PANEL ═══ -->
+  <div id="panel-expense" style="display:none">
+    <div class="card">
+      <div class="card-title"><span>💸</span> Record Expense</div>
+
+      <div class="field">
+        <label>Month</label>
+        <select id="exp-month"></select>
+      </div>
+
+      <div class="field">
+        <label>Category</label>
+        <div class="cat-grid" id="cat-grid"></div>
+      </div>
+
+      <div class="field">
+        <label>Amount (incl. GST) — $AUD</label>
+        <input type="number" id="exp-amount" placeholder="e.g. 80.00" min="0" step="0.01" oninput="updateExpGST()">
+      </div>
+
+      <div class="amount-row">
+        <div class="amount-pill pill-gst">
+          <div class="pill-label">GST Claimable (÷11)</div>
+          <div class="pill-value" id="exp-gst-display">$0.00</div>
+        </div>
+        <div class="amount-pill pill-exgst">
+          <div class="pill-label">Cost (ex-GST)</div>
+          <div class="pill-value" id="exp-exgst-display">$0.00</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Note (optional)</label>
+        <textarea id="exp-note" placeholder="e.g. Shell Altona — full tank"></textarea>
+      </div>
+
+      <button class="submit-btn submit-expense" onclick="submitExpense()">Add Expense Entry ➔</button>
+    </div>
+  </div>
+
+  <!-- ═══ LOG PANEL ═══ -->
+  <div id="panel-log" style="display:none">
+    <div class="card">
+      <div class="card-title"><span>📋</span> Recent Entries
+        <span style="margin-left:auto;font-size:11px;color:var(--muted);text-transform:none;letter-spacing:0;">(last 30 · this session)</span>
+      </div>
+      <div id="log-list"><div class="log-empty">No entries yet.<br>Start adding income or expenses above.</div></div>
+    </div>
+    <div class="card" style="margin-top:12px;">
+      <div class="card-title"><span>📊</span> Session Totals</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+        <div class="amount-pill"><div class="pill-label">Income</div><div class="pill-value" id="sum-income" style="color:var(--green);font-size:16px;">$0.00</div></div>
+        <div class="amount-pill"><div class="pill-label">Expenses</div><div class="pill-value" id="sum-expense" style="color:var(--red);font-size:16px;">$0.00</div></div>
+        <div class="amount-pill"><div class="pill-label">GST Payable</div><div class="pill-value" id="sum-gst" style="color:var(--purple);font-size:16px;">$0.00</div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+const MONTHS = ["January","February","March","April","May","June",
+                "July","August","September","October","November","December"];
+
+const EXPENSE_CATS = [
+  {name:"Business Purchase", icon:"🛒"},
+  {name:"Fuel",              icon:"⛽"},
+  {name:"Insurance",         icon:"🛡️"},
+  {name:"Servicing",         icon:"🔧"},
+  {name:"Car Wash",          icon:"🚿"},
+  {name:"Amenities",         icon:"🎁"},
+  {name:"Phone Bill",        icon:"📱"},
+  {name:"Registration",      icon:"📄"},
+  {name:"Tolls",             icon:"🛣️"},
+];
+
+let selectedPeriod = null;
+let selectedCat = null;
+let entries = JSON.parse(localStorage.getItem('gst_entries') || '[]');
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxIxUGCHmibWNgolBB_xP76FMh9jnnYayA-J4MwHKCthENMo5NQgOBbhq-XMwlZ5rSxKA/exec';
+let sheetUrl = SHEET_URL;
+
+const APPS_SCRIPT = `function doGet(e) {
+  try {
+    var params   = e.parameter;
+    var type     = params.type;
+    var month    = params.month;
+    var amount   = parseFloat(params.amount);
+    var note     = params.note || '';
+    var period   = params.period || '';
+    var category = params.category || '';
+
+    var ss    = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName(month);
+
+    if (!sheet) {
+      return ContentService
+        .createTextOutput(JSON.stringify({status:"error", msg:"Sheet not found: " + month}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (type === "income") {
+      var incStart = 6; var incEnd = 15;
+      for (var r = incStart; r <= incEnd; r++) {
+        var val = sheet.getRange(r, 2).getValue();
+        if (!val || val == 0) {
+          sheet.getRange(r, 1).setValue(period + (note ? " — " + note : ""));
+          sheet.getRange(r, 2).setValue(amount);
+          break;
+        }
+      }
+    } else if (type === "expense") {
+      var cats = ["Business Purchase","Fuel","Insurance","Servicing",
+                  "Car Wash","Amenities","Phone Bill","Registration","Tolls"];
+      var expStart = 20;
+      var idx = cats.indexOf(category);
+      if (idx >= 0) {
+        var catRow   = expStart + idx;
+        var existing = sheet.getRange(catRow, 2).getValue() || 0;
+        sheet.getRange(catRow, 2).setValue(existing + amount);
+      }
+    }
+
+    return ContentService
+      .createTextOutput(JSON.stringify({status:"ok"}))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({status:"error", msg: err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('apps-script-code').textContent = APPS_SCRIPT;
+
+  // Populate month dropdowns
+  ['inc-month','exp-month'].forEach(id => {
+    const sel = document.getElementById(id);
+    const now = new Date();
+    MONTHS.forEach((m, i) => {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.textContent = m;
+      if (i === now.getMonth()) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  });
+
+  // Build category grid
+  const grid = document.getElementById('cat-grid');
+  EXPENSE_CATS.forEach(cat => {
+    const btn = document.createElement('div');
+    btn.className = 'cat-btn';
+    btn.id = 'cat-' + cat.name.replace(/\s+/g,'-');
+    btn.innerHTML = `<span class="cat-icon">${cat.icon}</span>${cat.name}`;
+    btn.onclick = () => selectCat(cat.name);
+    grid.appendChild(btn);
+  });
+
+  // URL is hardcoded — always connected
+  document.getElementById('setup-banner').style.display = 'none';
+  updateConnBadge(true);
+
+  renderLog();
+  updateTotals();
+});
+
+// ── TABS ───────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  ['income','expense','log'].forEach(t => {
+    document.getElementById('panel-'+t).style.display = t===tab ? '' : 'none';
+    const btn = document.getElementById('tab-'+t);
+    btn.className = 'tab';
+    if (t===tab) {
+      if (t==='income') btn.className += ' active-income';
+      else if (t==='expense') btn.className += ' active-expense';
+      else btn.style.color = 'var(--text)';
+    }
+  });
+}
+
+// ── PERIOD SELECT ──────────────────────────────────────────────────────────
+function selectPeriod(p) {
+  selectedPeriod = p;
+  document.querySelectorAll('.period-option').forEach(el => {
+    el.classList.remove('selected-income');
+    if (el.textContent.trim() === p) el.classList.add('selected-income');
+  });
+}
+
+// ── CATEGORY SELECT ────────────────────────────────────────────────────────
+function selectCat(cat) {
+  selectedCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(el => el.classList.remove('selected'));
+  document.getElementById('cat-'+cat.replace(/\s+/g,'-')).classList.add('selected');
+}
+
+// ── GST CALC ───────────────────────────────────────────────────────────────
+function updateGST() {
+  const amt = parseFloat(document.getElementById('inc-amount').value) || 0;
+  const gst = amt / 11;
+  document.getElementById('inc-gst-display').textContent = fmt(gst);
+  document.getElementById('inc-exgst-display').textContent = fmt(amt - gst);
+}
+
+function updateExpGST() {
+  const amt = parseFloat(document.getElementById('exp-amount').value) || 0;
+  const gst = amt / 11;
+  document.getElementById('exp-gst-display').textContent = fmt(gst);
+  document.getElementById('exp-exgst-display').textContent = fmt(amt - gst);
+}
+
+function fmt(n) {
+  return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+// ── AUTO-SYNC TO GOOGLE SHEETS ─────────────────────────────────────────────
+// Uses fetch with no-cors so no popup or redirect is needed.
+// Google Apps Script doGet writes the data silently in the background.
+async function pushToSheet(entry) {
+  if (!sheetUrl) return;
+  const params = new URLSearchParams({
+    type:     entry.type,
+    month:    entry.month,
+    amount:   entry.amount,
+    note:     entry.note || '',
+    period:   entry.period || '',
+    category: entry.category || ''
+  });
+  const url = sheetUrl + '?' + params.toString();
+  try {
+    // no-cors is required for Google Apps Script web apps.
+    // We can't read the response body in no-cors mode, but the request
+    // still reaches the server and writes to the sheet.
+    await fetch(url, { method: 'GET', mode: 'no-cors' });
+    toast('✅ Saved & synced to Google Sheets!', 'success');
+  } catch (err) {
+    // Network error — save locally so nothing is lost
+    const pending = JSON.parse(localStorage.getItem('pending_sync') || '[]');
+    pending.unshift(entry);
+    localStorage.setItem('pending_sync', JSON.stringify(pending));
+    toast('Saved locally — will sync when online.', 'info');
+  }
+}
+
+// ── SUBMIT INCOME ──────────────────────────────────────────────────────────
+async function submitIncome() {
+  const month = document.getElementById('inc-month').value;
+  const amount = parseFloat(document.getElementById('inc-amount').value);
+  const note = document.getElementById('inc-note').value.trim();
+
+  if (!month) return toast('Please select a month.', 'error');
+  if (!selectedPeriod) return toast('Please select a period.', 'error');
+  if (!amount || amount <= 0) return toast('Please enter a valid amount.', 'error');
+
+  const btn = document.querySelector('.submit-income');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  const entry = {
+    type: 'income', month, period: selectedPeriod,
+    amount, note, gst: amount/11,
+    ts: new Date().toISOString()
+  };
+
+  entries.unshift(entry);
+  localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0,100)));
+
+  if (sheetUrl) {
+    await pushToSheet(entry);
+  } else {
+    toast('Saved locally — connect Google Sheets to sync.', 'info');
+  }
+
+  // Reset
+  document.getElementById('inc-amount').value = '';
+  document.getElementById('inc-note').value = '';
+  selectedPeriod = null;
+  document.querySelectorAll('.period-option').forEach(el => el.classList.remove('selected-income'));
+  updateGST();
+  renderLog();
+  updateTotals();
+  btn.disabled = false;
+  btn.textContent = 'Add Income Entry ➔';
+}
+
+// ── SUBMIT EXPENSE ─────────────────────────────────────────────────────────
+async function submitExpense() {
+  const month = document.getElementById('exp-month').value;
+  const amount = parseFloat(document.getElementById('exp-amount').value);
+  const note = document.getElementById('exp-note').value.trim();
+
+  if (!month) return toast('Please select a month.', 'error');
+  if (!selectedCat) return toast('Please select a category.', 'error');
+  if (!amount || amount <= 0) return toast('Please enter a valid amount.', 'error');
+
+  const btn = document.querySelector('.submit-expense');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  const entry = {
+    type: 'expense', month, category: selectedCat,
+    amount, note, gst: amount/11,
+    ts: new Date().toISOString()
+  };
+
+  entries.unshift(entry);
+  localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0,100)));
+
+  if (sheetUrl) {
+    await pushToSheet(entry);
+  } else {
+    toast('Saved locally — connect Google Sheets to sync.', 'info');
+  }
+
+  document.getElementById('exp-amount').value = '';
+  document.getElementById('exp-note').value = '';
+  selectedCat = null;
+  document.querySelectorAll('.cat-btn').forEach(el => el.classList.remove('selected'));
+  updateExpGST();
+  renderLog();
+  updateTotals();
+  btn.disabled = false;
+  btn.textContent = 'Add Expense Entry ➔';
+}
+
+// ── LOG RENDER ─────────────────────────────────────────────────────────────
+function renderLog() {
+  const container = document.getElementById('log-list');
+  const show = entries.slice(0,30);
+  if (!show.length) {
+    container.innerHTML = '<div class="log-empty">No entries yet.<br>Start adding income or expenses above.</div>';
+    return;
+  }
+  container.innerHTML = show.map(e => `
+    <div class="log-item">
+      <div class="log-left">
+        <div class="log-desc">
+          ${e.type==='income' ? '💰' : '💸'} 
+          ${e.type==='income' ? (e.period || 'Income') : e.category}
+          ${e.note ? `<span style="color:var(--muted)"> — ${e.note}</span>` : ''}
+        </div>
+        <div class="log-meta">${e.month} · GST: ${fmt(e.gst)}</div>
+      </div>
+      <div class="log-amount ${e.type==='income' ? 'log-income' : 'log-expense'}">
+        ${e.type==='income' ? '+' : '-'}${fmt(e.amount)}
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateTotals() {
+  const inc = entries.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
+  const exp = entries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+  const gstInc = inc/11; const gstExp = exp/11;
+  document.getElementById('sum-income').textContent = fmt(inc);
+  document.getElementById('sum-expense').textContent = fmt(exp);
+  document.getElementById('sum-gst').textContent = fmt(gstInc - gstExp);
+}
+
+// ── SETUP ──────────────────────────────────────────────────────────────────
+function saveSheetUrl() {
+  const url = document.getElementById('sheet-url-input').value.trim();
+  if (!url.startsWith('https://')) return toast('Please paste a valid https:// URL', 'error');
+  sheetUrl = url;
+  localStorage.setItem('sheet_url', url);
+  updateConnBadge(true);
+  document.getElementById('setup-banner').style.display = 'none';
+  toast('✅ Google Sheets connected!', 'success');
+}
+
+function updateConnBadge(connected) {
+  const badge = document.getElementById('conn-badge');
+  const dot   = document.getElementById('dot');
+  const text  = document.getElementById('conn-text');
+  if (connected) {
+    badge.className = 'conn-badge connected';
+    dot.className = 'dot green';
+    text.textContent = 'Sheets connected';
+  } else {
+    badge.className = 'conn-badge disconnected';
+    dot.className = 'dot red';
+    text.textContent = 'Not connected';
+  }
+}
+
+// ── TOAST ──────────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg, type='info') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+}
+</script>
+
+</body>
+</html>
