@@ -1907,14 +1907,17 @@ function closeDrawer() {
 // ── TABS ──────────────────────────────────────────────────────────────────
 function switchTab(tab) {
   ['income','expense','log','progress'].forEach(t => {
-    document.getElementById('panel-'+t).style.display = t===tab ? '' : 'none';
+    const panel = document.getElementById('panel-'+t);
+    if (panel) panel.style.display = t===tab ? '' : 'none';
     const btn = document.getElementById('tab-'+t);
-    btn.className = 'tab';
-    if (t===tab) {
-      if (t==='income')   btn.className += ' active-income';
-      else if (t==='expense')  btn.className += ' active-expense';
-      else if (t==='progress') btn.className += ' active-progress';
-      else btn.className += ' active-logs';
+    if (btn) {
+      btn.className = 'tab';
+      if (t===tab) {
+        if (t==='income')        btn.className += ' active-income';
+        else if (t==='expense')  btn.className += ' active-expense';
+        else if (t==='progress') btn.className += ' active-progress';
+        else                     btn.className += ' active-logs';
+      }
     }
   });
   if (tab === 'progress') renderProgress();
