@@ -534,7 +534,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 1.8</div>
+  <div class="splash-ver">Version 1.8.1</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -649,6 +649,9 @@
     <h2>⚙️ Menu</h2>
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
+  <div style="padding:12px 20px 0;border-bottom:1px solid var(--border);">
+    <div id="drawer-profile-name" style="font-size:13px;color:var(--muted);padding-bottom:12px;"></div>
+  </div>
 
   <div class="drawer-section">
     <div class="drawer-section-title">Connection</div>
@@ -665,6 +668,13 @@
       <div>
         <div class="drawer-row-label">My Logs</div>
         <div class="drawer-row-sub">View entries · Export PDF · Manage data</div>
+      </div>
+    </div>
+    <div class="drawer-row" onclick="openMyDocuments(); closeDrawer();">
+      <div class="drawer-row-icon">📁</div>
+      <div>
+        <div class="drawer-row-label">My Documents</div>
+        <div class="drawer-row-sub">Receipts & saved files</div>
       </div>
     </div>
     <div class="drawer-row" onclick="openCatModal(); closeDrawer();">
@@ -731,7 +741,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 1.8</strong>
+    <strong style="color:var(--accent);">Version 1.8.1</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -743,7 +753,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v1.8</p>
+        <p>Endless Digital World · v1.8.1</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -757,8 +767,6 @@
   <div class="tabs">
     <button class="tab active-income" id="tab-income"    onclick="switchTab('income')">💰 Income</button>
     <button class="tab"               id="tab-expense"   onclick="switchTab('expense')">💸 Expense</button>
-    <button class="tab"               id="tab-log"       onclick="switchTab('log')">📋 Log</button>
-    <button class="tab"               id="tab-progress"  onclick="switchTab('progress')">🏆</button>
   </div>
 
   <!-- ═══ INCOME PANEL ═══ -->
@@ -834,6 +842,23 @@
       <div class="field">
         <label>Note (optional)</label>
         <textarea id="exp-note" placeholder="e.g. Shell Altona — full tank"></textarea>
+      </div>
+      <div class="field">
+        <label>Receipt (optional)</label>
+        <div style="background:var(--card);border:1px dashed var(--border);border-radius:10px;padding:14px 16px;text-align:center;cursor:pointer;transition:border-color 0.2s;" onclick="document.getElementById('receipt-file-input').click()" id="receipt-upload-zone">
+          <div style="font-size:22px;margin-bottom:4px;">📷</div>
+          <div style="font-size:12px;color:var(--muted);">Tap to scan or attach a receipt <span style="color:var(--accent);font-weight:600;">(optional)</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;">Photo, PDF or image — saved to My Documents</div>
+        </div>
+        <input type="file" id="receipt-file-input" accept="image/*,application/pdf" capture="environment" style="display:none;" onchange="previewReceipt(event)">
+        <div id="receipt-preview" style="display:none;margin-top:10px;background:var(--card);border:1px solid var(--green);border-radius:10px;padding:10px 14px;display:none;align-items:center;gap:10px;">
+          <span style="font-size:20px;">📄</span>
+          <div style="flex:1;">
+            <div id="receipt-filename" style="font-size:12px;color:var(--green);font-weight:600;"></div>
+            <div style="font-size:11px;color:var(--muted);">Will be saved to My Documents</div>
+          </div>
+          <button onclick="clearReceipt()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;">✕</button>
+        </div>
       </div>
       <button class="submit-btn submit-expense" onclick="submitExpense()">Add Expense Entry ➔</button>
     </div>
@@ -1091,7 +1116,7 @@
       This app uses Google Fonts (DM Sans, DM Serif Display) for display purposes only. No analytics, no tracking scripts, no advertising SDKs are included.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8 · Endless Digital World · For personal record-keeping only</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.1 · Endless Digital World · For personal record-keeping only</p>
     </div>
   </div>
 </div>
@@ -1153,6 +1178,13 @@
         <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;">We're here to help!</div>
         <div style="font-size:12px;color:var(--muted);line-height:1.6;">Got a question, issue or feedback? Send us an email and we'll get back to you within <strong style="color:var(--accent);">7 business days</strong>.</div>
       </div>
+      <div class="modal-section-title">📖 Setup Guide</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6;">Download the complete 7-page setup guide covering all app features, Google Sheets integration, and how to get the most out of Smart GST Tracker.</div>
+        <button onclick="openSetupGuidePDF()" style="width:100%;padding:12px 16px;border-radius:10px;border:none;background:var(--accent);color:#0D1117;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+          <span>📄</span> View Setup Guide (PDF)
+        </button>
+      </div>
       <div class="modal-section-title">Contact Us</div>
       <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;">
         <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Email</div>
@@ -1185,20 +1217,24 @@
       <div class="modal-section-title">How to Earn Points</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-size:13px;color:var(--text);">Income over $100</div>
+          <div style="font-size:13px;color:var(--text);">Income over $1</div>
           <div style="font-size:14px;font-weight:700;color:var(--accent);">+5 pts</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-size:13px;color:var(--text);">Income over $500</div>
+          <div style="font-size:13px;color:var(--text);">Income over $50</div>
           <div style="font-size:14px;font-weight:700;color:var(--accent);">+15 pts</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:13px;color:var(--text);">Income over $100</div>
+          <div style="font-size:14px;font-weight:700;color:var(--accent);">+500 pts</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
           <div style="font-size:13px;color:var(--text);">Income over $1,000</div>
-          <div style="font-size:14px;font-weight:700;color:var(--accent);">+30 pts</div>
+          <div style="font-size:14px;font-weight:700;color:var(--accent);">+2,000 pts</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
           <div style="font-size:13px;color:var(--text);">Income over $2,000</div>
-          <div style="font-size:14px;font-weight:700;color:var(--accent);">+100 pts</div>
+          <div style="font-size:14px;font-weight:700;color:var(--accent);">+5,000 pts</div>
         </div>
       </div>
       <div class="modal-section-title">Share Your Score</div>
@@ -1214,6 +1250,22 @@
           <span style="font-size:20px;">📤</span> Share via…
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MY DOCUMENTS MODAL ── -->
+<div id="my-documents-modal" class="generic-modal">
+  <div class="modal-box" style="max-width:500px;">
+    <div class="modal-header">
+      <h2>📁 My Documents</h2>
+      <button class="modal-close" onclick="closeMyDocuments()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:0;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);">
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">Receipts you attach when logging expenses are saved here as PDF or image files, accessible anytime.</div>
+      </div>
+      <div id="my-documents-body" style="padding:0 20px;max-height:60vh;overflow-y:auto;"></div>
     </div>
   </div>
 </div>
@@ -1260,7 +1312,7 @@
       <div style="text-align:center;padding:16px 0 20px;">
         <div style="font-size:36px;margin-bottom:6px;">💰</div>
         <div style="font-size:17px;font-weight:700;color:var(--accent);">Smart GST Tracker</div>
-        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 1.8</div>
+        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 1.8.1</div>
       </div>
 
       <div class="modal-section-title">📱 Web App Features</div>
@@ -1350,7 +1402,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.8';
+const APP_VERSION = '1.8.1';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -1396,9 +1448,19 @@ const EMOJI_MAP = [
 
 const WHATS_NEW = [
   {
+    version: '1.8.1',
+    items: [
+      'Rewards program updated',
+      'Receipt scanning — optionally attach a receipt when logging expenses (saved as PDF under My Logs → My Documents)',
+      'Permanent local profile — your name and data are remembered for up to 7 years, even after clearing browser history',
+      'Setup Guide PDF added in Help & Support',
+      'App version now shown at the bottom of the hamburger menu',
+    ]
+  },
+  {
     version: '1.8',
     items: [
-      'Rewards & Points — earn points every time you log income ($100=5pts, $500=15pts, $1000=30pts, $2000=100pts)',
+      'Rewards & Points — earn points every time you log income',
       'Share your points score on Instagram Stories and social media with friends',
       'Rearrange expense categories — dedicated button in Manage Categories (drag & drop reorder mode)',
       'App version now shown on the loading/splash screen',
@@ -1525,7 +1587,169 @@ function hashPin(pin)    { // simple reversible for localStorage (not crypto —
   return btoa(pin + '_edw_gst');
 }
 
-// ── SETUP SCREEN ──────────────────────────────────────────────────────────
+// ── PERMANENT PROFILE (IndexedDB — survives browser history clear) ────────
+const EDW_DB_NAME = 'edw_smart_gst';
+const EDW_DB_VERSION = 1;
+const EDW_STORE = 'profile';
+
+function openProfileDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(EDW_DB_NAME, EDW_DB_VERSION);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(EDW_STORE)) {
+        db.createObjectStore(EDW_STORE, { keyPath: 'key' });
+      }
+    };
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror   = () => reject(req.error);
+  });
+}
+
+async function saveProfileData(key, value) {
+  try {
+    const db = await openProfileDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(EDW_STORE, 'readwrite');
+      tx.objectStore(EDW_STORE).put({ key, value, ts: Date.now() });
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch(e) { console.warn('ProfileDB save failed', e); }
+}
+
+async function getProfileData(key) {
+  try {
+    const db = await openProfileDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(EDW_STORE, 'readonly');
+      const req = tx.objectStore(EDW_STORE).get(key);
+      req.onsuccess = () => resolve(req.result ? req.result.value : null);
+      req.onerror = () => reject(req.error);
+    });
+  } catch(e) { return null; }
+}
+
+// 7 years in ms
+const PROFILE_TTL = 7 * 365 * 24 * 60 * 60 * 1000;
+
+async function getProfileName() {
+  // Check IndexedDB first (survives browser history clear)
+  let name = await getProfileData('user_name');
+  if (name) {
+    // Also restore to localStorage for other lookups
+    localStorage.setItem('edw_user_name', name);
+    return name;
+  }
+  // Fallback to localStorage
+  return localStorage.getItem('edw_user_name') || null;
+}
+
+async function saveProfileName(name) {
+  await saveProfileData('user_name', name);
+  localStorage.setItem('edw_user_name', name);
+}
+
+async function restoreProfileFromDB() {
+  // Restore entries from IndexedDB if localStorage was cleared
+  if (!localStorage.getItem('gst_entries') || localStorage.getItem('gst_entries') === '[]') {
+    const saved = await getProfileData('gst_entries_backup');
+    if (saved) {
+      localStorage.setItem('gst_entries', saved);
+      entries = JSON.parse(saved);
+      renderLog(); updateTotals();
+    }
+  }
+  // Restore categories
+  if (!localStorage.getItem('gst_categories')) {
+    const savedCats = await getProfileData('gst_categories_backup');
+    if (savedCats) {
+      localStorage.setItem('gst_categories', savedCats);
+      categories = JSON.parse(savedCats);
+      buildCatGrid();
+    }
+  }
+  // Restore sheet URL
+  if (!localStorage.getItem(SHEET_URL_KEY)) {
+    const savedUrl = await getProfileData('sheet_url_backup');
+    if (savedUrl) localStorage.setItem(SHEET_URL_KEY, savedUrl);
+  }
+  // Restore points
+  if (!localStorage.getItem('edw_points')) {
+    const savedPts = await getProfileData('edw_points_backup');
+    if (savedPts) localStorage.setItem('edw_points', savedPts);
+  }
+}
+
+// Sync critical data to IndexedDB on every save
+function backupToProfileDB() {
+  saveProfileData('gst_entries_backup', localStorage.getItem('gst_entries') || '[]');
+  saveProfileData('gst_categories_backup', localStorage.getItem('gst_categories') || 'null');
+  saveProfileData('sheet_url_backup', localStorage.getItem(SHEET_URL_KEY) || '');
+  saveProfileData('edw_points_backup', localStorage.getItem('edw_points') || '0');
+}
+
+// ── NAME PROMPT MODAL ─────────────────────────────────────────────────────
+function showNamePrompt(onComplete) {
+  // Create a simple name entry overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'name-prompt-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99998;display:flex;align-items:center;justify-content:center;padding:24px;';
+  overlay.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:32px 24px;width:100%;max-width:380px;text-align:center;">
+      <div style="font-size:48px;margin-bottom:12px;">👋</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent);margin-bottom:6px;">Welcome to Smart GST Tracker</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;">Enter your name to set up your personal profile. Your data will be remembered for up to 7 years.</div>
+      <input type="text" id="name-prompt-input" placeholder="Your first name…" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:14px 16px;font-size:15px;font-family:'DM Sans',sans-serif;margin-bottom:16px;box-sizing:border-box;">
+      <div id="name-prompt-error" style="font-size:12px;color:var(--red);min-height:18px;margin-bottom:10px;"></div>
+      <button id="name-prompt-btn" style="width:100%;padding:16px;border-radius:12px;border:none;background:var(--accent);color:#0D1117;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Get Started ➔</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  const input = overlay.querySelector('#name-prompt-input');
+  const btn   = overlay.querySelector('#name-prompt-btn');
+  const err   = overlay.querySelector('#name-prompt-error');
+  input.focus();
+  const submit = async () => {
+    const val = input.value.trim();
+    if (!val) { err.textContent = 'Please enter your name.'; return; }
+    await saveProfileName(val);
+    overlay.remove();
+    onComplete(val);
+  };
+  btn.addEventListener('click', submit);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+}
+
+// ── RETURNING USER NAME PROMPT (browser history deleted) ──────────────────
+function showReturningNamePrompt(onComplete) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99998;display:flex;align-items:center;justify-content:center;padding:24px;';
+  overlay.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:32px 24px;width:100%;max-width:380px;text-align:center;">
+      <div style="font-size:48px;margin-bottom:12px;">🔄</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--accent);margin-bottom:6px;">Welcome Back!</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;">It looks like your browser history was cleared. Enter your name to restore your profile and data.</div>
+      <input type="text" id="returning-name-input" placeholder="Your name…" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:14px 16px;font-size:15px;font-family:'DM Sans',sans-serif;margin-bottom:16px;box-sizing:border-box;">
+      <div id="returning-name-error" style="font-size:12px;color:var(--red);min-height:18px;margin-bottom:10px;"></div>
+      <button id="returning-name-btn" style="width:100%;padding:16px;border-radius:12px;border:none;background:var(--accent);color:#0D1117;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Restore My Data ➔</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  const input = overlay.querySelector('#returning-name-input');
+  const btn   = overlay.querySelector('#returning-name-btn');
+  const err   = overlay.querySelector('#returning-name-error');
+  input.focus();
+  const submit = async () => {
+    const val = input.value.trim();
+    if (!val) { err.textContent = 'Please enter your name.'; return; }
+    // Save name back to both stores
+    await saveProfileName(val);
+    overlay.remove();
+    onComplete(val);
+  };
+  btn.addEventListener('click', submit);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+}
+
 function showSetupScreen() {
   document.getElementById('setup-screen').classList.add('active');
 }
@@ -1589,18 +1813,45 @@ function updateConnectionStatus() {
 }
 
 // ── SPLASH & INIT ─────────────────────────────────────────────────────────
-setTimeout(() => {
+setTimeout(async () => {
   const splash = document.getElementById('splash');
   if (splash) splash.style.display = 'none';
 
+  // Restore data from IndexedDB in case localStorage was cleared
+  await restoreProfileFromDB();
+
   const url = getSheetUrl();
-  if (!url) {
-    // First time — show setup screen
-    showSetupScreen();
-  } else if (getPinEnabled() && getPin()) {
-    document.getElementById('pin-lock').classList.add('active');
+  const profileName = await getProfileName();
+  const lsName = localStorage.getItem('edw_user_name');
+
+  if (!profileName) {
+    // Completely new user — show name prompt then setup
+    showNamePrompt(async (name) => {
+      updateDrawerProfile(name);
+      if (!url) showSetupScreen();
+      else updateConnectionStatus();
+    });
+  } else if (!lsName && profileName) {
+    // Has IndexedDB profile but localStorage was cleared (browser history delete)
+    showReturningNamePrompt(async (name) => {
+      updateDrawerProfile(name);
+      await restoreProfileFromDB();
+      renderLog(); updateTotals(); updateDrawerPointsSub();
+      updateConnectionStatus();
+      if (!getSheetUrl()) showSetupScreen();
+    });
+  } else {
+    // Normal returning user
+    updateDrawerProfile(profileName);
+    if (!url) showSetupScreen();
+    else if (getPinEnabled() && getPin()) {
+      document.getElementById('pin-lock').classList.add('active');
+    }
+    updateConnectionStatus();
   }
-  updateConnectionStatus();
+
+  // Backup to IndexedDB on every load
+  backupToProfileDB();
 }, 2700);
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1637,6 +1888,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Private browser warning (every 6 hours)
   setTimeout(checkPrivateBrowser, 1500);
 });
+
+function updateDrawerProfile(name) {
+  const el = document.getElementById('drawer-profile-name');
+  if (el && name) el.textContent = '👤 ' + name;
+}
 
 // ── DRAWER ────────────────────────────────────────────────────────────────
 function openDrawer() {
@@ -1762,6 +2018,7 @@ async function submitIncome() {
   const entry = {type:'income', month, period:selectedPeriod, amount, note, gst:calcGst(amount), ts:new Date().toISOString()};
   entries.unshift(entry);
   localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0,APP_STORAGE_LIMIT)));
+  backupToProfileDB();
   awardPoints(amount);
   await pushToSheet(entry);
 
@@ -1787,6 +2044,15 @@ async function submitExpense() {
   const entry = {type:'expense', month, category:selectedCat, amount, note, gst:calcGst(amount), ts:new Date().toISOString()};
   entries.unshift(entry);
   localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0,APP_STORAGE_LIMIT)));
+  backupToProfileDB();
+
+  // Save receipt if attached
+  if (pendingReceiptData) {
+    saveReceiptToDocuments(pendingReceiptData, note, selectedCat, month);
+    toast('📄 Receipt saved to My Documents!', 'success');
+    clearReceipt();
+  }
+
   await pushToSheet(entry);
 
   document.getElementById('exp-amount').value = '';
@@ -1887,7 +2153,7 @@ function exportLogsPDF() {
     <div class="sum-box"><div class="sum-label">GST Payable to ATO</div><div class="sum-val" style="color:#6c3eaa">${fmt(totalGST)}</div></div>
   </div>
   <p style="margin-top:24px;font-size:11px;color:#aaa;">Smart GST Tracker v${APP_VERSION} · Endless Digital World · For personal record-keeping only</p>
-  <script>window.onload=()=>window.print();<\/script>
+  <${'script'}>window.onload=()=>window.print();</${'script'}>
   </body></html>`;
 
   const w = window.open('','_blank');
@@ -2661,10 +2927,11 @@ function setPoints(p) {
   updateDrawerPointsSub();
 }
 function calcPointsForIncome(amount) {
-  if (amount > 2000) return 100;
-  if (amount > 1000) return 30;
-  if (amount > 500)  return 15;
-  if (amount > 100)  return 5;
+  if (amount > 2000) return 5000;
+  if (amount > 1000) return 2000;
+  if (amount > 100)  return 500;
+  if (amount > 50)   return 15;
+  if (amount > 1)    return 5;
   return 0;
 }
 function awardPoints(amount) {
@@ -2689,12 +2956,24 @@ function sharePoints(method) {
   const pts = getPoints();
   const msg = `🏅 I've earned ${pts} points on Smart GST Tracker by Endless Digital World! Track your income & GST like a pro. 💰 #SmartGSTTracker #EDW`;
   if (method === 'instagram') {
-    // Copy text then open Instagram (Instagram doesn't allow direct share via URL on desktop)
+    // Try to open Instagram app directly; copy text as fallback
     navigator.clipboard.writeText(msg).then(() => {
-      toast('📋 Text copied! Open Instagram and paste into your Story.', 'info');
-      setTimeout(() => window.open('https://www.instagram.com/', '_blank'), 1000);
+      toast('📋 Score copied! Opening Instagram…', 'info');
+      setTimeout(() => {
+        // Try deep link to Instagram Stories on mobile
+        const igDeep = 'instagram-stories://share';
+        const igApp  = 'instagram://app';
+        // On mobile devices try the deep link; fallback to instagram.com
+        try {
+          window.location.href = igApp;
+          setTimeout(() => window.open('https://www.instagram.com/', '_blank'), 1500);
+        } catch {
+          window.open('https://www.instagram.com/', '_blank');
+        }
+      }, 600);
     }).catch(() => {
       toast('Please copy manually: ' + msg, 'info');
+      setTimeout(() => window.open('https://www.instagram.com/', '_blank'), 800);
     });
   } else if (method === 'copy') {
     navigator.clipboard.writeText(msg).then(() => {
@@ -2713,7 +2992,305 @@ function sharePoints(method) {
   }
 }
 
-// ── REARRANGE MODE (Categories) ───────────────────────────────────────────
+// ── RECEIPT HANDLING ──────────────────────────────────────────────────────
+let pendingReceiptData = null; // { name, dataUrl, type }
+
+function previewReceipt(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    pendingReceiptData = { name: file.name, dataUrl: e.target.result, type: file.type, ts: new Date().toISOString() };
+    const preview = document.getElementById('receipt-preview');
+    document.getElementById('receipt-filename').textContent = file.name;
+    preview.style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearReceipt() {
+  pendingReceiptData = null;
+  document.getElementById('receipt-preview').style.display = 'none';
+  document.getElementById('receipt-file-input').value = '';
+}
+
+function saveReceiptToDocuments(receipt, entryNote, category, month) {
+  const docs = JSON.parse(localStorage.getItem('edw_documents') || '[]');
+  docs.unshift({
+    id: Date.now(),
+    name: receipt.name,
+    dataUrl: receipt.dataUrl,
+    type: receipt.type,
+    entryNote: entryNote || '',
+    category: category || '',
+    month: month || '',
+    ts: receipt.ts
+  });
+  // Limit to 200 documents
+  localStorage.setItem('edw_documents', JSON.stringify(docs.slice(0, 200)));
+  saveProfileData('edw_documents_backup', JSON.stringify(docs.slice(0, 200)));
+}
+
+function openMyDocuments() {
+  renderMyDocuments();
+  document.getElementById('my-documents-modal').classList.add('open');
+}
+function closeMyDocuments() {
+  document.getElementById('my-documents-modal').classList.remove('open');
+}
+
+function renderMyDocuments() {
+  const docs = JSON.parse(localStorage.getItem('edw_documents') || '[]');
+  const body = document.getElementById('my-documents-body');
+  if (!docs.length) {
+    body.innerHTML = '<div class="log-empty-msg" style="padding:32px 0;text-align:center;color:var(--muted);">No receipts saved yet.<br>Attach receipts when logging expenses.</div>';
+    return;
+  }
+  body.innerHTML = docs.map((doc, i) => `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+      <div style="font-size:28px;flex-shrink:0;">${doc.type && doc.type.startsWith('image') ? '🖼️' : '📄'}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${doc.name}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">${doc.category || ''} · ${doc.month || ''} · ${new Date(doc.ts).toLocaleDateString('en-AU')}</div>
+        ${doc.entryNote ? `<div style="font-size:11px;color:var(--muted);">${doc.entryNote}</div>` : ''}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+        <button onclick="viewDocument(${i})" style="background:var(--accent);color:#0D1117;border:none;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">View</button>
+        <button onclick="deleteDocument(${i})" style="background:var(--expense-bg);color:var(--red);border:1px solid rgba(255,107,107,0.3);border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+function viewDocument(index) {
+  const docs = JSON.parse(localStorage.getItem('edw_documents') || '[]');
+  const doc = docs[index];
+  if (!doc) return;
+  // Open document in new window / download
+  const w = window.open('', '_blank');
+  if (doc.type && doc.type.startsWith('image')) {
+    w.document.write(`<!DOCTYPE html><html><head><title>${doc.name}</title></head><body style="margin:0;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh;"><img src="${doc.dataUrl}" style="max-width:100%;max-height:100vh;object-fit:contain;"></body></html>`);
+  } else {
+    // For PDFs and other files — trigger download
+    const a = document.createElement('a');
+    a.href = doc.dataUrl;
+    a.download = doc.name;
+    a.click();
+    w.close();
+  }
+}
+
+function deleteDocument(index) {
+  const docs = JSON.parse(localStorage.getItem('edw_documents') || '[]');
+  docs.splice(index, 1);
+  localStorage.setItem('edw_documents', JSON.stringify(docs));
+  saveProfileData('edw_documents_backup', JSON.stringify(docs));
+  renderMyDocuments();
+  toast('Receipt deleted.', 'info');
+}
+
+
+// ── SETUP GUIDE PDF ───────────────────────────────────────────────────────
+function openSetupGuidePDF() {
+  const html = `<!DOCTYPE html><html><head><title>Smart GST Tracker — Setup Guide</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: #222; margin: 0; padding: 0; }
+    .page { width: 210mm; min-height: 297mm; padding: 20mm 22mm; box-sizing: border-box; page-break-after: always; position: relative; }
+    .page:last-child { page-break-after: auto; }
+    h1 { color: #1a1a2e; font-size: 22px; margin-bottom: 6px; }
+    h2 { color: #1a1a2e; font-size: 16px; margin-top: 24px; margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+    p, li { font-size: 12px; line-height: 1.7; color: #444; }
+    ul { padding-left: 18px; }
+    .cover-logo { font-size: 56px; text-align: center; margin: 30px 0 10px; }
+    .cover-title { font-size: 28px; font-weight: 900; color: #1a1a2e; text-align: center; }
+    .cover-sub { font-size: 13px; color: #666; text-align: center; margin-top: 6px; }
+    .cover-version { font-size: 11px; color: #f0b429; text-align: center; margin-top: 4px; font-weight: 700; }
+    .step-box { background: #f9f9f9; border-left: 3px solid #f0b429; border-radius: 6px; padding: 12px 16px; margin-bottom: 12px; }
+    .step-num { font-size: 11px; font-weight: 700; color: #f0b429; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tip { background: #e8f8f1; border-left: 3px solid #3DDC84; border-radius: 6px; padding: 10px 14px; margin: 10px 0; font-size: 11px; color: #1a5c38; }
+    .warn { background: #fff8e6; border-left: 3px solid #f0b429; border-radius: 6px; padding: 10px 14px; margin: 10px 0; font-size: 11px; color: #7a5500; }
+    .footer { position: absolute; bottom: 14mm; left: 22mm; right: 22mm; display: flex; justify-content: space-between; font-size: 9px; color: #aaa; border-top: 1px solid #eee; padding-top: 6px; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+    th { background: #1a1a2e; color: #fff; padding: 8px 10px; font-size: 11px; text-align: left; }
+    td { padding: 8px 10px; font-size: 11px; border-bottom: 1px solid #eee; }
+    .disclaimer { font-size: 7px; color: #bbb; line-height: 1.5; }
+    @media print { body { margin: 0; } }
+  </style>
+  </head><body>
+
+  <!-- PAGE 1: COVER -->
+  <div class="page">
+    <div style="height:60mm;"></div>
+    <div class="cover-logo">💰</div>
+    <div class="cover-title">Smart GST Tracker</div>
+    <div class="cover-sub">Complete Setup &amp; User Guide</div>
+    <div class="cover-sub" style="margin-top:4px;">by <strong>Endless Digital World</strong></div>
+    <div class="cover-version">Version 1.8.1</div>
+    <div style="height:30mm;"></div>
+    <div style="background:#f9f9f9;border:1px solid #eee;border-radius:10px;padding:16px 20px;text-align:center;">
+      <p style="margin:0;font-size:12px;color:#555;">This guide covers everything you need to set up and use<br>Smart GST Tracker and your connected Google Sheet.</p>
+    </div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 1 of 7</span></div>
+  </div>
+
+  <!-- PAGE 2: GETTING STARTED -->
+  <div class="page">
+    <h1>Getting Started</h1>
+    <p>Welcome to Smart GST Tracker — the easiest way to track your income, expenses, and GST as an Australian small business owner or sole trader. This guide walks you through the initial setup and core features.</p>
+    <h2>What You Need</h2>
+    <ul>
+      <li>A modern web browser (Chrome, Safari, Firefox, Edge)</li>
+      <li>A Google account (for Google Sheets integration)</li>
+      <li>Your Smart GST Tracker Google Sheet (included in your Etsy purchase)</li>
+    </ul>
+    <h2>Step-by-Step Setup</h2>
+    <div class="step-box">
+      <div class="step-num">Step 1 — Open Your Google Sheet</div>
+      <p>Use the link provided in your Etsy purchase to open the Smart GST Tracker Google Sheet. Go to <strong>File → Make a copy</strong> to save it to your own Google Drive.</p>
+    </div>
+    <div class="step-box">
+      <div class="step-num">Step 2 — Deploy Your Apps Script</div>
+      <p>In your Google Sheet, go to <strong>Extensions → Apps Script</strong>. Click <strong>Deploy → New deployment</strong>. Select <strong>Web app</strong>. Set "Who has access" to <strong>Anyone</strong>. Click Deploy and authorise. Copy the URL provided.</p>
+    </div>
+    <div class="step-box">
+      <div class="step-num">Step 3 — Connect the App</div>
+      <p>Open Smart GST Tracker in your browser. On the setup screen, paste your Apps Script URL and tap <strong>Connect My Sheet</strong>. Done!</p>
+    </div>
+    <div class="tip">💡 Tip: Bookmark the app in your browser for instant access.</div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 2 of 7</span></div>
+  </div>
+
+  <!-- PAGE 3: LOGGING INCOME & EXPENSES -->
+  <div class="page">
+    <h1>Logging Income &amp; Expenses</h1>
+    <h2>Recording Income</h2>
+    <p>Tap <strong>Income</strong> on the main screen to record an income entry.</p>
+    <ul>
+      <li><strong>Month:</strong> Select the month this income belongs to.</li>
+      <li><strong>Period:</strong> Choose Week 1–4 or Full Month.</li>
+      <li><strong>Amount:</strong> Enter the total amount <em>including GST</em>. The app automatically splits out the GST and ex-GST amounts.</li>
+      <li><strong>Note:</strong> Optionally add a description.</li>
+    </ul>
+    <div class="tip">💡 Always enter the full amount including GST — the app calculates everything automatically.</div>
+    <h2>Recording Expenses</h2>
+    <p>Tap <strong>Expense</strong> on the main screen to record an expense.</p>
+    <ul>
+      <li><strong>Category:</strong> Select or create a category (e.g. Fuel, Insurance, Tolls).</li>
+      <li><strong>Amount:</strong> Enter the total amount including GST.</li>
+      <li><strong>Note:</strong> Add a description for your records.</li>
+      <li><strong>Receipt (optional):</strong> Attach a photo or PDF receipt — saved to My Documents.</li>
+    </ul>
+    <h2>Receipt Scanning</h2>
+    <p>When submitting an expense you can attach a photo or PDF receipt. Access saved receipts at any time via <strong>☰ Menu → My Documents</strong>.</p>
+    <div class="warn">⚠️ Receipts are stored locally. Export important receipts for long-term backup.</div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 3 of 7</span></div>
+  </div>
+
+  <!-- PAGE 4: GOOGLE SHEETS FEATURES -->
+  <div class="page">
+    <h1>Google Sheets Features</h1>
+    <p>Your Smart GST Tracker Google Sheet is a powerful companion to the app. Every entry syncs instantly.</p>
+    <h2>Monthly Sheets</h2>
+    <p>The workbook has 12 monthly tabs (January–December). Each records income, expense categories, GST, and ex-GST totals. Rows are added automatically with each entry.</p>
+    <h2>Dashboard Overview</h2>
+    <p>The Dashboard tab shows a full financial year view — income, expenses, net profit, and GST payable for every month. Charts update automatically.</p>
+    <h2>Quarterly ATO Breakdown</h2>
+    <p>Quarterly totals are aligned to ATO BAS periods (Q1–Q4) with GST payable per quarter, making BAS lodgement much easier.</p>
+    <h2>Syncing Data to the App</h2>
+    <p>Go to <strong>☰ Menu → My Progress</strong> and tap <strong>Get Data from Sheet</strong> to load all 12 months into the app for charts and rankings.</p>
+    <h2>Custom Categories</h2>
+    <p>Categories you add in the app are automatically synced to your Google Sheet with the correct GST formula.</p>
+    <table>
+      <tr><th>Sheet Tab</th><th>Purpose</th></tr>
+      <tr><td>January–December</td><td>Monthly income &amp; expense entries</td></tr>
+      <tr><td>Dashboard</td><td>Full-year overview &amp; charts</td></tr>
+      <tr><td>Quarterly</td><td>ATO BAS period breakdowns</td></tr>
+    </table>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 4 of 7</span></div>
+  </div>
+
+  <!-- PAGE 5: APP FEATURES & SETTINGS -->
+  <div class="page">
+    <h1>App Features &amp; Settings</h1>
+    <h2>Rewards &amp; Points</h2>
+    <p>Every time you log income you earn points. Access your total via <strong>☰ Menu → Rewards &amp; Points</strong>. Share your score on Instagram Stories or copy it to clipboard.</p>
+    <h2>My Progress</h2>
+    <p>Access <strong>☰ Menu → My Progress</strong> for monthly profit rankings with 🥇🥈🥉 medals, interactive charts, and statistics.</p>
+    <h2>PIN Lock</h2>
+    <p>Protect the app with a 4-digit PIN under <strong>☰ Menu → Settings → Security → Enable PIN Lock</strong>.</p>
+    <h2>GST Rate</h2>
+    <p>The default is Australia's 10% GST rate. Change it under <strong>☰ Menu → Settings → GST Rate</strong>. The new rate syncs to your sheet automatically.</p>
+    <h2>Personal Profile</h2>
+    <p>Your profile and data are stored permanently using IndexedDB — a browser storage system that survives clearing browser history. Re-enter your name after clearing history to restore all data.</p>
+    <h2>My Documents</h2>
+    <p>Receipts attached to expense entries are stored here. Access via <strong>☰ Menu → My Documents</strong>.</p>
+    <div class="tip">💡 Use "Get Data from Sheet" regularly to keep charts and rankings current.</div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 5 of 7</span></div>
+  </div>
+
+  <!-- PAGE 6: TROUBLESHOOTING & FAQ -->
+  <div class="page">
+    <h1>Troubleshooting &amp; FAQ</h1>
+    <h2>Entries not appearing in my Google Sheet</h2>
+    <p>Check that your Apps Script URL is correct and the deployment access is set to <strong>Anyone</strong>. Go to your Google Sheet → Extensions → Apps Script → Deploy → Manage deployments to verify.</p>
+    <h2>Sync shows "No data found"</h2>
+    <p>This is normal if no data has been added to the sheet yet. Log entries through the app first, then sync. If data exists but won't load, re-deploy the Apps Script with a new deployment version.</p>
+    <h2>App not remembering data after browser clear</h2>
+    <p>Open the app and enter your name when prompted — your data will be restored automatically from permanent storage.</p>
+    <h2>How do I change my Google Sheet URL?</h2>
+    <p>Go to <strong>☰ Menu → Settings → Modify Google Sheet URL</strong>.</p>
+    <h2>Can I use the app without Google Sheets?</h2>
+    <p>Yes. During setup, tap <strong>Skip for now</strong>. Connect a sheet later from Settings.</p>
+    <h2>Contact &amp; Support</h2>
+    <p>Email: <strong>endlessdigitalworld@gmail.com</strong><br>Response within 7 business days.</p>
+    <br><br><br><br><br>
+    <p class="disclaimer">The sole purpose of this app is for personal record keeping and EDW (Endless Digital World) doesn't constitute to any liabilities and you should always seek an advice from your financial advisor.</p>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 6 of 7</span></div>
+  </div>
+
+  <!-- PAGE 7: QUICK REFERENCE -->
+  <div class="page">
+    <h1>Quick Reference</h1>
+    <h2>Menu Overview</h2>
+    <table>
+      <tr><th>Menu Item</th><th>What It Does</th></tr>
+      <tr><td>📂 My Logs</td><td>Browse entries, filter by month/type, export PDF</td></tr>
+      <tr><td>📁 My Documents</td><td>View and manage saved receipts</td></tr>
+      <tr><td>🗂️ Manage Categories</td><td>Add, remove, and reorder expense categories</td></tr>
+      <tr><td>🏆 My Progress</td><td>Rankings, charts, stats and Google Sheet sync</td></tr>
+      <tr><td>✨ What's New</td><td>Latest updates for each version</td></tr>
+      <tr><td>ℹ️ About This App</td><td>Feature guide and tips</td></tr>
+      <tr><td>🏅 Rewards &amp; Points</td><td>View and share your points score</td></tr>
+      <tr><td>⚙️ Settings</td><td>PIN lock, GST rate, sheet URL</td></tr>
+      <tr><td>🆘 Help &amp; Support</td><td>Email support + setup guide</td></tr>
+      <tr><td>🔒 Privacy Policy</td><td>How your data is handled</td></tr>
+    </table>
+    <h2>Points Tiers</h2>
+    <table>
+      <tr><th>Income Amount</th><th>Points Awarded</th></tr>
+      <tr><td>Over $1</td><td>+5 points</td></tr>
+      <tr><td>Over $50</td><td>+15 points</td></tr>
+      <tr><td>Over $100</td><td>+500 points</td></tr>
+      <tr><td>Over $1,000</td><td>+2,000 points</td></tr>
+      <tr><td>Over $2,000</td><td>+5,000 points</td></tr>
+    </table>
+    <h2>GST Quick Reference</h2>
+    <ul>
+      <li>Always enter amounts <strong>including GST</strong></li>
+      <li>Australian GST rate: 10% (divisor ÷11)</li>
+      <li>GST = Amount ÷ 11 &nbsp;|&nbsp; Ex-GST = Amount − GST</li>
+    </ul>
+    <div class="tip">💡 Export a PDF from My Logs at the end of each quarter for your BAS records.</div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide · v1.8.1 · Endless Digital World</span><span>Page 7 of 7</span></div>
+  </div>
+
+  <${'script'}>window.onload = () => window.print();</${'script'}>
+  </body></html>`;
+
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
+}
+
 let rearrangeMode = false;
 function toggleRearrangeMode() {
   rearrangeMode = !rearrangeMode;
