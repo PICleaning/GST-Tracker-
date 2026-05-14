@@ -6,6 +6,7 @@
 <title>Smart GST Tracker — EDW</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
   :root {
     --bg:       #0D1117;
@@ -534,7 +535,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 1.8.1</div>
+  <div class="splash-ver">Version 1.8.2</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -741,7 +742,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 1.8.1</strong>
+    <strong style="color:var(--accent);">Version 1.8.2</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -753,7 +754,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v1.8.1</p>
+        <p>Endless Digital World · v1.8.2</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -777,17 +778,46 @@
         <label>Month</label>
         <div class="month-select-row"><select id="inc-month"></select></div>
       </div>
+
+      <!-- Income Logging Mode -->
       <div class="field">
-        <label>Period</label>
-        <div class="period-grid">
-          <div class="period-option" onclick="selectPeriod('Week 1 (1–7)')">Week 1 (1–7)</div>
-          <div class="period-option" onclick="selectPeriod('Week 2 (8–14)')">Week 2 (8–14)</div>
-          <div class="period-option" onclick="selectPeriod('Week 3 (15–21)')">Week 3 (15–21)</div>
-          <div class="period-option" onclick="selectPeriod('Week 4 (22–28)')">Week 4 (22–28)</div>
-          <div class="period-option" onclick="selectPeriod('Full Month')">Full Month</div>
-          <div class="period-option" onclick="selectPeriod('Custom')">Custom</div>
+        <label>Log Income By</label>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;">
+          <div class="period-option inc-mode-btn" id="mode-weekly" onclick="setIncomeMode('weekly')">📅 Weekly</div>
+          <div class="period-option inc-mode-btn" id="mode-monthly" onclick="setIncomeMode('monthly')">📆 Monthly</div>
+          <div class="period-option inc-mode-btn" id="mode-category" onclick="setIncomeMode('category')">🏷️ Category</div>
         </div>
       </div>
+
+      <!-- WEEKLY mode -->
+      <div id="inc-mode-weekly" style="display:none;">
+        <div class="field">
+          <label>Week Period</label>
+          <div class="period-grid" id="weekly-period-grid"></div>
+        </div>
+      </div>
+
+      <!-- MONTHLY mode -->
+      <div id="inc-mode-monthly" style="display:none;">
+        <div class="field">
+          <label>Period</label>
+          <div class="period-grid">
+            <div class="period-option" onclick="selectPeriod('Full Month')">Full Month</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORY mode -->
+      <div id="inc-mode-category" style="display:none;">
+        <div class="field">
+          <label>Income Category</label>
+          <div class="cat-grid-wrap">
+            <div class="cat-grid" id="inc-cat-grid"></div>
+            <button class="manage-cats-btn" onclick="openIncCatModal()">✏️ Manage income categories</button>
+          </div>
+        </div>
+      </div>
+
       <div class="field">
         <label>Amount Earned (incl. GST)</label>
         <input type="number" id="inc-amount" placeholder="e.g. 150.00" min="0" step="0.01" oninput="updateGST()">
@@ -1003,6 +1033,62 @@
   </div>
 </div>
 
+<!-- ── MANAGE INCOME CATEGORIES MODAL ── -->
+<div id="inc-cat-modal" class="generic-modal">
+  <div class="cat-modal-box">
+    <div class="cat-modal-header">
+      <h2>🏷️ Income Categories</h2>
+      <button class="cat-modal-close" onclick="closeIncCatModal()">✕</button>
+    </div>
+    <div class="cat-modal-body">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Create custom income sources (e.g. Uber, DoorDash, Freelance). You can log income under the same category multiple times.</div>
+      <div class="cat-add-row">
+        <input type="text" class="cat-add-input" id="new-inc-cat-input" placeholder="e.g. Uber, Side Job, Client A…" onkeydown="if(event.key==='Enter')addIncomeCategory()">
+        <button class="cat-add-btn" onclick="addIncomeCategory()">Add</button>
+      </div>
+      <div id="inc-cat-modal-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── EMAIL VERIFICATION MODAL ── -->
+<div id="email-verify-screen" style="position:fixed;inset:0;background:var(--bg);z-index:99996;display:none;align-items:center;justify-content:center;padding:24px;flex-direction:column;">
+  <div style="width:100%;max-width:400px;text-align:center;">
+
+    <!-- Step 1: Enter email -->
+    <div id="ev-step1">
+      <div style="font-size:52px;margin-bottom:12px;">📧</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:24px;color:var(--accent);margin-bottom:8px;">Verify Your Email</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;">Enter your email address to receive your 6-digit verification code and get started.</div>
+      <input type="email" id="ev-email-input" placeholder="your@email.com" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:14px 16px;font-size:15px;font-family:'DM Sans',sans-serif;margin-bottom:12px;box-sizing:border-box;" onkeydown="if(event.key==='Enter')sendVerificationOTP()">
+      <div id="ev-email-error" style="font-size:12px;color:var(--red);min-height:18px;margin-bottom:10px;"></div>
+      <button onclick="sendVerificationOTP()" style="width:100%;padding:16px;border-radius:12px;border:none;background:var(--accent);color:#0D1117;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;" id="ev-send-btn">Get My Code ➔</button>
+    </div>
+
+    <!-- Step 2: Show code on screen + entry boxes -->
+    <div id="ev-step2" style="display:none;">
+      <div style="font-size:52px;margin-bottom:12px;">🔐</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent);margin-bottom:8px;">Your Verification Code</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;">Your one-time code for <strong style="color:var(--text);" id="ev-email-display"></strong> is:</div>
+
+      <!-- Large code display -->
+      <div id="ev-code-display" style="background:var(--card);border:2px solid var(--accent);border-radius:16px;padding:20px 16px;margin-bottom:20px;letter-spacing:0.3em;font-size:36px;font-weight:900;color:var(--accent);font-family:'DM Serif Display',serif;"></div>
+
+      <div style="font-size:12px;color:var(--muted);margin-bottom:20px;background:rgba(240,180,41,0.07);border:1px solid rgba(240,180,41,0.2);border-radius:10px;padding:10px 14px;line-height:1.6;">
+        ⏱️ This code expires in <strong id="ev-timer" style="color:var(--accent);">5:00</strong> — enter it below to continue.
+      </div>
+
+      <!-- Entry boxes -->
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;" id="ev-otp-boxes"></div>
+      <div id="ev-otp-error" style="font-size:12px;color:var(--red);min-height:18px;margin-bottom:10px;"></div>
+      <button onclick="verifyOTP()" style="width:100%;padding:16px;border-radius:12px;border:none;background:var(--accent);color:#0D1117;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;" id="ev-verify-btn">Verify & Continue ➔</button>
+      <div style="margin-top:14px;font-size:12px;color:var(--muted);">Need a new code? <span onclick="resendOTP()" style="color:var(--accent);cursor:pointer;text-decoration:underline;">Generate new code</span></div>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted);cursor:pointer;" onclick="backToEmail()">← Use a different email</div>
+    </div>
+
+  </div>
+</div>
+
 <!-- ── MANAGE CATEGORIES MODAL ── -->
 <div id="cat-modal">
   <div class="cat-modal-box">
@@ -1116,7 +1202,7 @@
       This app uses Google Fonts (DM Sans, DM Serif Display) for display purposes only. No analytics, no tracking scripts, no advertising SDKs are included.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.1 · Endless Digital World · For personal record-keeping only</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.2 · Endless Digital World · For personal record-keeping only</p>
     </div>
   </div>
 </div>
@@ -1402,7 +1488,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.8.1';
+const APP_VERSION = '1.8.2';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -1447,6 +1533,16 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '1.8.2',
+    items: [
+      'Custom income categories — create unlimited income sources (e.g. Uber, DoorDash, side jobs) accessible from the Income screen',
+      'Smart period selection — log income by Month, by Week (Week 1–4 with correct dates per month), or by Category',
+      'App version now shown on the loading screen, in the header, and at the bottom of the hamburger menu',
+      'Notes now sync to Google Sheets — descriptions added to income and expense entries appear as a dedicated Notes column in your sheet',
+      'Email verification — new users verify their email address with a 6-digit OTP before using the app',
+    ]
+  },
   {
     version: '1.8.1',
     items: [
@@ -1648,6 +1744,14 @@ async function getProfileName() {
 async function saveProfileName(name) {
   await saveProfileData('user_name', name);
   localStorage.setItem('edw_user_name', name);
+  // Silently send name + email to EDW once — only on first save
+  if (!localStorage.getItem('edw_user_registered')) {
+    const email = localStorage.getItem('edw_verified_email') || '';
+    if (email) {
+      silentlyRegisterUser(name, email);
+      localStorage.setItem('edw_user_registered', 'true');
+    }
+  }
 }
 
 async function restoreProfileFromDB() {
@@ -1825,12 +1929,23 @@ setTimeout(async () => {
   const lsName = localStorage.getItem('edw_user_name');
 
   if (!profileName) {
-    // Completely new user — show name prompt then setup
-    showNamePrompt(async (name) => {
-      updateDrawerProfile(name);
-      if (!url) showSetupScreen();
-      else updateConnectionStatus();
-    });
+    // Completely new user — email verify first, then name prompt, then setup
+    const emailVerified = localStorage.getItem('edw_email_verified') === 'true';
+    if (!emailVerified) {
+      showEmailVerify(() => {
+        showNamePrompt(async (name) => {
+          updateDrawerProfile(name);
+          if (!url) showSetupScreen();
+          else updateConnectionStatus();
+        });
+      });
+    } else {
+      showNamePrompt(async (name) => {
+        updateDrawerProfile(name);
+        if (!url) showSetupScreen();
+        else updateConnectionStatus();
+      });
+    }
   } else if (!lsName && profileName) {
     // Has IndexedDB profile but localStorage was cleared (browser history delete)
     showReturningNamePrompt(async (name) => {
@@ -2012,13 +2127,18 @@ async function submitIncome() {
   const month  = document.getElementById('inc-month').value;
   const amount = parseFloat(document.getElementById('inc-amount').value);
   const note   = document.getElementById('inc-note').value.trim();
-  if (!selectedPeriod) return toast('Please select a period.', 'error');
+
+  // Mode validation
+  if (!incomeMode) return toast('Please select how to log income (Weekly, Monthly, or Category).', 'error');
+  if (incomeMode === 'category' && !selectedIncCat) return toast('Please select an income category.', 'error');
+  if ((incomeMode === 'weekly' || incomeMode === 'monthly') && !selectedPeriod) return toast('Please select a period.', 'error');
   if (!amount || amount <= 0) return toast('Please enter a valid amount.', 'error');
 
   const btn = document.querySelector('.submit-income');
   btn.disabled = true; btn.textContent = 'Saving…';
 
-  const entry = {type:'income', month, period:selectedPeriod, amount, note, gst:calcGst(amount), ts:new Date().toISOString()};
+  const periodLabel = incomeMode === 'category' ? selectedIncCat : selectedPeriod;
+  const entry = {type:'income', month, period:periodLabel, amount, note, gst:calcGst(amount), ts:new Date().toISOString()};
   entries.unshift(entry);
   localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0,APP_STORAGE_LIMIT)));
   backupToProfileDB();
@@ -2028,7 +2148,9 @@ async function submitIncome() {
   document.getElementById('inc-amount').value = '';
   document.getElementById('inc-note').value = '';
   selectedPeriod = null;
+  selectedIncCat = null;
   document.querySelectorAll('.period-option').forEach(el => el.classList.remove('selected-income'));
+  document.querySelectorAll('#inc-cat-grid .cat-btn').forEach(el => el.classList.remove('selected'));
   updateGST(); renderLog(); updateTotals();
   btn.disabled = false; btn.textContent = 'Add Income Entry ➔';
 }
@@ -3127,7 +3249,7 @@ function openSetupGuidePDF() {
     <div class="cover-title">Smart GST Tracker</div>
     <div class="cover-sub">Complete Setup &amp; User Guide</div>
     <div class="cover-sub" style="margin-top:4px;">by <strong>Endless Digital World</strong></div>
-    <div class="cover-version">Version 1.8.1</div>
+    <div class="cover-version">Version 1.8.2</div>
     <div style="height:30mm;"></div>
     <div style="background:#f9f9f9;border:1px solid #eee;border-radius:10px;padding:16px 20px;text-align:center;">
       <p style="margin:0;font-size:12px;color:#555;">This guide covers everything you need to set up and use<br>Smart GST Tracker and your connected Google Sheet.</p>
@@ -3245,7 +3367,9 @@ function openSetupGuidePDF() {
     <p>Yes. During setup, tap <strong>Skip for now</strong>. Connect a sheet later from Settings.</p>
     <h2>Contact &amp; Support</h2>
     <p>Email: <strong>endlessdigitalworld@gmail.com</strong><br>Response within 7 business days.</p>
-    <br><br><br><br><br>
+    <h2>Your Privacy &amp; Data Collection</h2>
+    <p>Endless Digital World (EDW) may collect your name and email address for the purpose of informing you about new services, product updates, or launches — such as bookkeeping services offered by EDW. Rest assured your details are <strong>never shared with any third party</strong>. You may contact us at any time at endlessdigitalworld@gmail.com to have your details removed from our records.</p>
+    <br><br>
     <p class="disclaimer">The sole purpose of this app is for personal record keeping and EDW (Endless Digital World) doesn't constitute to any liabilities and you should always seek an advice from your financial advisor.</p>
     <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 6 of 7</span></div>
   </div>
@@ -3283,7 +3407,7 @@ function openSetupGuidePDF() {
       <li>GST = Amount ÷ 11 &nbsp;|&nbsp; Ex-GST = Amount − GST</li>
     </ul>
     <div class="tip">💡 Export a PDF from My Logs at the end of each quarter for your BAS records.</div>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide · v1.8.1 · Endless Digital World</span><span>Page 7 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide · v1.8.2 · Endless Digital World</span><span>Page 7 of 7</span></div>
   </div>
 
   <${'script'}>window.onload = () => window.print();</${'script'}>
@@ -3313,6 +3437,292 @@ function toggleRearrangeMode() {
   renderCatModalList();
 }
 
+
+
+// ── INCOME MODE ───────────────────────────────────────────────────────────
+let incomeMode = null; // 'weekly' | 'monthly' | 'category'
+let selectedIncCat = null;
+
+const DEFAULT_INC_CATS = [
+  {name:'Uber',      icon:'🚗'},
+  {name:'DoorDash',  icon:'🍕'},
+  {name:'Freelance', icon:'💻'},
+];
+
+function getIncCategories() {
+  return JSON.parse(localStorage.getItem('gst_inc_categories') || 'null') || DEFAULT_INC_CATS.map(c=>({...c}));
+}
+function saveIncCategories(cats) {
+  localStorage.setItem('gst_inc_categories', JSON.stringify(cats));
+}
+
+function setIncomeMode(mode) {
+  incomeMode = mode;
+  selectedPeriod = null;
+  selectedIncCat = null;
+  // Update mode buttons
+  document.querySelectorAll('.inc-mode-btn').forEach(el => el.classList.remove('selected-income'));
+  const btn = document.getElementById('mode-' + mode);
+  if (btn) btn.classList.add('selected-income');
+  // Show/hide sections
+  ['weekly','monthly','category'].forEach(m => {
+    const el = document.getElementById('inc-mode-' + m);
+    if (el) el.style.display = m === mode ? '' : 'none';
+  });
+  if (mode === 'weekly') buildWeeklyPeriodGrid();
+  if (mode === 'category') buildIncCatGrid();
+}
+
+function getDaysInMonth(monthName, year) {
+  const idx = ["January","February","March","April","May","June",
+               "July","August","September","October","November","December"].indexOf(monthName);
+  if (idx < 0) return 31;
+  return new Date(year, idx + 1, 0).getDate();
+}
+
+function buildWeeklyPeriodGrid() {
+  const grid = document.getElementById('weekly-period-grid');
+  if (!grid) return;
+  const monthName = document.getElementById('inc-month').value;
+  const year = new Date().getFullYear();
+  const days = getDaysInMonth(monthName, year);
+
+  // Week ranges: W1 1-7, W2 8-14, W3 15-21, W4 22-end
+  const weeks = [
+    { label: `Week 1 (1–7)`,    val: `Week 1 (1–7)`,    show: 7 <= days },
+    { label: `Week 2 (8–14)`,   val: `Week 2 (8–14)`,   show: 8 <= days },
+    { label: `Week 3 (15–21)`,  val: `Week 3 (15–21)`,  show: 15 <= days },
+    { label: `Week 4 (22–${days})`, val: `Week 4 (22–${days})`, show: 22 <= days },
+  ];
+  grid.innerHTML = weeks.filter(w => w.show).map(w =>
+    `<div class="period-option" onclick="selectPeriod('${w.val}')">${w.label}</div>`
+  ).join('');
+}
+
+function buildIncCatGrid() {
+  const grid = document.getElementById('inc-cat-grid');
+  if (!grid) return;
+  const cats = getIncCategories();
+  selectedIncCat = null;
+  grid.innerHTML = '';
+  cats.forEach(cat => {
+    const btn = document.createElement('div');
+    btn.className = 'cat-btn';
+    btn.id = 'incat-' + cat.name.replace(/[^a-zA-Z0-9]/g,'_');
+    btn.innerHTML = `<span class="cat-icon">${cat.icon}</span>${cat.name}`;
+    btn.onclick = () => selectIncCat(cat.name);
+    grid.appendChild(btn);
+  });
+}
+
+function selectIncCat(name) {
+  selectedIncCat = name;
+  selectedPeriod = name; // period = category name for sheet logging
+  document.querySelectorAll('#inc-cat-grid .cat-btn').forEach(el => el.classList.remove('selected'));
+  const safe = name.replace(/[^a-zA-Z0-9]/g,'_');
+  const el = document.getElementById('incat-' + safe);
+  if (el) el.classList.add('selected');
+}
+
+function openIncCatModal() {
+  renderIncCatModalList();
+  document.getElementById('inc-cat-modal').classList.add('open');
+}
+function closeIncCatModal() {
+  document.getElementById('inc-cat-modal').classList.remove('open');
+  document.getElementById('new-inc-cat-input').value = '';
+}
+function renderIncCatModalList() {
+  const cats = getIncCategories();
+  const list = document.getElementById('inc-cat-modal-list');
+  list.innerHTML = cats.map((cat, i) => `
+    <div class="cat-list-item" style="cursor:default;">
+      <div class="cat-list-left">
+        <span style="width:23px;display:inline-block;"></span>
+        <span class="cat-list-icon">${cat.icon}</span>
+        <span>${cat.name}</span>
+        ${cat.isDefault ? '<span class="cat-default-tag">default</span>' : ''}
+      </div>
+      <button class="cat-delete-btn" onclick="deleteIncCategory(${i})" title="Remove">✕</button>
+    </div>`).join('');
+}
+function addIncomeCategory() {
+  const input = document.getElementById('new-inc-cat-input');
+  const name = input.value.trim();
+  if (!name) return toast('Please enter a category name.', 'error');
+  const cats = getIncCategories();
+  const icon = getEmojiForName(name);
+  cats.push({name, icon, isDefault: false});
+  saveIncCategories(cats);
+  input.value = '';
+  renderIncCatModalList();
+  buildIncCatGrid();
+  toast(`✅ "${name}" ${icon} added!`, 'success');
+}
+function deleteIncCategory(index) {
+  const cats = getIncCategories();
+  const cat = cats[index];
+  cats.splice(index, 1);
+  saveIncCategories(cats);
+  renderIncCatModalList();
+  buildIncCatGrid();
+  toast(`Removed "${cat.name}"`, 'info');
+}
+
+// Rebuild weekly grid when month changes
+document.addEventListener('DOMContentLoaded', () => {
+  const incMonthSel = document.getElementById('inc-month');
+  if (incMonthSel) {
+    incMonthSel.addEventListener('change', () => {
+      if (incomeMode === 'weekly') buildWeeklyPeriodGrid();
+    });
+  }
+});
+
+// ── EMAIL VERIFICATION ────────────────────────────────────────────────────
+let _evOTP = '';
+let _evEmail = '';
+
+function showEmailVerify(onComplete) {
+  const screen = document.getElementById('email-verify-screen');
+  screen.style.display = 'flex';
+  window._evOnComplete = onComplete;
+  // Reset to step 1
+  document.getElementById('ev-step1').style.display = '';
+  document.getElementById('ev-step2').style.display = 'none';
+  document.getElementById('ev-email-input').value = '';
+  document.getElementById('ev-email-error').textContent = '';
+}
+
+// ── EMAILJS CONFIG ────────────────────────────────────────────────────────
+const EDW_EMAILJS_SERVICE  = 'service_eow5nxm';
+const EDW_EMAILJS_TEMPLATE = '2kt49hy';
+const EDW_EMAILJS_KEY      = 'K9cjki5adgiiwx38U';
+
+function initEmailJS() {
+  if (window.emailjs) emailjs.init({ publicKey: EDW_EMAILJS_KEY });
+}
+
+// Silent background call — sends new user name + email to EDW inbox
+async function silentlyRegisterUser(name, email) {
+  try {
+    initEmailJS();
+    await emailjs.send(EDW_EMAILJS_SERVICE, EDW_EMAILJS_TEMPLATE, {
+      user_name:  name,
+      user_email: email,
+      date:       new Date().toLocaleString('en-AU')
+    });
+  } catch(e) {
+    // Silent — user never sees this
+  }
+}
+
+let _evTimerInterval = null;
+
+async function sendVerificationOTP() {
+  const email = document.getElementById('ev-email-input').value.trim();
+  const err = document.getElementById('ev-email-error');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    err.textContent = 'Please enter a valid email address.';
+    return;
+  }
+  err.textContent = '';
+
+  _evEmail = email;
+  _evOTP = String(Math.floor(100000 + Math.random() * 900000));
+  _evExpiry = Date.now() + 5 * 60 * 1000; // 5 minutes
+
+  // Show the code on screen
+  document.getElementById('ev-email-display').textContent = email;
+  document.getElementById('ev-code-display').textContent = _evOTP;
+  document.getElementById('ev-step1').style.display = 'none';
+  document.getElementById('ev-step2').style.display = '';
+
+  // Build OTP input boxes
+  buildOTPBoxes();
+  setTimeout(() => { const f = document.getElementById('ev-otp-0'); if(f) f.focus(); }, 100);
+
+  // Start countdown timer
+  startOTPTimer();
+}
+
+let _evExpiry = 0;
+
+function startOTPTimer() {
+  if (_evTimerInterval) clearInterval(_evTimerInterval);
+  _evTimerInterval = setInterval(() => {
+    const remaining = Math.max(0, _evExpiry - Date.now());
+    const mins = Math.floor(remaining / 60000);
+    const secs = Math.floor((remaining % 60000) / 1000);
+    const timerEl = document.getElementById('ev-timer');
+    if (timerEl) timerEl.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+    if (remaining <= 0) {
+      clearInterval(_evTimerInterval);
+      // Expire the code
+      _evOTP = '';
+      const codeEl = document.getElementById('ev-code-display');
+      if (codeEl) { codeEl.textContent = '——————'; codeEl.style.color = 'var(--muted)'; }
+      const err = document.getElementById('ev-otp-error');
+      if (err) err.textContent = '⏱️ Code expired — tap "Generate new code" to get a new one.';
+    }
+  }, 500);
+}
+
+function buildOTPBoxes() {
+  const container = document.getElementById('ev-otp-boxes');
+  container.innerHTML = '';
+  for (let i = 0; i < 6; i++) {
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.maxLength = 1;
+    inp.inputMode = 'numeric';
+    inp.id = 'ev-otp-' + i;
+    inp.style.cssText = 'width:44px;height:52px;text-align:center;font-size:22px;font-weight:700;background:var(--card);border:2px solid var(--border);border-radius:10px;color:var(--text);font-family:\'DM Sans\',sans-serif;';
+    inp.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g,'');
+      if (e.target.value && i < 5) document.getElementById('ev-otp-' + (i+1)).focus();
+      // Auto-verify when all 6 filled
+      const all = Array.from({length:6}, (_,j) => (document.getElementById('ev-otp-'+j)?.value||'')).join('');
+      if (all.length === 6) verifyOTP();
+    });
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !e.target.value && i > 0) document.getElementById('ev-otp-' + (i-1)).focus();
+    });
+    container.appendChild(inp);
+  }
+}
+
+function resendOTP() {
+  _evOTP = String(Math.floor(100000 + Math.random() * 900000));
+  _evExpiry = Date.now() + 5 * 60 * 1000;
+  const codeEl = document.getElementById('ev-code-display');
+  if (codeEl) { codeEl.textContent = _evOTP; codeEl.style.color = 'var(--accent)'; }
+  buildOTPBoxes();
+  setTimeout(() => { const f = document.getElementById('ev-otp-0'); if(f) f.focus(); }, 100);
+  document.getElementById('ev-otp-error').textContent = '';
+  startOTPTimer();
+  toast('🔄 New code generated!', 'success');
+}
+
+function backToEmail() {
+  document.getElementById('ev-step1').style.display = '';
+  document.getElementById('ev-step2').style.display = 'none';
+}
+
+function verifyOTP() {
+  const entered = Array.from({length:6}, (_,i) => (document.getElementById('ev-otp-'+i).value || '')).join('');
+  const err = document.getElementById('ev-otp-error');
+  if (entered.length < 6) { err.textContent = 'Please enter all 6 digits.'; return; }
+  if (entered !== _evOTP) { err.textContent = '❌ Incorrect code. Please try again.'; return; }
+  err.textContent = '';
+  if (_evTimerInterval) clearInterval(_evTimerInterval);
+  // Mark verified
+  localStorage.setItem('edw_email_verified', 'true');
+  localStorage.setItem('edw_verified_email', _evEmail);
+  document.getElementById('email-verify-screen').style.display = 'none';
+  toast('✅ Email verified!', 'success');
+  if (window._evOnComplete) window._evOnComplete(_evEmail);
+}
 
 let toastTimer;
 function toast(msg, type='info') {
