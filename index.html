@@ -525,6 +525,102 @@
     .cat-grid { grid-template-columns: repeat(2, 1fr); }
     .period-grid { grid-template-columns: 1fr; }
   }
+
+  /* ── INCOME CELEBRATION ANIMATION ── */
+  #income-anim-overlay {
+    position: fixed; inset: 0; z-index: 9990; pointer-events: none;
+    overflow: hidden; display: none;
+  }
+  #income-anim-overlay.active { display: block; }
+
+  .anim-smiley {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    font-size: 72px; line-height: 1;
+    top: -100px;
+    animation: smileydrop 5s ease forwards;
+    filter: drop-shadow(0 0 20px rgba(240,180,41,0.6));
+  }
+  @keyframes smileydrop {
+    0%   { top: -100px; }
+    15%  { top: 80px; }
+    30%  { top: 80px; }       /* pause — thumb + wink phase */
+    80%  { top: 80px; }
+    100% { top: calc(100vh - 100px); }
+  }
+
+  .anim-wallet-bottom {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    font-size: 72px; line-height: 1;
+    bottom: -100px;
+    animation: walletrise 5s ease forwards;
+    filter: drop-shadow(0 0 20px rgba(61,220,132,0.5));
+  }
+  @keyframes walletrise {
+    0%   { bottom: -100px; }
+    15%  { bottom: 80px; }
+    80%  { bottom: 80px; }
+    100% { bottom: calc(100vh - 100px); }
+  }
+
+  /* thumb + wink overlays on the smiley */
+  .anim-thumb {
+    position: absolute; left: calc(50% + 44px); font-size: 36px;
+    top: 80px;
+    opacity: 0;
+    animation: thumbpop 5s ease forwards;
+  }
+  @keyframes thumbpop {
+    0%,28% { opacity: 0; transform: scale(0.5); }
+    35%    { opacity: 1; transform: scale(1.3); }
+    55%    { opacity: 1; transform: scale(1); }
+    75%    { opacity: 0; }
+    100%   { opacity: 0; }
+  }
+
+  .anim-wink {
+    position: absolute; left: calc(50% - 80px); font-size: 28px;
+    top: 100px;
+    opacity: 0;
+    animation: winkpop 5s ease forwards;
+  }
+  @keyframes winkpop {
+    0%,45% { opacity: 0; }
+    52%    { opacity: 1; }
+    70%    { opacity: 1; }
+    80%    { opacity: 0; }
+    100%   { opacity: 0; }
+  }
+
+  /* ── WALLET SHEET-SYNC ANIMATION ── */
+  #wallet-sync-overlay {
+    position: fixed; inset: 0; z-index: 9989; pointer-events: none;
+    overflow: hidden; display: none;
+  }
+  #wallet-sync-overlay.active { display: block; }
+
+  .sync-wallet {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    font-size: 64px; top: -90px;
+    animation: syncwallet 3s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+  @keyframes syncwallet {
+    0%   { top: -90px; }
+    30%  { top: 40px; }
+    80%  { top: 40px; }
+    100% { top: -90px; }
+  }
+
+  .sync-dollar {
+    position: absolute;
+    font-size: 28px;
+    animation: dollarfall 3s ease forwards;
+    opacity: 0;
+  }
+  @keyframes dollarfall {
+    0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+    25%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(60vh) rotate(180deg); }
+  }
 </style>
 </head>
 <body>
@@ -535,7 +631,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 1.8.2</div>
+  <div class="splash-ver">Version 1.8.3</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -742,7 +838,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 1.8.2</strong>
+    <strong style="color:var(--accent);">Version 1.8.3</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -754,7 +850,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v1.8.2</p>
+        <p>Endless Digital World · v1.8.3</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -1202,7 +1298,7 @@
       This app uses Google Fonts (DM Sans, DM Serif Display) for display purposes only. No analytics, no tracking scripts, no advertising SDKs are included.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.2 · Endless Digital World · For personal record-keeping only</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.3 · Endless Digital World · For personal record-keeping only</p>
     </div>
   </div>
 </div>
@@ -1486,9 +1582,22 @@
   </div>
 </div>
 
+<!-- ── INCOME CELEBRATION ANIMATION OVERLAY ── -->
+<div id="income-anim-overlay">
+  <div class="anim-smiley" id="anim-smiley">😊</div>
+  <div class="anim-thumb" id="anim-thumb">👍</div>
+  <div class="anim-wink" id="anim-wink">😉</div>
+  <div class="anim-wallet-bottom" id="anim-wallet-bottom">👛</div>
+</div>
+
+<!-- ── WALLET SYNC ANIMATION OVERLAY ── -->
+<div id="wallet-sync-overlay">
+  <div class="sync-wallet" id="sync-wallet">👛</div>
+</div>
+
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.8.2';
+const APP_VERSION = '1.8.3';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -1533,6 +1642,16 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '1.8.3',
+    items: [
+      'Income category limit — maximum of 10 custom income categories; a prompt now appears when the limit is reached',
+      'App version displayed in the hamburger menu at the very bottom, making it easy to know which version you\'re on',
+      'App version now shown on the loading/splash screen',
+      'Fun income animation — a smiley face drops from the top and a wallet rises from the bottom; the smiley gives a thumbs up and a wink before sliding into the wallet',
+      'Wallet animation — a wallet pops from the top with dollar signs falling out whenever you save data to Google Sheets',
+    ]
+  },
   {
     version: '1.8.2',
     items: [
@@ -2096,6 +2215,7 @@ async function pushToSheet(entry) {
   try {
     await fetch(getSheetUrl() + '?' + params.toString(), {method:'GET', mode:'no-cors'});
     toast('✅ Saved & synced to Google Sheets!', 'success');
+    playWalletSyncAnimation();
   } catch {
     toast('Saved locally — sync failed.', 'info');
   }
@@ -2153,6 +2273,7 @@ async function submitIncome() {
   document.querySelectorAll('#inc-cat-grid .cat-btn').forEach(el => el.classList.remove('selected'));
   updateGST(); renderLog(); updateTotals();
   btn.disabled = false; btn.textContent = 'Add Income Entry ➔';
+  playIncomeAnimation();
 }
 
 // ── SUBMIT EXPENSE ────────────────────────────────────────────────────────
@@ -3249,7 +3370,7 @@ function openSetupGuidePDF() {
     <div class="cover-title">Smart GST Tracker</div>
     <div class="cover-sub">Complete Setup &amp; User Guide</div>
     <div class="cover-sub" style="margin-top:4px;">by <strong>Endless Digital World</strong></div>
-    <div class="cover-version">Version 1.8.2</div>
+    <div class="cover-version">Version 1.8.3</div>
     <div style="height:30mm;"></div>
     <div style="background:#f9f9f9;border:1px solid #eee;border-radius:10px;padding:16px 20px;text-align:center;">
       <p style="margin:0;font-size:12px;color:#555;">This guide covers everything you need to set up and use<br>Smart GST Tracker and your connected Google Sheet.</p>
@@ -3407,7 +3528,7 @@ function openSetupGuidePDF() {
       <li>GST = Amount ÷ 11 &nbsp;|&nbsp; Ex-GST = Amount − GST</li>
     </ul>
     <div class="tip">💡 Export a PDF from My Logs at the end of each quarter for your BAS records.</div>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide · v1.8.2 · Endless Digital World</span><span>Page 7 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide · v1.8.3 · Endless Digital World</span><span>Page 7 of 7</span></div>
   </div>
 
   <${'script'}>window.onload = () => window.print();</${'script'}>
@@ -3535,7 +3656,26 @@ function closeIncCatModal() {
 function renderIncCatModalList() {
   const cats = getIncCategories();
   const list = document.getElementById('inc-cat-modal-list');
-  list.innerHTML = cats.map((cat, i) => `
+  const atLimit = cats.length >= 10;
+
+  // Update add button state
+  const addBtn = document.querySelector('#inc-cat-modal .cat-add-btn');
+  const addInput = document.getElementById('new-inc-cat-input');
+  if (addBtn) {
+    addBtn.style.opacity = atLimit ? '0.4' : '1';
+    addBtn.style.cursor = atLimit ? 'not-allowed' : 'pointer';
+  }
+  if (addInput) {
+    addInput.disabled = atLimit;
+    addInput.placeholder = atLimit ? '⚠️ Limit reached — remove 1 to add more' : 'Type a category name…';
+  }
+
+  // Show count badge
+  let countHtml = `<div style="font-size:11px;color:${atLimit?'var(--red)':'var(--muted)'};margin-bottom:10px;font-weight:${atLimit?'700':'400'};">
+    ${cats.length}/10 categories${atLimit ? ' — ⚠️ Max limit reached' : ''}
+  </div>`;
+
+  list.innerHTML = countHtml + cats.map((cat, i) => `
     <div class="cat-list-item" style="cursor:default;">
       <div class="cat-list-left">
         <span style="width:23px;display:inline-block;"></span>
@@ -3551,6 +3691,7 @@ function addIncomeCategory() {
   const name = input.value.trim();
   if (!name) return toast('Please enter a category name.', 'error');
   const cats = getIncCategories();
+  if (cats.length >= 10) return toast('⚠️ Max income category limit reached — please remove 1 before proceeding further.', 'error');
   const icon = getEmojiForName(name);
   cats.push({name, icon, isDefault: false});
   saveIncCategories(cats);
@@ -3722,6 +3863,76 @@ function verifyOTP() {
   document.getElementById('email-verify-screen').style.display = 'none';
   toast('✅ Email verified!', 'success');
   if (window._evOnComplete) window._evOnComplete(_evEmail);
+}
+
+// ── INCOME CELEBRATION ANIMATION ──────────────────────────────────────────
+function playIncomeAnimation() {
+  const overlay = document.getElementById('income-anim-overlay');
+  if (!overlay) return;
+
+  // Reset smiley to happy face, restart by re-cloning nodes
+  const smiley = document.getElementById('anim-smiley');
+  const thumb  = document.getElementById('anim-thumb');
+  const wink   = document.getElementById('anim-wink');
+  const wallet = document.getElementById('anim-wallet-bottom');
+
+  // Force restart animations by toggling active class
+  overlay.classList.remove('active');
+  // Reset animation nodes
+  [smiley, thumb, wink, wallet].forEach(el => {
+    if (el) { const a = el.style.animation; el.style.animation='none'; el.offsetHeight; el.style.animation=a; }
+  });
+
+  overlay.classList.add('active');
+
+  // At ~60% through (≈3s), switch smiley to winking
+  setTimeout(() => {
+    if (smiley) smiley.textContent = '😄';
+  }, 2800);
+
+  // Hide after 5.2s
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    if (smiley) smiley.textContent = '😊';
+  }, 5200);
+}
+
+// ── WALLET SYNC ANIMATION ─────────────────────────────────────────────────
+function playWalletSyncAnimation() {
+  const overlay = document.getElementById('wallet-sync-overlay');
+  if (!overlay) return;
+
+  overlay.classList.remove('active');
+
+  // Remove old dollar signs
+  overlay.querySelectorAll('.sync-dollar').forEach(el => el.remove());
+
+  // Reset wallet anim
+  const wallet = document.getElementById('sync-wallet');
+  if (wallet) { wallet.style.animation = 'none'; wallet.offsetHeight; wallet.style.animation = ''; }
+
+  overlay.classList.add('active');
+
+  // Spawn falling dollar signs with slight delay and random positions
+  const positions = [35, 42, 50, 58, 65];
+  positions.forEach((left, i) => {
+    setTimeout(() => {
+      const d = document.createElement('div');
+      d.className = 'sync-dollar';
+      d.textContent = '$';
+      d.style.left = left + '%';
+      d.style.top = (55 + (i % 2) * 10) + 'px';
+      d.style.color = 'var(--green)';
+      d.style.fontWeight = '700';
+      d.style.animationDelay = '0s';
+      overlay.appendChild(d);
+    }, 600 + i * 120);
+  });
+
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    overlay.querySelectorAll('.sync-dollar').forEach(el => el.remove());
+  }, 3200);
 }
 
 let toastTimer;
