@@ -1888,6 +1888,9 @@ async function saveProfileName(name) {
 }
 
 async function restoreProfileFromDB() {
+  // If user deleted data, never restore from backup
+  if (localStorage.getItem('edw_data_deleted') === 'true') return;
+
   // Restore entries from IndexedDB if localStorage was cleared
   if (!localStorage.getItem('gst_entries') || localStorage.getItem('gst_entries') === '[]') {
     const saved = await getProfileData('gst_entries_backup');
@@ -2905,39 +2908,7 @@ async function executeDeleteAll() {
     return;
   }
 
-  if (delApp) {
-    // 1. Clear ALL localStorage keys belonging to this app
-    const keysToRemove = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      keysToRemove.push(localStorage.key(i));
-    }
-    keysToRemove.forEach(k => localStorage.removeItem(k));
-
-    // 2. Wipe IndexedDB — this is why data was coming back after delete
-    try {
-      const dbReq = indexedDB.open('EDWProfileDB', 1);
-      dbReq.onsuccess = function(e) {
-        const db = e.target.result;
-        try {
-          const tx = db.transaction(['profile'], 'readwrite');
-          tx.objectStore('profile').clear();
-        } catch(err) { /* store might not exist yet */ }
-      };
-      // Also delete the whole database to be thorough
-      indexedDB.deleteDatabase('EDWProfileDB');
-    } catch(e) { /* silent */ }
-
-    // 3. Reset in-memory state
-    entries    = [];
-    categories = DEFAULT_CATS.map(c => ({...c}));
-    renderLog();
-    updateTotals();
-    buildCatGrid();
-    updateGstLabels();
-    document.getElementById('pin-lock').classList.remove('active');
-
-    toast('🗑️ All app data deleted permanently.', 'info');
-  }
+  closeConfirm();
 
   if (delSheet) {
     const url = getSheetUrl();
@@ -2945,13 +2916,52 @@ async function executeDeleteAll() {
       MONTHS.forEach(month => {
         fetch(`${url}?type=deleteMonth&month=${encodeURIComponent(month)}`, { method:'GET', mode:'no-cors' });
       });
-      toast('☁️ Sheet clear request sent.', 'info');
-    } else {
-      toast('No sheet connected — sheet not cleared.', 'info');
     }
   }
 
-  closeConfirm();
+  if (delApp) {
+    // Set a flag FIRST so restoreProfileFromDB() knows not to restore on next load
+    localStorage.setItem('edw_data_deleted', 'true');
+
+    // Wipe ALL localStorage keys
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      keysToRemove.push(localStorage.key(i));
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+
+    // Re-set the deleted flag after clearing (so it survives the clear)
+    localStorage.setItem('edw_data_deleted', 'true');
+
+    // Wipe IndexedDB completely — using the CORRECT database name
+    await new Promise((resolve) => {
+      try {
+        // Clear the object store first
+        const openReq = indexedDB.open(EDW_DB_NAME, EDW_DB_VERSION);
+        openReq.onsuccess = function(e) {
+          const db = e.target.result;
+          try {
+            const tx = db.transaction([EDW_STORE], 'readwrite');
+            const store = tx.objectStore(EDW_STORE);
+            store.clear();
+            tx.oncomplete = () => {
+              db.close();
+              // Then delete the whole database
+              const delReq = indexedDB.deleteDatabase(EDW_DB_NAME);
+              delReq.onsuccess = () => resolve();
+              delReq.onerror   = () => resolve();
+              delReq.onblocked = () => { db.close(); resolve(); };
+            };
+          } catch(err) { resolve(); }
+        };
+        openReq.onerror = () => resolve();
+      } catch(e) { resolve(); }
+    });
+
+    // Reload the page — cleanest way to ensure everything resets
+    toast('🗑️ All data deleted. Reloading app…', 'info');
+    setTimeout(() => { window.location.reload(); }, 1200);
+  }
 }
 
 // ── PROGRESS / GAMIFICATION ───────────────────────────────────────────────
