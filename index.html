@@ -631,7 +631,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 1.8.4</div>
+  <div class="splash-ver">Version 1.8.5</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -781,6 +781,20 @@
         <div class="drawer-row-sub">Add or remove expense categories</div>
       </div>
     </div>
+    <div class="drawer-row" onclick="openRecurringModal(); closeDrawer();">
+      <div class="drawer-row-icon">🔁</div>
+      <div>
+        <div class="drawer-row-label">Recurring Expenses</div>
+        <div class="drawer-row-sub">Subscriptions, memberships & auto-log</div>
+      </div>
+    </div>
+    <div class="drawer-row" onclick="openBudgetModal(); closeDrawer();">
+      <div class="drawer-row-icon">🎯</div>
+      <div>
+        <div class="drawer-row-label">Budget Goals</div>
+        <div class="drawer-row-sub">Set monthly income targets & track progress</div>
+      </div>
+    </div>
     <div class="drawer-row" onclick="switchTab('progress'); closeDrawer();">
       <div class="drawer-row-icon">🏆</div>
       <div>
@@ -838,7 +852,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 1.8.4</strong>
+    <strong style="color:var(--accent);">Version 1.8.5</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -850,7 +864,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v1.8.4</p>
+        <p>Endless Digital World · v1.8.5</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -987,6 +1001,9 @@
         </div>
       </div>
       <button class="submit-btn submit-expense" onclick="submitExpense()">Add Expense Entry ➔</button>
+      <button onclick="openRecurringModal()" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">
+        🔁 Manage Recurring Expenses
+      </button>
     </div>
   </div>
 
@@ -1065,6 +1082,14 @@
     <div class="card">
       <div class="card-title"><span>🥇</span> Monthly Rankings — Best Profit</div>
       <div id="rank-list"><div class="log-empty">No data yet — add some entries to see your rankings!</div></div>
+    </div>
+
+    <!-- Budget Goals card -->
+    <div class="card">
+      <div class="card-title"><span>🎯</span> Budget Goals
+        <button onclick="openBudgetModal()" style="margin-left:auto;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:11px;color:var(--accent);cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif;">Set Target</button>
+      </div>
+      <div id="budget-inline-progress"><div style="font-size:12px;color:var(--muted);padding:8px 0;">No budget target set. Tap Set Target to get started.</div></div>
     </div>
 
     <!-- Sync from Sheet card -->
@@ -1298,7 +1323,7 @@
       This app uses Google Fonts (DM Sans, DM Serif Display) for display purposes only. No analytics, no tracking scripts, no advertising SDKs are included.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.4 · Endless Digital World · For personal record-keeping only</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.5 · Endless Digital World · For personal record-keeping only</p>
     </div>
   </div>
 </div>
@@ -1486,6 +1511,94 @@
   </div>
 </div>
 
+<!-- ── RECURRING EXPENSES MODAL ── -->
+<div id="recurring-modal" class="generic-modal">
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-header">
+      <h2>🔁 Recurring Expenses</h2>
+      <button class="modal-close" onclick="closeRecurringModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6;">
+        Set up expenses that repeat automatically each month — subscriptions, memberships, rent, phone bills, etc. They'll be logged and synced to your Google Sheet each month automatically.
+      </div>
+
+      <!-- Add new recurring -->
+      <div class="modal-section-title">➕ Add Recurring Expense</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+        <div>
+          <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px;">Name / Description</label>
+          <input type="text" id="rec-name" placeholder="e.g. Netflix, Gym Membership, Phone Bill" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;box-sizing:border-box;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px;">Category</label>
+            <select id="rec-category" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;box-sizing:border-box;"></select>
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px;">Amount (incl. GST)</label>
+            <input type="number" id="rec-amount" placeholder="0.00" min="0" step="0.01" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;box-sizing:border-box;">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px;">Frequency</label>
+            <select id="rec-frequency" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;box-sizing:border-box;">
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px;">Start Month</label>
+            <select id="rec-start-month" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;box-sizing:border-box;"></select>
+          </div>
+        </div>
+        <button onclick="addRecurringExpense()" style="background:var(--purple);color:#fff;border:none;border-radius:12px;padding:13px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">
+          ➕ Add Recurring Expense
+        </button>
+      </div>
+
+      <!-- Existing recurring list -->
+      <div class="modal-section-title">📋 Active Recurring Expenses</div>
+      <div id="recurring-list"><div class="log-empty" style="padding:12px 0;">No recurring expenses set up yet.</div></div>
+
+      <!-- Process button -->
+      <div style="margin-top:16px;padding:12px;background:rgba(167,139,250,0.07);border:1px solid rgba(167,139,250,0.2);border-radius:10px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Log all due recurring expenses for the current month and sync to Google Sheets.</div>
+        <button onclick="processRecurringExpenses()" style="background:var(--purple);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-size:12px;font-weight:700;cursor:pointer;width:100%;font-family:'DM Sans',sans-serif;">
+          🔁 Process Recurring Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── BUDGET GOALS MODAL ── -->
+<div id="budget-modal" class="generic-modal">
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-header">
+      <h2>🎯 Budget Goals</h2>
+      <button class="modal-close" onclick="closeBudgetModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6;">
+        Set a monthly income target. The app will show your progress toward it as you log income.
+      </div>
+
+      <div class="modal-section-title">🎯 Monthly Income Target</div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
+        <span style="font-size:18px;font-weight:700;color:var(--accent);">$</span>
+        <input type="number" id="budget-goal-input" placeholder="e.g. 5000" min="0" step="100" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;">
+        <button onclick="saveBudgetGoal()" style="background:var(--accent);color:#0D1117;border:none;border-radius:10px;padding:11px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">Save</button>
+      </div>
+
+      <div class="modal-section-title">📊 Progress by Month</div>
+      <div id="budget-progress-list"><div class="log-empty" style="padding:12px 0;">Set a target above to see your progress.</div></div>
+    </div>
+  </div>
+</div>
+
 <!-- ── ABOUT APP MODAL ── -->
 <div id="about-modal" class="generic-modal">
   <div class="modal-box" style="max-width:520px;">
@@ -1498,7 +1611,7 @@
       <div style="text-align:center;padding:16px 0 20px;">
         <div style="font-size:36px;margin-bottom:6px;">💰</div>
         <div style="font-size:17px;font-weight:700;color:var(--accent);">Smart GST Tracker</div>
-        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 1.8.1</div>
+        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 1.8.5</div>
       </div>
 
       <div class="modal-section-title">📱 Web App Features</div>
@@ -1601,7 +1714,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.8.4';
+const APP_VERSION = '1.8.5';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -1646,6 +1759,16 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '1.8.5',
+    items: [
+      'Recurring Expenses — set up subscriptions, memberships & bills that auto-log monthly',
+      'Recurring categories auto-create in Google Sheets and smart-lodge to correct row',
+      'Budget Goals — set a monthly income target and track progress with a live progress bar',
+      'Budget progress shown inline on the Progress tab for the current month',
+      'All stale version numbers corrected throughout the app',
+    ]
+  },
   {
     version: '1.8.4',
     items: [
@@ -2964,6 +3087,198 @@ async function executeDeleteAll() {
   }
 }
 
+// ── RECURRING EXPENSES ───────────────────────────────────────────────────
+let recurringExpenses = JSON.parse(localStorage.getItem('edw_recurring') || '[]');
+
+function saveRecurring() {
+  localStorage.setItem('edw_recurring', JSON.stringify(recurringExpenses));
+}
+
+function openRecurringModal() {
+  // Populate category select
+  const sel = document.getElementById('rec-category');
+  sel.innerHTML = categories.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join('');
+
+  // Populate start month select
+  const msel = document.getElementById('rec-start-month');
+  msel.innerHTML = MONTHS.map(m => `<option value="${m}">${m}</option>`).join('');
+  const curMonth = MONTHS[new Date().getMonth()];
+  msel.value = curMonth;
+
+  renderRecurringList();
+  document.getElementById('recurring-modal').classList.add('open');
+}
+function closeRecurringModal() { document.getElementById('recurring-modal').classList.remove('open'); }
+
+function renderRecurringList() {
+  const el = document.getElementById('recurring-list');
+  if (!recurringExpenses.length) {
+    el.innerHTML = '<div class="log-empty" style="padding:12px 0;">No recurring expenses set up yet.</div>';
+    return;
+  }
+  el.innerHTML = recurringExpenses.map((r, i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;">
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;color:var(--text);">${r.name}</div>
+        <div style="font-size:11px;color:var(--muted);">${r.category} · ${fmt(r.amount)} · ${r.frequency} · from ${r.startMonth}</div>
+        <div style="font-size:10px;color:var(--purple);margin-top:2px;">Last logged: ${r.lastLogged || 'Never'}</div>
+      </div>
+      <button onclick="deleteRecurring(${i})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px 8px;">✕</button>
+    </div>`).join('');
+}
+
+async function addRecurringExpense() {
+  const name      = document.getElementById('rec-name').value.trim();
+  const category  = document.getElementById('rec-category').value;
+  const amount    = parseFloat(document.getElementById('rec-amount').value);
+  const frequency = document.getElementById('rec-frequency').value;
+  const startMonth= document.getElementById('rec-start-month').value;
+
+  if (!name)             return toast('Please enter a name.', 'error');
+  if (!amount || amount <= 0) return toast('Please enter a valid amount.', 'error');
+
+  const rec = { name, category, amount, frequency, startMonth, lastLogged: null, id: Date.now() };
+  recurringExpenses.push(rec);
+  saveRecurring();
+  renderRecurringList();
+
+  // Ensure category exists in sheet
+  const catObj = categories.find(c => c.name === category);
+  await ensureCategoryInSheet(category, catObj ? catObj.icon : '');
+
+  document.getElementById('rec-name').value = '';
+  document.getElementById('rec-amount').value = '';
+  toast(`✅ "${name}" recurring expense added!`, 'success');
+}
+
+function deleteRecurring(i) {
+  const rec = recurringExpenses[i];
+  recurringExpenses.splice(i, 1);
+  saveRecurring();
+  renderRecurringList();
+  toast(`Removed "${rec.name}"`, 'info');
+}
+
+async function processRecurringExpenses() {
+  const currentMonth = MONTHS[new Date().getMonth()];
+  const currentMonthIdx = new Date().getMonth();
+  let logged = 0;
+
+  for (const rec of recurringExpenses) {
+    const startIdx = MONTHS.indexOf(rec.startMonth);
+    const monthsSinceStart = currentMonthIdx - startIdx + (currentMonthIdx < startIdx ? 12 : 0);
+
+    // Check if due this month
+    let isDue = false;
+    if (rec.frequency === 'monthly')   isDue = currentMonthIdx >= startIdx;
+    if (rec.frequency === 'quarterly') isDue = monthsSinceStart % 3 === 0;
+    if (rec.frequency === 'yearly')    isDue = monthsSinceStart % 12 === 0;
+
+    if (!isDue) continue;
+    if (rec.lastLogged === currentMonth) continue; // already logged this month
+
+    const entry = {
+      type: 'expense', month: currentMonth,
+      category: rec.category, amount: rec.amount,
+      note: `🔁 Recurring: ${rec.name}`,
+      gst: calcGst(rec.amount), ts: new Date().toISOString()
+    };
+    entries.unshift(entry);
+    rec.lastLogged = currentMonth;
+    logged++;
+
+    const catObj = categories.find(c => c.name === rec.category);
+    await ensureCategoryInSheet(rec.category, catObj ? catObj.icon : '');
+    await pushToSheet(entry);
+  }
+
+  saveRecurring();
+  localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0, APP_STORAGE_LIMIT)));
+  renderLog(); updateTotals();
+  renderRecurringList();
+
+  if (logged > 0) {
+    toast(`✅ ${logged} recurring expense${logged > 1 ? 's' : ''} logged for ${currentMonth}!`, 'success');
+  } else {
+    toast('No recurring expenses due this month, or already logged.', 'info');
+  }
+}
+
+// ── BUDGET GOALS ─────────────────────────────────────────────────────────
+function getBudgetGoal() { return parseFloat(localStorage.getItem('edw_budget_goal') || '0'); }
+
+function openBudgetModal() {
+  const goal = getBudgetGoal();
+  document.getElementById('budget-goal-input').value = goal || '';
+  renderBudgetProgress();
+  document.getElementById('budget-modal').classList.add('open');
+}
+function closeBudgetModal() { document.getElementById('budget-modal').classList.remove('open'); }
+
+function saveBudgetGoal() {
+  const val = parseFloat(document.getElementById('budget-goal-input').value);
+  if (!val || val <= 0) return toast('Please enter a valid target amount.', 'error');
+  localStorage.setItem('edw_budget_goal', val);
+  renderBudgetProgress();
+  renderBudgetInline();
+  toast(`🎯 Monthly target set to ${fmt(val)}!`, 'success');
+}
+
+function renderBudgetProgress() {
+  const goal = getBudgetGoal();
+  const el   = document.getElementById('budget-progress-list');
+  if (!goal) { el.innerHTML = '<div class="log-empty" style="padding:12px 0;">Set a target above to see your progress.</div>'; return; }
+
+  const monthly = getMonthlyData();
+  if (!monthly.length) { el.innerHTML = '<div class="log-empty" style="padding:12px 0;">No entries yet.</div>'; return; }
+
+  el.innerHTML = monthly.map(m => {
+    const pct     = Math.min(100, Math.round((m.income / goal) * 100));
+    const color   = pct >= 100 ? 'var(--green)' : pct >= 60 ? 'var(--accent)' : 'var(--red)';
+    const badge   = pct >= 100 ? '🏆 Target Hit!' : pct >= 60 ? '📈 On Track' : '⚠️ Below Target';
+    return `
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+          <span style="font-size:12px;font-weight:600;color:var(--text);">${m.month}</span>
+          <span style="font-size:11px;color:${color};font-weight:700;">${badge}</span>
+        </div>
+        <div style="background:var(--card);border-radius:20px;height:10px;overflow:hidden;margin-bottom:4px;">
+          <div style="background:${color};width:${pct}%;height:100%;border-radius:20px;transition:width 0.4s;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
+          <span>${fmt(m.income)} earned</span>
+          <span>${pct}% of ${fmt(goal)}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderBudgetInline() {
+  const goal = getBudgetGoal();
+  const el   = document.getElementById('budget-inline-progress');
+  if (!el) return;
+  if (!goal) { el.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0;">No budget target set. Tap Set Target to get started.</div>'; return; }
+
+  const currentMonth = MONTHS[new Date().getMonth()];
+  const monthIncome  = entries.filter(e => e.type === 'income' && e.month === currentMonth).reduce((s,e) => s+e.amount, 0);
+  const pct   = Math.min(100, Math.round((monthIncome / goal) * 100));
+  const color = pct >= 100 ? 'var(--green)' : pct >= 60 ? 'var(--accent)' : 'var(--red)';
+  const badge = pct >= 100 ? '🏆 Target Hit!' : pct >= 60 ? '📈 On Track' : '⚠️ Below Target';
+
+  el.innerHTML = `
+    <div style="margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:12px;color:var(--muted);">${currentMonth} — Target: ${fmt(goal)}</span>
+      <span style="font-size:11px;color:${color};font-weight:700;">${badge}</span>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;height:12px;overflow:hidden;margin-bottom:6px;">
+      <div style="background:${color};width:${pct}%;height:100%;border-radius:20px;transition:width 0.5s;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
+      <span>${fmt(monthIncome)} earned this month</span>
+      <span style="color:${color};font-weight:600;">${pct}%</span>
+    </div>`;
+}
+
 // ── PROGRESS / GAMIFICATION ───────────────────────────────────────────────
 let progressChart = null;
 let chartView = 'profit';
@@ -3050,6 +3365,7 @@ function drawChart(monthlyData) {
 }
 
 function renderProgress() {
+  renderBudgetInline();
   const monthly = getMonthlyData();
   const totalInc = entries.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
   const totalExp = entries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
@@ -3451,7 +3767,7 @@ function openSetupGuidePDF() {
     <div class="cover-title">Smart GST Tracker</div>
     <div class="cover-sub">Complete Setup &amp; User Guide</div>
     <div class="cover-sub" style="margin-top:4px;">by <strong>Endless Digital World</strong></div>
-    <div class="cover-version">Version 1.8.4</div>
+    <div class="cover-version">Version 1.8.5</div>
     <div style="height:30mm;"></div>
     <div style="background:#f9f9f9;border:1px solid #eee;border-radius:10px;padding:16px 20px;text-align:center;">
       <p style="margin:0;font-size:12px;color:#555;">This guide covers everything you need to set up and use<br>Smart GST Tracker and your connected Google Sheet.</p>
@@ -3609,7 +3925,7 @@ function openSetupGuidePDF() {
       <li>GST = Amount ÷ 11 &nbsp;|&nbsp; Ex-GST = Amount − GST</li>
     </ul>
     <div class="tip">💡 Export a PDF from My Logs at the end of each quarter for your BAS records.</div>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide · v1.8.4 · Endless Digital World</span><span>Page 7 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide · v1.8.5 · Endless Digital World</span><span>Page 7 of 7</span></div>
   </div>
 
   <${'script'}>window.onload = () => window.print();</${'script'}>
