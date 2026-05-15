@@ -325,8 +325,22 @@
   @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 
   /* ── TOAST ── */
-  #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 22px; font-size: 13.5px; font-weight: 500; box-shadow: 0 8px 32px rgba(0,0,0,0.5); z-index: 999; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); max-width: 320px; text-align: center; }
-  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast {
+    position: fixed; bottom: 32px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px 22px; font-size: 13.5px;
+    font-weight: 500; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    z-index: 999; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    max-width: 320px; text-align: center; pointer-events: none;
+  }
+  #toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+  #toast.hiding {
+    transform: translateX(-50%) translateY(calc(-100vh - 80px));
+    transition: transform 0.55s cubic-bezier(0.4,0,0.6,1);
+  }
   #toast.success { border-color: var(--green); color: var(--green); }
   #toast.error { border-color: var(--red); color: var(--red); }
   #toast.info { border-color: var(--purple); color: var(--purple); }
@@ -631,7 +645,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 1.8.5</div>
+  <div class="splash-ver">Version 1.8.6</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -743,8 +757,19 @@
 <!-- ── DRAWER ── -->
 <div id="drawer">
   <div class="drawer-header">
-    <h2>⚙️ Menu</h2>
+    <h2>☰ Menu</h2>
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <!-- Budget Progress Bar for current month -->
+  <div id="drawer-budget-bar" style="padding:14px 20px 12px;border-bottom:1px solid var(--border);background:var(--surface);">
+    <div id="drawer-budget-month-label" style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:7px;"></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;height:9px;overflow:hidden;">
+      <div id="drawer-budget-bar-fill" style="height:100%;border-radius:20px;transition:width 0.5s;width:0%;background:var(--muted);"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;">
+      <span id="drawer-budget-earned" style="font-size:10px;color:var(--muted);"></span>
+      <span id="drawer-budget-pct" style="font-size:10px;font-weight:700;"></span>
+    </div>
   </div>
   <div style="padding:12px 20px 0;border-bottom:1px solid var(--border);">
     <div id="drawer-profile-name" style="font-size:13px;color:var(--muted);padding-bottom:12px;"></div>
@@ -772,13 +797,6 @@
       <div>
         <div class="drawer-row-label">My Documents</div>
         <div class="drawer-row-sub">Receipts & saved files</div>
-      </div>
-    </div>
-    <div class="drawer-row" onclick="openCatModal(); closeDrawer();">
-      <div class="drawer-row-icon">🗂️</div>
-      <div>
-        <div class="drawer-row-label">Manage Categories</div>
-        <div class="drawer-row-sub">Add or remove expense categories</div>
       </div>
     </div>
     <div class="drawer-row" onclick="openRecurringModal(); closeDrawer();">
@@ -852,7 +870,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 1.8.5</strong>
+    <strong style="color:var(--accent);">Version 1.8.6</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -864,7 +882,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v1.8.5</p>
+        <p>Endless Digital World · v1.8.6</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -1323,7 +1341,7 @@
       This app uses Google Fonts (DM Sans, DM Serif Display) for display purposes only. No analytics, no tracking scripts, no advertising SDKs are included.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.5 · Endless Digital World · For personal record-keeping only</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.6 · Endless Digital World · For personal record-keeping only</p>
     </div>
   </div>
 </div>
@@ -1611,38 +1629,62 @@
       <div style="text-align:center;padding:16px 0 20px;">
         <div style="font-size:36px;margin-bottom:6px;">💰</div>
         <div style="font-size:17px;font-weight:700;color:var(--accent);">Smart GST Tracker</div>
-        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 1.8.5</div>
+        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 1.8.6</div>
       </div>
 
       <div class="modal-section-title">📱 Web App Features</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">💰 Income & Expense Tracking</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Record income and expenses with GST automatically split out at 10%. Supports up to 10 income entries per month and unlimited expense categories.</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Record income and expenses with GST automatically split at your chosen rate (default 10%). Log income weekly, monthly, or by category. Supports unlimited expense categories and up to 10 custom income sources per month.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">☁️ Google Sheets Sync</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Every entry syncs instantly to your own private Google Sheet. Your data stays in your Google account — EDW never sees it.</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Every entry syncs instantly to your own private Google Sheet via Apps Script. Your data stays inside your Google account — Endless Digital World never sees it. Pull existing sheet data back into the app anytime.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🏆 Gamified Progress</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Monthly profit rankings with 🥇🥈🥉 medals, income vs expense charts, GST payable trends, and performance stats to keep you motivated.</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Monthly profit rankings with 🥇🥈🥉 medals, interactive bar charts showing income, expenses, profit or GST by month, and performance statistics including streak count and best-ever month.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">📂 My Logs</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Browse all entries by month and type. Export a PDF report for any period. Manage and delete data securely from here.</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Browse all entries by month and type. Export a detailed PDF report for any period. Manage or delete data securely from here. Filter by income only or expenses only.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🔒 PIN Lock</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Set a 4-digit PIN to protect your financial data. Enable it under Settings.</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Set a 4-digit PIN to protect your financial data. Enable it under Settings → Security. The PIN is required every time you open the app.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
-          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🗂️ Custom Categories</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Add your own expense categories beyond the defaults. Manage them anytime via Manage Categories in the menu.</div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🗂️ Custom Expense Categories</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Add your own expense categories beyond the 9 defaults. Auto-detects the best emoji for your category name. Drag to reorder, delete anytime. New categories sync to your Google Sheet automatically. Access via the Expenses screen.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🔁 Recurring Expenses</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Set up subscriptions, memberships, and bills that auto-log each month, quarter, or year. Recurring entries sync to your Google Sheet automatically when processed. Access via ☰ Menu → Recurring Expenses.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🎯 Budget Goals</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Set a monthly income target and track your progress with a live progress bar. Budget status shown on the Progress tab and at the top of the hamburger menu for quick access. Access via ☰ Menu → Budget Goals.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">📁 My Documents</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Attach photo or PDF receipts when logging expenses. All receipts are saved here and viewable or downloadable anytime. Storage is local to your browser. Access via ☰ Menu → My Documents.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🏅 Rewards & Points</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Earn points every time you log income. Points scale with income amount — bigger entries earn more. Share your score on Instagram Stories or copy it to clipboard. Access via ☰ Menu → Rewards & Points.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">⚙️ Settings</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Customise the GST rate (default 10% for Australia), manage your Google Sheet URL, enable or change your PIN lock, and manage your data. Access via ☰ Menu → Settings.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🔄 Auto Updates</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">The app is hosted online. New features and improvements are delivered automatically every time you open it — no re-download needed.</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">The app is hosted online and updates automatically every time you open it. No re-download or reinstall needed — new features appear the next time you visit.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🛡️ Privacy & Local Storage</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">All data is stored locally on your device using localStorage and IndexedDB (up to 7 years of data). Your profile persists even after clearing browser history — just re-enter your name to restore everything. EDW never collects your financial data.</div>
         </div>
       </div>
 
@@ -1714,7 +1756,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.8.5';
+const APP_VERSION = '1.8.6';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -1759,6 +1801,17 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '1.8.6',
+    items: [
+      'Confirmation pop-up now animates smoothly upward and disappears after 3 seconds — no tap needed',
+      'App version (v1.8.6) now displayed at the very bottom of the hamburger menu',
+      'Version shown on the loading/splash screen updated to v1.8.6',
+      'Budget progress bar added at the very top of the hamburger menu — shows current month\'s income progress at a glance',
+      'Manage Categories removed from the hamburger menu — now only accessible through the Expenses section',
+      'About This App section updated with full feature descriptions for all app capabilities',
+    ]
+  },
   {
     version: '1.8.5',
     items: [
@@ -2270,12 +2323,47 @@ function updateDrawerProfile(name) {
 
 // ── DRAWER ────────────────────────────────────────────────────────────────
 function openDrawer() {
+  renderDrawerBudgetBar();
   document.getElementById('drawer').classList.add('open');
   document.getElementById('drawer-overlay').classList.add('open');
 }
 function closeDrawer() {
   document.getElementById('drawer').classList.remove('open');
   document.getElementById('drawer-overlay').classList.remove('open');
+}
+
+// ── DRAWER BUDGET BAR ─────────────────────────────────────────────────────
+function renderDrawerBudgetBar() {
+  const goal = getBudgetGoal ? getBudgetGoal() : parseFloat(localStorage.getItem('edw_budget_goal') || '0');
+  const monthLabel = document.getElementById('drawer-budget-month-label');
+  const barFill    = document.getElementById('drawer-budget-bar-fill');
+  const earned     = document.getElementById('drawer-budget-earned');
+  const pctEl      = document.getElementById('drawer-budget-pct');
+  if (!monthLabel || !barFill) return;
+
+  const currentMonth = MONTHS[new Date().getMonth()];
+  monthLabel.textContent = currentMonth;
+
+  if (!goal) {
+    barFill.style.width = '0%';
+    barFill.style.background = 'var(--border)';
+    earned.textContent = 'No target set';
+    pctEl.textContent = '';
+    pctEl.style.color = 'var(--muted)';
+    return;
+  }
+
+  const monthIncome = (typeof entries !== 'undefined' ? entries : [])
+    .filter(e => e.type === 'income' && e.month === currentMonth)
+    .reduce((s, e) => s + e.amount, 0);
+  const pct   = Math.min(100, Math.round((monthIncome / goal) * 100));
+  const color = pct >= 100 ? 'var(--green)' : pct >= 60 ? 'var(--accent)' : 'var(--red)';
+
+  barFill.style.width   = pct + '%';
+  barFill.style.background = color;
+  earned.textContent    = '$' + monthIncome.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' of $' + goal.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  pctEl.textContent     = pct + '%';
+  pctEl.style.color     = color;
 }
 
 // ── TABS ──────────────────────────────────────────────────────────────────
@@ -3767,7 +3855,7 @@ function openSetupGuidePDF() {
     <div class="cover-title">Smart GST Tracker</div>
     <div class="cover-sub">Complete Setup &amp; User Guide</div>
     <div class="cover-sub" style="margin-top:4px;">by <strong>Endless Digital World</strong></div>
-    <div class="cover-version">Version 1.8.5</div>
+    <div class="cover-version">Version 1.8.6</div>
     <div style="height:30mm;"></div>
     <div style="background:#f9f9f9;border:1px solid #eee;border-radius:10px;padding:16px 20px;text-align:center;">
       <p style="margin:0;font-size:12px;color:#555;">This guide covers everything you need to set up and use<br>Smart GST Tracker and your connected Google Sheet.</p>
@@ -4333,12 +4421,26 @@ function playWalletSyncAnimation() {
 }
 
 let toastTimer;
+let toastHideTimer;
 function toast(msg, type='info') {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = `show ${type}`;
+  // Clear any pending timers
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+  clearTimeout(toastHideTimer);
+  // Reset classes and position instantly
+  el.className = '';
+  el.textContent = msg;
+  // Force reflow so the reset is applied before re-adding .show
+  void el.offsetHeight;
+  el.className = `show ${type}`;
+  // After 3 seconds, animate upward (slide to top of screen)
+  toastTimer = setTimeout(() => {
+    el.classList.add('hiding');
+    // After animation completes, fully hide
+    toastHideTimer = setTimeout(() => {
+      el.className = '';
+    }, 600);
+  }, 3000);
 }
 </script>
 </body>
