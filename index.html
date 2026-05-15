@@ -645,7 +645,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 1.8.6</div>
+  <div class="splash-ver">Version 2.1</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -849,7 +849,7 @@
       <div class="drawer-row-icon">⚙️</div>
       <div>
         <div class="drawer-row-label">Settings</div>
-        <div class="drawer-row-sub">PIN, GST rate & Sheet URL</div>
+        <div class="drawer-row-sub">PIN, GST rate, Sheet URL & Notifications</div>
       </div>
     </div>
     <div class="drawer-row" onclick="openHelpModal(); closeDrawer();">
@@ -870,7 +870,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 1.8.6</strong>
+    <strong style="color:var(--accent);">Version 2.1</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -882,7 +882,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v1.8.6</p>
+        <p>Endless Digital World · v2.1</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -1317,6 +1317,66 @@
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Data is stored locally in this browser for up to 7 years.</div>
       <div style="font-size:12px;color:var(--muted);line-height:1.6;">To delete your data go to <strong style="color:var(--text);">☰ Menu → My Logs → Manage Data</strong>.</div>
 
+      <hr class="divider">
+
+      <div class="modal-section-title">🔔 Notification Settings</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Control which prompts and notifications appear in the app.</div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Weekly Income Reminder</div>
+          <div class="toggle-sub">Alert when no income logged for 7+ days</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="notif-weekly-reminder" onchange="saveNotifSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">BAS Lodgement Alerts</div>
+          <div class="toggle-sub">Reminder before each quarterly ATO deadline</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="notif-bas-alert" onchange="saveNotifSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Monthly Summary Digest</div>
+          <div class="toggle-sub">Auto summary at month end (income, expenses, GST)</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="notif-monthly-summary" onchange="saveNotifSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Inactivity Nudge</div>
+          <div class="toggle-sub">Prompt if no entries added in 7+ days</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="notif-inactivity" onchange="saveNotifSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Private Browser Warning</div>
+          <div class="toggle-sub">Show alert when using private/incognito mode</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="notif-private-browser" onchange="saveNotifSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1341,7 +1401,7 @@
       This app uses Google Fonts (DM Sans, DM Serif Display) for display purposes only. No analytics, no tracking scripts, no advertising SDKs are included.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.6 · Endless Digital World · For personal record-keeping only</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v2.1 · Endless Digital World · For personal record-keeping only</p>
     </div>
   </div>
 </div>
@@ -1629,7 +1689,7 @@
       <div style="text-align:center;padding:16px 0 20px;">
         <div style="font-size:36px;margin-bottom:6px;">💰</div>
         <div style="font-size:17px;font-weight:700;color:var(--accent);">Smart GST Tracker</div>
-        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 1.8.6</div>
+        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 2.1</div>
       </div>
 
       <div class="modal-section-title">📱 Web App Features</div>
@@ -1677,6 +1737,18 @@
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">⚙️ Settings</div>
           <div style="font-size:11px;color:var(--muted);line-height:1.5;">Customise the GST rate (default 10% for Australia), manage your Google Sheet URL, enable or change your PIN lock, and manage your data. Access via ☰ Menu → Settings.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🔔 Push Notification Reminders</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Receive in-app alerts when you haven't logged income for a week, plus BAS lodgement date reminders before each quarterly ATO deadline. Enable or disable individually in Settings → Notifications.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">📊 Monthly Summary Notifications</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">At the end of each month, an auto-generated digest shows your total income, expenses, and GST payable for that month — helping you stay on top of your finances and BAS obligations. Toggle in Settings → Notifications.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">💤 Inactivity Nudge</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">If no entries have been added in 7 or more days, the app gently prompts you to log any income or expenses you may have missed. Toggle in Settings → Notifications.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🔄 Auto Updates</div>
@@ -1756,7 +1828,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.8.6';
+const APP_VERSION = '2.1';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -1801,6 +1873,20 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '2.1',
+    items: [
+      'Confirmation pop-up now slides smoothly off the top of the screen after 3 seconds — no tap needed',
+      'App version v2.1 shown at the bottom of the hamburger menu and on the loading screen',
+      'About This App section now fully describes every feature in the app',
+      'Income category matching is now strict — app checks Google Sheet before creating a new row; existing category names always lodge to the same row',
+      'Push notification reminders — "You haven\'t logged income this week" alert to keep you on track',
+      'BAS lodgement date alerts — notified before each quarterly ATO deadline',
+      'Monthly summary notification — auto-generated digest of income, expenses and GST for the month just ended',
+      'Inactivity nudge — gentle prompt if no entries have been added in 7+ days',
+      'New Notification Settings panel in ☰ Menu → Settings — toggle every prompt and notification individually on or off',
+    ]
+  },
   {
     version: '1.8.6',
     items: [
@@ -2314,6 +2400,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Private browser warning (every 6 hours)
   setTimeout(checkPrivateBrowser, 1500);
+  // Notification checks — staggered to avoid overwhelming on load
+  setTimeout(checkInactivityNudge,    3000);
+  setTimeout(checkWeeklyIncomeReminder, 4500);
+  setTimeout(checkMonthlySummary,     5500);
+  setTimeout(checkBasAlert,           6500);
 });
 
 function updateDrawerProfile(name) {
@@ -2438,7 +2529,10 @@ async function pushToSheet(entry) {
   const params = new URLSearchParams({
     type: entry.type, month: entry.month, amount: entry.amount,
     note: entry.note||'', period: entry.period||'', category: entry.category||'',
-    gstRate: getGstRate()
+    gstRate: getGstRate(),
+    // For income category mode — signal to sheet to match existing category row
+    incomeMode: entry.incomeMode || '',
+    strictCategory: entry.type === 'income' && entry.incomeMode === 'category' ? '1' : '0',
   });
   try {
     await fetch(getSheetUrl() + '?' + params.toString(), {method:'GET', mode:'no-cors'});
@@ -2489,6 +2583,22 @@ async function pushGstRateToSheet(rate) {
   } catch { /* silent */ }
 }
 
+// ── ENSURE INCOME CATEGORY IN SHEET (strict matching) ─────────────────────
+async function ensureIncomeCategoryInSheet(catName, month) {
+  const url = getSheetUrl();
+  if (!url || url === 'skipped') return;
+  const params = new URLSearchParams({
+    type: 'incomeCategory',
+    action: 'ensureIncomeCategory',
+    category: catName,
+    month: month,
+    gstRate: getGstRate()
+  });
+  try {
+    await fetch(url + '?' + params.toString(), {method:'GET', mode:'no-cors'});
+  } catch { /* silent */ }
+}
+
 // ── SUBMIT INCOME ─────────────────────────────────────────────────────────
 async function submitIncome() {
   const month  = document.getElementById('inc-month').value;
@@ -2505,11 +2615,24 @@ async function submitIncome() {
   btn.disabled = true; btn.textContent = 'Saving…';
 
   const periodLabel = incomeMode === 'category' ? selectedIncCat : selectedPeriod;
-  const entry = {type:'income', month, period:periodLabel, amount, note, gst:calcGst(amount), ts:new Date().toISOString()};
+
+  // Build entry — include incomeMode and category for strict sheet matching
+  const entry = {
+    type:'income', month, period:periodLabel,
+    category: incomeMode === 'category' ? selectedIncCat : '',
+    incomeMode,
+    amount, note, gst:calcGst(amount), ts:new Date().toISOString()
+  };
   entries.unshift(entry);
   localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0,APP_STORAGE_LIMIT)));
   backupToProfileDB();
   awardPoints(amount);
+
+  // Strict category matching: ensure income category row exists in sheet before lodging
+  if (incomeMode === 'category' && selectedIncCat) {
+    await ensureIncomeCategoryInSheet(selectedIncCat, month);
+  }
+
   await pushToSheet(entry);
 
   document.getElementById('inc-amount').value = '';
@@ -2862,6 +2985,7 @@ document.addEventListener('change', function(e) {
 // ── PRIVATE BROWSER WARNING ───────────────────────────────────────────────
 const PRIVATE_WARN_KEY = 'edw_private_warn_ts';
 function checkPrivateBrowser() {
+  if (!getNotifSetting('private-browser')) return;
   const last = parseInt(localStorage.getItem(PRIVATE_WARN_KEY) || '0');
   const sixHours = 6 * 60 * 60 * 1000;
   if (Date.now() - last > sixHours) {
@@ -2964,6 +3088,8 @@ function openSettings() {
   pinSetupBuffer = ''; pinSetupPhase = 'set'; pinSetupTemp = '';
   updateSetupDots();
   document.getElementById('pin-setup-msg').textContent = '';
+  // Load notification settings
+  loadNotifSettings();
   document.getElementById('settings-modal').classList.add('open');
 }
 function closeSettings() { document.getElementById('settings-modal').classList.remove('open'); }
@@ -3086,6 +3212,212 @@ async function saveGstRate() {
 // ── PRIVACY ───────────────────────────────────────────────────────────────
 function openPrivacy()  { document.getElementById('privacy-modal').classList.add('open'); }
 function closePrivacy() { document.getElementById('privacy-modal').classList.remove('open'); }
+
+// ── NOTIFICATION SETTINGS ─────────────────────────────────────────────────
+const NOTIF_DEFAULTS = {
+  'weekly-reminder':  true,
+  'bas-alert':        true,
+  'monthly-summary':  true,
+  'inactivity':       true,
+  'private-browser':  true,
+};
+
+function getNotifSetting(key) {
+  const stored = localStorage.getItem('edw_notif_' + key);
+  if (stored === null) return NOTIF_DEFAULTS[key] !== false;
+  return stored === 'true';
+}
+
+function saveNotifSettings() {
+  ['weekly-reminder','bas-alert','monthly-summary','inactivity','private-browser'].forEach(key => {
+    const el = document.getElementById('notif-' + key);
+    if (el) localStorage.setItem('edw_notif_' + key, el.checked);
+  });
+  toast('✅ Notification settings saved!', 'success');
+}
+
+function loadNotifSettings() {
+  ['weekly-reminder','bas-alert','monthly-summary','inactivity','private-browser'].forEach(key => {
+    const el = document.getElementById('notif-' + key);
+    if (el) el.checked = getNotifSetting(key);
+  });
+}
+
+// ── WEEKLY INCOME REMINDER ────────────────────────────────────────────────
+function checkWeeklyIncomeReminder() {
+  if (!getNotifSetting('weekly-reminder')) return;
+  const sevenDays = 7 * 24 * 60 * 60 * 1000;
+  const lastSeen = parseInt(localStorage.getItem('edw_last_income_reminder_shown') || '0');
+  if (Date.now() - lastSeen < sevenDays) return; // only check once per 7 days
+
+  const incomeEntries = entries.filter(e => e.type === 'income');
+  if (!incomeEntries.length) {
+    localStorage.setItem('edw_last_income_reminder_shown', Date.now());
+    showNotificationBanner('📊 Income Reminder', 'You haven\'t logged any income this week. Tap to log now.', () => switchTab('income'));
+    return;
+  }
+  const latest = Math.max(...incomeEntries.map(e => new Date(e.ts).getTime()));
+  if (Date.now() - latest > sevenDays) {
+    localStorage.setItem('edw_last_income_reminder_shown', Date.now());
+    showNotificationBanner('📊 Income Reminder', 'You haven\'t logged income this week — don\'t forget to add your earnings!', () => switchTab('income'));
+  }
+}
+
+// ── INACTIVITY NUDGE ─────────────────────────────────────────────────────
+function checkInactivityNudge() {
+  if (!getNotifSetting('inactivity')) return;
+  const sevenDays = 7 * 24 * 60 * 60 * 1000;
+  const lastNudge = parseInt(localStorage.getItem('edw_last_inactivity_nudge') || '0');
+  if (Date.now() - lastNudge < sevenDays) return;
+
+  if (!entries.length) return; // new user, skip
+  const latest = Math.max(...entries.map(e => new Date(e.ts).getTime()));
+  if (Date.now() - latest > sevenDays) {
+    localStorage.setItem('edw_last_inactivity_nudge', Date.now());
+    showNotificationBanner('💤 Haven\'t seen you in a while!', 'No entries added in 7+ days. Log your latest income or expenses to stay on track.', () => switchTab('income'));
+  }
+}
+
+// ── MONTHLY SUMMARY NOTIFICATION ─────────────────────────────────────────
+function checkMonthlySummary() {
+  if (!getNotifSetting('monthly-summary')) return;
+  const now = new Date();
+  const today = now.getDate();
+  if (today > 3) return; // Only show in first 3 days of a new month
+
+  const prevMonthIdx = now.getMonth() === 0 ? 11 : now.getMonth() - 1;
+  const prevMonthName = MONTHS[prevMonthIdx];
+  const lastSummaryKey = 'edw_monthly_summary_shown_' + prevMonthName + '_' + now.getFullYear();
+  if (localStorage.getItem(lastSummaryKey)) return;
+
+  const monthIncome  = entries.filter(e => e.type === 'income'  && e.month === prevMonthName).reduce((s,e) => s + e.amount, 0);
+  const monthExpense = entries.filter(e => e.type === 'expense' && e.month === prevMonthName).reduce((s,e) => s + e.amount, 0);
+  const monthGst     = entries.filter(e => e.type === 'income'  && e.month === prevMonthName).reduce((s,e) => s + e.gst, 0)
+                     - entries.filter(e => e.type === 'expense' && e.month === prevMonthName).reduce((s,e) => s + e.gst, 0);
+
+  if (monthIncome === 0 && monthExpense === 0) return; // nothing to show
+
+  localStorage.setItem(lastSummaryKey, '1');
+  showMonthlySummaryModal(prevMonthName, monthIncome, monthExpense, Math.max(0, monthGst));
+}
+
+function showMonthlySummaryModal(month, income, expense, gst) {
+  const overlay = document.createElement('div');
+  overlay.id = 'monthly-summary-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9995;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:380px;padding:28px 24px;">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:36px;margin-bottom:8px;">📊</div>
+        <div style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:4px;">${month} Summary</div>
+        <div style="font-size:12px;color:var(--muted);">Your month-end financial digest</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
+        <div style="background:var(--card);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border);">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">Income</div>
+          <div style="font-size:15px;font-weight:700;color:var(--green);">${fmt(income)}</div>
+        </div>
+        <div style="background:var(--card);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border);">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">Expenses</div>
+          <div style="font-size:15px;font-weight:700;color:var(--red);">${fmt(expense)}</div>
+        </div>
+        <div style="background:var(--card);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border);">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">GST</div>
+          <div style="font-size:15px;font-weight:700;color:var(--purple);">${fmt(gst)}</div>
+        </div>
+      </div>
+      <div style="background:var(--income-bg);border:1px solid rgba(61,220,132,0.2);border-radius:10px;padding:12px;margin-bottom:16px;font-size:12px;color:var(--green);text-align:center;">
+        Net Profit: <strong>${fmt(income - expense)}</strong>
+      </div>
+      <button onclick="document.getElementById('monthly-summary-overlay').remove()" style="width:100%;padding:14px;border-radius:12px;border:none;background:var(--accent);color:#0D1117;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">
+        Got It ✓
+      </button>
+      <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--muted);">
+        Turn off in ☰ Menu → Settings → Notifications
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+// ── BAS LODGEMENT ALERT ───────────────────────────────────────────────────
+function checkBasAlert() {
+  if (!getNotifSetting('bas-alert')) return;
+  const now = new Date();
+  const month = now.getMonth() + 1; // 1-12
+  const day   = now.getDate();
+
+  // ATO BAS lodgement deadlines (approx): Q1 Oct 28, Q2 Feb 28, Q3 Apr 28, Q4 Jul 28
+  // We alert in the last 14 days of the month before deadline
+  const basAlerts = [
+    { alertMonth: 10, alertDay: 14, quarter: 'Q1 (Jul–Sep)', deadline: '28 Oct' },
+    { alertMonth: 2,  alertDay: 14, quarter: 'Q2 (Oct–Dec)', deadline: '28 Feb' },
+    { alertMonth: 4,  alertDay: 14, quarter: 'Q3 (Jan–Mar)', deadline: '28 Apr' },
+    { alertMonth: 7,  alertDay: 14, quarter: 'Q4 (Apr–Jun)', deadline: '28 Jul' },
+  ];
+
+  for (const alert of basAlerts) {
+    if (month === alert.alertMonth && day >= alert.alertDay) {
+      const key = 'edw_bas_alert_' + alert.quarter + '_' + now.getFullYear();
+      if (!localStorage.getItem(key)) {
+        localStorage.setItem(key, '1');
+        showNotificationBanner(
+          '📋 BAS Due Soon',
+          `${alert.quarter} BAS is due ${alert.deadline}. Check your GST in My Logs or export a PDF for your records.`,
+          () => openLogsModal()
+        );
+      }
+      break;
+    }
+  }
+}
+
+// ── NOTIFICATION BANNER ───────────────────────────────────────────────────
+function showNotificationBanner(title, message, onClick) {
+  // Remove any existing banner
+  const existing = document.getElementById('notif-banner');
+  if (existing) existing.remove();
+
+  const banner = document.createElement('div');
+  banner.id = 'notif-banner';
+  banner.style.cssText = `
+    position:fixed;top:-120px;left:50%;transform:translateX(-50%);
+    background:var(--surface);border:1px solid var(--accent);
+    border-radius:14px;padding:14px 18px;max-width:340px;width:calc(100% - 32px);
+    z-index:9994;box-shadow:0 8px 32px rgba(0,0,0,0.5);
+    cursor:pointer;transition:top 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  `;
+  banner.innerHTML = `
+    <div style="display:flex;align-items:flex-start;gap:10px;">
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:3px;">${title}</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.5;">${message}</div>
+      </div>
+      <button onclick="event.stopPropagation();dismissNotifBanner()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;flex-shrink:0;padding:0;">✕</button>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:6px;">Tap to open · Turn off in Settings</div>
+  `;
+  banner.addEventListener('click', () => {
+    dismissNotifBanner();
+    if (onClick) onClick();
+  });
+  document.body.appendChild(banner);
+
+  // Animate in
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { banner.style.top = '16px'; });
+  });
+
+  // Auto-dismiss after 7 seconds
+  setTimeout(() => dismissNotifBanner(), 7000);
+}
+
+function dismissNotifBanner() {
+  const banner = document.getElementById('notif-banner');
+  if (!banner) return;
+  banner.style.top = '-120px';
+  banner.style.transition = 'top 0.4s cubic-bezier(0.4,0,0.6,1)';
+  setTimeout(() => { if (banner.parentNode) banner.remove(); }, 450);
+}
 
 // ── CONFIRM DELETE ────────────────────────────────────────────────────────
 function confirmDeleteAll() {
