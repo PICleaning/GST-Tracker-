@@ -631,7 +631,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 1.8.3</div>
+  <div class="splash-ver">Version 1.8.4</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -838,7 +838,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 1.8.3</strong>
+    <strong style="color:var(--accent);">Version 1.8.4</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -850,7 +850,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v1.8.3</p>
+        <p>Endless Digital World · v1.8.4</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -1298,7 +1298,7 @@
       This app uses Google Fonts (DM Sans, DM Serif Display) for display purposes only. No analytics, no tracking scripts, no advertising SDKs are included.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.3 · Endless Digital World · For personal record-keeping only</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v1.8.4 · Endless Digital World · For personal record-keeping only</p>
     </div>
   </div>
 </div>
@@ -1455,29 +1455,33 @@
 <!-- ── CONFIRM DELETE MODAL ── -->
 <div id="confirm-modal">
   <div class="confirm-box">
-    <div class="confirm-icon">⚠️</div>
+    <div class="confirm-icon">🗑️</div>
     <div class="confirm-title">Delete Data</div>
-    <div class="confirm-msg">Choose what you want to permanently delete. <strong style="color:var(--red);">This cannot be reversed.</strong></div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin:16px 0;">
-      <label style="display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;">
+    <div class="confirm-msg">Choose what to delete. <strong style="color:var(--red);">This cannot be reversed.</strong></div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin:12px 0;">
+      <label style="display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;text-align:left;">
         <input type="checkbox" id="del-app-data" checked style="margin-top:2px;accent-color:var(--red);">
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--text);">App Data</div>
-          <div style="font-size:11px;color:var(--muted);">All local entries, categories & settings stored in this browser</div>
+          <div style="font-size:11px;color:var(--muted);">All local entries, categories & settings (localStorage + IndexedDB)</div>
         </div>
       </label>
-      <label style="display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;">
-        <input type="checkbox" id="del-sheet-data" style="margin-top:2px;accent-color:var(--red);">
+      <label style="display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;text-align:left;">
+        <input type="checkbox" id="del-sheet-data" onchange="document.getElementById('confirm-delete-warning').style.display=this.checked?'block':'none'" style="margin-top:2px;accent-color:var(--red);">
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--text);">Google Sheet Data</div>
-          <div style="font-size:11px;color:var(--muted);">Clears all entries from your connected Google Sheet (cannot be undone)</div>
+          <div style="font-size:11px;color:var(--muted);">Clears all entries from your connected Google Sheet</div>
         </div>
       </label>
     </div>
-    <div id="confirm-delete-warning" style="font-size:11px;color:var(--red);margin-bottom:12px;display:none;">⚠️ Deleting Google Sheet data is permanent and cannot be recovered.</div>
+    <div id="confirm-delete-warning" style="font-size:11px;color:var(--red);margin-bottom:10px;display:none;">⚠️ Google Sheet deletion is permanent and unrecoverable.</div>
+    <div style="margin-bottom:14px;text-align:left;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Type <strong style="color:var(--red);">DELETE</strong> to confirm:</div>
+      <input type="text" id="delete-confirm-input" placeholder="Type DELETE here…" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px 12px;font-size:13px;font-family:'DM Sans',sans-serif;box-sizing:border-box;">
+    </div>
     <div class="confirm-btns">
       <button class="confirm-cancel" onclick="closeConfirm()">Cancel</button>
-      <button class="confirm-delete" onclick="executeDeleteAll()">Yes, Delete Selected</button>
+      <button class="confirm-delete" onclick="executeDeleteAll()">Delete Now</button>
     </div>
   </div>
 </div>
@@ -1597,7 +1601,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '1.8.3';
+const APP_VERSION = '1.8.4';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -1642,6 +1646,16 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '1.8.4',
+    items: [
+      'Smart category sync — new categories auto-create in Google Sheets instantly',
+      'Category deletion syncs to Google Sheets — remove from app removes from sheet',
+      'Smart lodging — app checks if category exists in sheet before creating a new row',
+      'Delete data completely fixed — now clears both localStorage AND IndexedDB',
+      'Type DELETE to confirm — prevents accidental data deletion',
+    ]
+  },
   {
     version: '1.8.3',
     items: [
@@ -2223,14 +2237,33 @@ async function pushToSheet(entry) {
 
 // ── PUSH CATEGORY TO SHEET ────────────────────────────────────────────────
 async function pushCategoryToSheet(action, catName, catIcon) {
+  const url = getSheetUrl();
+  if (!url || url === 'skipped') return;
   const params = new URLSearchParams({
+    type: 'category',
     action: action === 'add' ? 'addCategory' : 'deleteCategory',
     category: catName,
     icon: catIcon || '',
     gstRate: getGstRate()
   });
   try {
-    await fetch(getSheetUrl() + '?' + params.toString(), {method:'GET', mode:'no-cors'});
+    await fetch(url + '?' + params.toString(), {method:'GET', mode:'no-cors'});
+  } catch { /* silent */ }
+}
+
+// Called before lodging an expense — ensures the category row exists in all month sheets
+async function ensureCategoryInSheet(catName, catIcon) {
+  const url = getSheetUrl();
+  if (!url || url === 'skipped') return;
+  const params = new URLSearchParams({
+    type: 'category',
+    action: 'ensureCategory',
+    category: catName,
+    icon: catIcon || '',
+    gstRate: getGstRate()
+  });
+  try {
+    await fetch(url + '?' + params.toString(), {method:'GET', mode:'no-cors'});
   } catch { /* silent */ }
 }
 
@@ -2299,6 +2332,9 @@ async function submitExpense() {
     clearReceipt();
   }
 
+  // Ensure category exists in all month sheets before lodging (smart category sync)
+  const catObj = categories.find(c => c.name === selectedCat);
+  await ensureCategoryInSheet(selectedCat, catObj ? catObj.icon : '');
   await pushToSheet(entry);
 
   document.getElementById('exp-amount').value = '';
@@ -2839,12 +2875,28 @@ function closePrivacy() { document.getElementById('privacy-modal').classList.rem
 
 // ── CONFIRM DELETE ────────────────────────────────────────────────────────
 function confirmDeleteAll() {
+  const input = document.getElementById('delete-confirm-input');
+  if (input) input.value = '';
+  document.getElementById('del-app-data').checked = true;
+  document.getElementById('del-sheet-data').checked = false;
+  document.getElementById('confirm-delete-warning').style.display = 'none';
   document.getElementById('confirm-modal').classList.add('open');
 }
 function closeConfirm() {
   document.getElementById('confirm-modal').classList.remove('open');
 }
-function executeDeleteAll() {
+async function executeDeleteAll() {
+  const confirmInput = document.getElementById('delete-confirm-input');
+  if (!confirmInput || confirmInput.value.trim().toUpperCase() !== 'DELETE') {
+    confirmInput.style.borderColor = 'var(--red)';
+    confirmInput.placeholder = 'You must type DELETE to confirm!';
+    setTimeout(() => {
+      confirmInput.style.borderColor = 'var(--border)';
+      confirmInput.placeholder = 'Type DELETE here…';
+    }, 2000);
+    return;
+  }
+
   const delApp   = document.getElementById('del-app-data').checked;
   const delSheet = document.getElementById('del-sheet-data').checked;
 
@@ -2854,16 +2906,37 @@ function executeDeleteAll() {
   }
 
   if (delApp) {
-    localStorage.removeItem('gst_entries');
-    localStorage.removeItem('gst_categories');
-    localStorage.removeItem('pin_enabled');
-    localStorage.removeItem('pin_hash');
-    localStorage.removeItem('gst_rate');
-    WHATS_NEW.forEach(v => localStorage.removeItem('wn_clicks_v'+v.version));
+    // 1. Clear ALL localStorage keys belonging to this app
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      keysToRemove.push(localStorage.key(i));
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+
+    // 2. Wipe IndexedDB — this is why data was coming back after delete
+    try {
+      const dbReq = indexedDB.open('EDWProfileDB', 1);
+      dbReq.onsuccess = function(e) {
+        const db = e.target.result;
+        try {
+          const tx = db.transaction(['profile'], 'readwrite');
+          tx.objectStore('profile').clear();
+        } catch(err) { /* store might not exist yet */ }
+      };
+      // Also delete the whole database to be thorough
+      indexedDB.deleteDatabase('EDWProfileDB');
+    } catch(e) { /* silent */ }
+
+    // 3. Reset in-memory state
     entries    = [];
-    categories = DEFAULT_CATS.map(c=>({...c}));
-    renderLog(); updateTotals(); buildCatGrid(); updateGstLabels();
+    categories = DEFAULT_CATS.map(c => ({...c}));
+    renderLog();
+    updateTotals();
+    buildCatGrid();
+    updateGstLabels();
     document.getElementById('pin-lock').classList.remove('active');
+
+    toast('🗑️ All app data deleted permanently.', 'info');
   }
 
   if (delSheet) {
@@ -2872,12 +2945,10 @@ function executeDeleteAll() {
       MONTHS.forEach(month => {
         fetch(`${url}?type=deleteMonth&month=${encodeURIComponent(month)}`, { method:'GET', mode:'no-cors' });
       });
-      toast('☁️ Sheet clear request sent. App data deleted.', 'info');
+      toast('☁️ Sheet clear request sent.', 'info');
     } else {
-      toast('No sheet connected — only app data deleted.', 'info');
+      toast('No sheet connected — sheet not cleared.', 'info');
     }
-  } else {
-    toast('🗑️ App data deleted permanently.', 'info');
   }
 
   closeConfirm();
@@ -3370,7 +3441,7 @@ function openSetupGuidePDF() {
     <div class="cover-title">Smart GST Tracker</div>
     <div class="cover-sub">Complete Setup &amp; User Guide</div>
     <div class="cover-sub" style="margin-top:4px;">by <strong>Endless Digital World</strong></div>
-    <div class="cover-version">Version 1.8.3</div>
+    <div class="cover-version">Version 1.8.4</div>
     <div style="height:30mm;"></div>
     <div style="background:#f9f9f9;border:1px solid #eee;border-radius:10px;padding:16px 20px;text-align:center;">
       <p style="margin:0;font-size:12px;color:#555;">This guide covers everything you need to set up and use<br>Smart GST Tracker and your connected Google Sheet.</p>
@@ -3528,7 +3599,7 @@ function openSetupGuidePDF() {
       <li>GST = Amount ÷ 11 &nbsp;|&nbsp; Ex-GST = Amount − GST</li>
     </ul>
     <div class="tip">💡 Export a PDF from My Logs at the end of each quarter for your BAS records.</div>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide · v1.8.3 · Endless Digital World</span><span>Page 7 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide · v1.8.4 · Endless Digital World</span><span>Page 7 of 7</span></div>
   </div>
 
   <${'script'}>window.onload = () => window.print();</${'script'}>
