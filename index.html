@@ -774,7 +774,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 3.0.1</div>
+  <div class="splash-ver">Version 3.0.2</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -902,7 +902,11 @@
       <h2>Dashboard Pro</h2>
       <span class="db-pro-badge">PRO</span>
     </div>
-    <button class="db-close-btn" onclick="closeDashboardPro()">✕</button>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+      <span id="db-header-mode" style="font-size:9px;font-weight:700;color:var(--purple);background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.25);border-radius:6px;padding:2px 7px;letter-spacing:0.04em;text-transform:uppercase;">Standalone</span>
+      <span id="db-header-month" style="font-size:11px;color:var(--accent);font-weight:700;"></span>
+    </div>
+    <button class="db-close-btn" onclick="closeDashboardPro()" style="margin-left:10px;">✕</button>
   </div>
 
   <!-- ── DB PRO NAV TABS ── -->
@@ -945,6 +949,16 @@
       <div id="db-own-entry-btns" style="display:none;display:flex;gap:8px;margin-bottom:16px;">
         <button onclick="openDbLogEntry('income')" style="flex:1;background:rgba(61,220,132,0.1);border:1px solid rgba(61,220,132,0.3);border-radius:10px;padding:10px;font-size:12px;font-weight:700;color:var(--green);cursor:pointer;font-family:'DM Sans',sans-serif;">+ Log Income</button>
         <button onclick="openDbLogEntry('expense')" style="flex:1;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);border-radius:10px;padding:10px;font-size:12px;font-weight:700;color:var(--red);cursor:pointer;font-family:'DM Sans',sans-serif;">+ Log Expense</button>
+      </div>
+
+      <!-- Pie chart -->
+      <div class="db-section-title" style="margin-top:4px;">
+        <span>🥧 Period Profit Chart</span>
+        <span id="db-pie-period-label" style="font-size:11px;color:var(--accent);font-weight:600;text-transform:none;letter-spacing:0;"></span>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
+        <canvas id="db-pie-canvas" width="110" height="110" style="flex-shrink:0;"></canvas>
+        <div id="db-pie-legend" style="flex:1;font-size:11px;line-height:1.9;color:var(--muted);"></div>
       </div>
 
       <!-- Category budgets -->
@@ -1039,59 +1053,68 @@
       <!-- Data source -->
       <div style="margin-bottom:20px;">
         <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:12px;">📂 Data Source</div>
-
         <label style="display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;">
           <input type="radio" name="db-data-source" id="db-src-own" value="own" onchange="saveDbDataSource()" style="margin-top:2px;accent-color:var(--accent);">
           <div>
             <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">🆕 Standalone — My own data</div>
-            <div style="font-size:11px;color:var(--muted);line-height:1.5;">Dashboard Pro keeps its own separate income and expense records. Perfect for TFN income, personal budgeting, or any data you don't want mixed with GST.</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.5;">Dashboard Pro keeps its own separate records. Perfect for TFN income or personal budgeting.</div>
           </div>
         </label>
-
         <label style="display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;">
           <input type="radio" name="db-data-source" id="db-src-gst" value="gst" onchange="saveDbDataSource()" style="margin-top:2px;accent-color:var(--accent);">
           <div>
             <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">🔗 Pull from GST Tracker</div>
-            <div style="font-size:11px;color:var(--muted);line-height:1.5;">Dashboard Pro mirrors data from your Smart GST Tracker — income, expenses and GST figures shown automatically.</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.5;">Mirrors data from Smart GST Tracker automatically.</div>
           </div>
         </label>
-
         <label style="display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;">
           <input type="radio" name="db-data-source" id="db-src-both" value="both" onchange="saveDbDataSource()" style="margin-top:2px;accent-color:var(--accent);">
           <div>
             <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">🔀 Combined — Both sources</div>
-            <div style="font-size:11px;color:var(--muted);line-height:1.5;">Combines your GST Tracker data with your own Dashboard Pro entries. Great for seeing your full financial picture in one place.</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.5;">Merges GST Tracker and Dashboard Pro data for the full picture.</div>
           </div>
         </label>
       </div>
 
-      <!-- GST visibility toggle -->
+      <!-- Budget period -->
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:12px;">📅 Budget Period</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <button id="dbp-weekly"      onclick="setDbBudgetPeriod('weekly')"      class="dbp-period-btn" style="padding:10px 6px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">📅 Weekly</button>
+          <button id="dbp-fortnightly" onclick="setDbBudgetPeriod('fortnightly')" class="dbp-period-btn" style="padding:10px 6px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">📆 Fortnightly</button>
+          <button id="dbp-monthly"     onclick="setDbBudgetPeriod('monthly')"     class="dbp-period-btn" style="padding:10px 6px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">🗓️ Monthly</button>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;" id="dbp-period-hint">Charts and budget calculations use this period.</div>
+      </div>
+
+      <!-- GST display -->
       <div style="margin-bottom:20px;">
         <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:12px;">🧮 GST Display</div>
         <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;">
           <div>
             <div style="font-size:13px;font-weight:600;color:var(--text);">Show GST figures</div>
-            <div style="font-size:11px;color:var(--muted);">Hide if you're tracking TFN / non-GST income</div>
+            <div style="font-size:11px;color:var(--muted);">Hide for TFN / non-GST income tracking</div>
           </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="db-show-gst-toggle" onchange="saveDbSettings()" checked>
-            <span class="toggle-slider"></span>
-          </label>
+          <label class="toggle-switch"><input type="checkbox" id="db-show-gst-toggle" onchange="saveDbSettings()" checked><span class="toggle-slider"></span></label>
         </div>
       </div>
 
-      <!-- Combine menus toggle -->
+      <!-- Hamburger menu access -->
       <div style="margin-bottom:20px;">
-        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:12px;">📱 Menu Integration</div>
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:12px;">☰ Hamburger Menu Access</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text);">Allow settings from main menu</div>
+            <div style="font-size:11px;color:var(--muted);">Control Dashboard Pro settings directly from the ☰ hamburger menu</div>
+          </div>
+          <label class="toggle-switch"><input type="checkbox" id="db-allow-hamburger-toggle" onchange="saveDbSettings()"><span class="toggle-slider"></span></label>
+        </div>
         <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;">
           <div>
             <div style="font-size:13px;font-weight:600;color:var(--text);">Combine with main menu</div>
-            <div style="font-size:11px;color:var(--muted);">Show Dashboard Pro options inside the GST Tracker hamburger menu</div>
+            <div style="font-size:11px;color:var(--muted);">Show Dashboard Pro shortcuts inside the hamburger menu</div>
           </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="db-combine-menu-toggle" onchange="saveDbSettings()">
-            <span class="toggle-slider"></span>
-          </label>
+          <label class="toggle-switch"><input type="checkbox" id="db-combine-menu-toggle" onchange="saveDbSettings()"><span class="toggle-slider"></span></label>
         </div>
       </div>
 
@@ -1137,12 +1160,28 @@
       <button class="modal-close" onclick="closeAddDbBudget()">✕</button>
     </div>
     <div class="modal-body">
-      <div style="margin-bottom:12px;">
-        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Category</label>
-        <select id="db-budget-cat-sel" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;"></select>
+      <div style="margin-bottom:10px;">
+        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Category Name</label>
+        <input type="text" id="db-budget-cat-input" placeholder="e.g. Rent, Groceries, Phone Bill…" oninput="detectDbBudgetEmoji()"
+          style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;box-sizing:border-box;">
+        <div id="db-budget-emoji-preview" style="font-size:11px;color:var(--accent);margin-top:5px;min-height:16px;"></div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Quick Select (Default Categories)</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${['🏠 Rent/Mortgage','📱 Phone Bill','🌐 WiFi','🛡️ Insurance','🛒 Groceries','💊 Medicine','⚡ Bills','🚗 Transport','🎬 Entertainment','🍔 Dining Out','💪 Gym','📚 Education'].map(c=>`<button onclick="selectDbBudgetCat('${c}')" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;">${c}</button>`).join('')}
+        </div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Budget Period</label>
+        <select id="db-budget-period-sel" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;">
+          <option value="weekly">Weekly</option>
+          <option value="fortnightly">Fortnightly</option>
+          <option value="monthly" selected>Monthly</option>
+        </select>
       </div>
       <div style="margin-bottom:16px;">
-        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Monthly Limit ($)</label>
+        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Budget Limit ($)</label>
         <input type="number" id="db-budget-limit-input" placeholder="e.g. 200" min="0" step="1"
           style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;">
       </div>
@@ -1277,7 +1316,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 3.0.1</strong>
+    <strong style="color:var(--accent);">Version 3.0.2</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -2205,7 +2244,7 @@
       <div style="text-align:center;padding:16px 0 20px;">
         <div style="font-size:36px;margin-bottom:6px;">💰</div>
         <div style="font-size:17px;font-weight:700;color:var(--accent);">Smart GST Tracker</div>
-        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 3.0.1</div>
+        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 3.0.2</div>
       </div>
 
       <div class="modal-section-title">📱 Web App Features</div>
@@ -2352,7 +2391,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '3.0.1';
+const APP_VERSION = '3.0.2';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -2397,6 +2436,20 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '3.0.2',
+    items: [
+      'Points cap — once you hit 20,000 points/month, reduced 1:1 ratio kicks in automatically',
+      'Smart budget categories — type any name and the app auto-assigns the right emoji',
+      'Default budget categories: 🏠 Rent, 📱 Phone Bill, 🌐 WiFi, 🛡️ Insurance, 🛒 Groceries, 💊 Medicine, ⚡ Bills',
+      'Budgets are now period-aware — set weekly, fortnightly or monthly limits per category',
+      'Budget progress shows exact $ remaining and % used — and is aware of ALL prior logged data',
+      'Dashboard Pro header now shows current mode (Standalone / GST Sync / Combined) and current month',
+      'Pie chart added to Overview — shows profit for last 4 weeks, fortnights or months based on period setting',
+      'Budget period selector — choose weekly, fortnightly or monthly in Dashboard Pro → Settings',
+      'Hamburger menu access — allow Dashboard Pro settings to be controlled from the main menu (opt-in in DB Pro Settings)',
+    ]
+  },
   {
     version: '3.0.1',
     items: [
@@ -4801,20 +4854,48 @@ function setPoints(p) {
   localStorage.setItem('edw_points', p);
   updateDrawerPointsSub();
 }
+function getMonthlyPointsEarned() {
+  const key = 'edw_monthly_pts_' + new Date().getFullYear() + '_' + new Date().getMonth();
+  return parseInt(localStorage.getItem(key) || '0');
+}
+function addMonthlyPointsEarned(pts) {
+  const key = 'edw_monthly_pts_' + new Date().getFullYear() + '_' + new Date().getMonth();
+  const cur  = getMonthlyPointsEarned();
+  localStorage.setItem(key, cur + pts);
+}
+const MONTHLY_POINTS_CAP = 20000;
+
 function calcPointsForIncome(amount) {
-  if (amount > 2000) return 5000;
-  if (amount > 1000) return 2000;
-  if (amount > 100)  return 500;
-  if (amount > 50)   return 15;
-  if (amount > 1)    return 5;
-  return 0;
+  const monthlyEarned = getMonthlyPointsEarned();
+  const isCapped = monthlyEarned >= MONTHLY_POINTS_CAP;
+
+  if (isCapped) {
+    // Reduced 1-1 ratio after cap
+    if (amount >= 2000) return 2000;
+    if (amount >= 1000) return 1000;
+    if (amount >= 100)  return 100;
+    if (amount >= 50)   return 10;
+    return Math.floor(amount);
+  } else {
+    // Normal tier before cap
+    if (amount > 2000) return 5000;
+    if (amount > 1000) return 2000;
+    if (amount > 100)  return 500;
+    if (amount > 50)   return 15;
+    if (amount > 1)    return 5;
+    return 0;
+  }
 }
 function awardPoints(amount) {
-  const pts = calcPointsForIncome(amount);
+  const pts   = calcPointsForIncome(amount);
   if (pts <= 0) return;
-  const total = getPoints() + pts;
+  const monthlyEarned = getMonthlyPointsEarned();
+  const isCapped      = monthlyEarned >= MONTHLY_POINTS_CAP;
+  const total         = getPoints() + pts;
   setPoints(total);
-  toast(`🏅 +${pts} points! You now have ${total} pts.`, 'success');
+  addMonthlyPointsEarned(pts);
+  const capNote = isCapped ? ' (reduced rate — monthly cap reached)' : '';
+  toast(`🏅 +${pts} points${capNote}! Total: ${total.toLocaleString()} pts.`, 'success');
 }
 function updateDrawerPointsSub() {
   const sub = document.getElementById('drawer-points-sub');
@@ -5622,18 +5703,75 @@ function saveDbDataSource()  {
 }
 function getDbShowGst()      { return localStorage.getItem('edw_db_show_gst') !== 'false'; }
 function getDbCombineMenu()  { return localStorage.getItem('edw_db_combine_menu') === 'true'; }
+function getDbBudgetPeriod() { return localStorage.getItem('edw_db_period') || 'monthly'; }
+function setDbBudgetPeriod(p) {
+  localStorage.setItem('edw_db_period', p);
+  renderDbSettingsPeriodBtns();
+  renderDashboardPro();
+  toast(`📅 Budget period set to ${p}!`, 'success');
+}
+function renderDbSettingsPeriodBtns() {
+  const p = getDbBudgetPeriod();
+  ['weekly','fortnightly','monthly'].forEach(id => {
+    const btn = document.getElementById('dbp-'+id);
+    if (!btn) return;
+    const active = p === id;
+    btn.style.background  = active ? 'var(--accent)' : 'var(--card)';
+    btn.style.color       = active ? '#0D1117' : 'var(--muted)';
+    btn.style.borderColor = active ? 'var(--accent)' : 'var(--border)';
+  });
+  const hint = document.getElementById('dbp-period-hint');
+  if (hint) { const lbl={weekly:'Charts show 4 weeks.',fortnightly:'Charts show 4 fortnights.',monthly:'Charts show 4 months.'}; hint.textContent = lbl[p]||''; }
+}
+function getDbAllowHamburger() { return localStorage.getItem('edw_db_allow_hamburger') === 'true'; }
 function saveDbSettings() {
   const gst  = document.getElementById('db-show-gst-toggle');
   const menu = document.getElementById('db-combine-menu-toggle');
-  if (gst)  localStorage.setItem('edw_db_show_gst', gst.checked ? 'true' : 'false');
-  if (menu) {
-    localStorage.setItem('edw_db_combine_menu', menu.checked ? 'true' : 'false');
-    updateDbCombinedMenu();
-  }
+  const hamb = document.getElementById('db-allow-hamburger-toggle');
+  if (gst)  localStorage.setItem('edw_db_show_gst',        gst.checked  ? 'true' : 'false');
+  if (hamb) localStorage.setItem('edw_db_allow_hamburger', hamb.checked ? 'true' : 'false');
+  if (menu) { localStorage.setItem('edw_db_combine_menu',  menu.checked ? 'true' : 'false'); updateDbCombinedMenu(); }
+  updateDbHamburgerSettings();
   renderDashboardPro();
 }
-
-// Own DB Pro entries (separate from GST tracker)
+function renderDbSettings() {
+  const src = getDbDataSource();
+  document.querySelectorAll('input[name="db-data-source"]').forEach(r => { r.checked = r.value === src; });
+  const gstT  = document.getElementById('db-show-gst-toggle');
+  const menuT = document.getElementById('db-combine-menu-toggle');
+  const hambT = document.getElementById('db-allow-hamburger-toggle');
+  if (gstT)  gstT.checked  = getDbShowGst();
+  if (menuT) menuT.checked = getDbCombineMenu();
+  if (hambT) hambT.checked = getDbAllowHamburger();
+  renderDbSettingsPeriodBtns();
+}
+function updateDbHamburgerSettings() {
+  const allowed = getDbAllowHamburger();
+  let section = document.getElementById('db-hamburger-settings-section');
+  if (allowed && !section) {
+    section = document.createElement('div');
+    section.id = 'db-hamburger-settings-section';
+    section.className = 'drawer-section';
+    section.innerHTML = `
+      <div class="drawer-section-title">Dashboard Pro Settings</div>
+      <div class="drawer-row" onclick="openDashboardPro(); switchDbTab('settings'); closeDrawer();">
+        <div class="drawer-row-icon">📅</div>
+        <div><div class="drawer-row-label">Budget Period</div><div class="drawer-row-sub">${getDbBudgetPeriod()}</div></div>
+      </div>
+      <div class="drawer-row" onclick="openDashboardPro(); switchDbTab('settings'); closeDrawer();">
+        <div class="drawer-row-icon">📂</div>
+        <div><div class="drawer-row-label">Data Source</div><div class="drawer-row-sub">${getDbDataSource()}</div></div>
+      </div>
+      <div class="drawer-row" onclick="openDashboardPro(); switchDbTab('settings'); closeDrawer();">
+        <div class="drawer-row-icon">⚙️</div>
+        <div><div class="drawer-row-label">All DB Pro Settings</div><div class="drawer-row-sub">Open Dashboard Pro → Settings</div></div>
+      </div>`;
+    const drawerVersion = document.querySelector('.drawer-version');
+    if (drawerVersion) drawerVersion.parentNode.insertBefore(section, drawerVersion);
+  } else if (!allowed && section) {
+    section.remove();
+  }
+}
 function getDbEntries()     { return JSON.parse(localStorage.getItem('edw_db_entries') || '[]'); }
 function saveDbEntries(arr) { localStorage.setItem('edw_db_entries', JSON.stringify(arr)); }
 
@@ -5680,17 +5818,6 @@ function switchDbTab(tab) {
   if (tab === 'settings')    renderDbSettings();
 }
 
-// ── DB PRO SETTINGS RENDER ────────────────────────────────────────────────
-function renderDbSettings() {
-  const src  = getDbDataSource();
-  const srcs = document.querySelectorAll('input[name="db-data-source"]');
-  srcs.forEach(r => { r.checked = r.value === src; });
-  const gstT = document.getElementById('db-show-gst-toggle');
-  const menuT= document.getElementById('db-combine-menu-toggle');
-  if (gstT)  gstT.checked  = getDbShowGst();
-  if (menuT) menuT.checked = getDbCombineMenu();
-}
-
 // ── DB PRO COMBINE MENU ───────────────────────────────────────────────────
 function updateDbCombinedMenu() {
   const combined = getDbCombineMenu();
@@ -5724,27 +5851,32 @@ function updateDbCombinedMenu() {
 // ── RENDER DASHBOARD PRO OVERVIEW ────────────────────────────────────────
 function renderDashboardPro() {
   const currentMonth = MONTHS[new Date().getMonth()];
-  document.getElementById('db-month-label').textContent = currentMonth;
+  const period       = getDbBudgetPeriod();
+  const src          = getDbDataSource();
+  const showGst      = getDbShowGst();
 
-  const { inc, exp } = getDbWorkingData();
-  const src = getDbDataSource();
-  const showGst = getDbShowGst();
+  // Update header mode badge + month
+  const modeLabels = { own:'Standalone', gst:'GST Sync', both:'Combined' };
+  const headerMode  = document.getElementById('db-header-mode');
+  const headerMonth = document.getElementById('db-header-month');
+  if (headerMode)  headerMode.textContent  = modeLabels[src] || 'Standalone';
+  if (headerMonth) headerMonth.textContent = currentMonth;
+  if (document.getElementById('db-month-label')) document.getElementById('db-month-label').textContent = currentMonth;
 
   // Data source notice
   const notice = document.getElementById('db-data-source-notice');
   if (notice) {
-    const labels = { own:'🆕 Standalone mode — showing your own Dashboard Pro data only.', gst:'🔗 GST Tracker mode — showing data from Smart GST Tracker.', both:'🔀 Combined mode — showing both GST Tracker and your own Dashboard Pro data.' };
+    const labels = { own:'🆕 Standalone — your own Dashboard Pro data only.', gst:'🔗 GST Tracker mode — mirroring Smart GST Tracker.', both:'🔀 Combined — both GST Tracker and Dashboard Pro data.' };
     notice.textContent = labels[src] || '';
     notice.style.display = '';
   }
 
-  // Show/hide own entry buttons
+  const { inc, exp } = getDbWorkingData();
   const ownBtns = document.getElementById('db-own-entry-btns');
   if (ownBtns) ownBtns.style.display = (src === 'own' || src === 'both') ? 'flex' : 'none';
 
-  // GST card visibility
+  // GST card
   const gstCard = document.getElementById('db-month-gst');
-  const gstLabel= document.getElementById('db-gst-label');
   if (gstCard) gstCard.closest('.db-sum-card').style.display = showGst ? '' : 'none';
 
   const monthIncome  = inc.reduce((s,e) => s+e.amount, 0);
@@ -5767,28 +5899,46 @@ function renderDashboardPro() {
   document.getElementById('db-inc-pct').textContent = incPct + '%';
   document.getElementById('db-exp-pct').textContent = expPct + '%';
 
-  // Category budgets — use DB Pro cats if own, GST cats if gst
-  const budgets = getDbBudgets();
+  // ── PIE CHART ──────────────────────────────────────────────────────────
+  renderDbPieChart(period, src);
+
+  // ── CATEGORY BUDGETS (smart: aware of all prior logged data) ──────────
+  const budgets    = getDbBudgets();
   const budgetRows = document.getElementById('db-budget-rows');
   if (!budgets.length) {
     budgetRows.innerHTML = '<div class="db-empty">No category budgets set yet.<br>Tap below to add your first one.</div>';
   } else {
+    // For budget awareness: get ALL data for this month (not just working data)
+    let allMonthExp = [];
+    if (src === 'own' || src === 'both') allMonthExp = [...allMonthExp, ...getDbEntries().filter(e=>e.type==='expense'&&e.month===currentMonth)];
+    if (src === 'gst' || src === 'both') allMonthExp = [...allMonthExp, ...(typeof entries!=='undefined'?entries:[]).filter(e=>e.type==='expense'&&e.month===currentMonth)];
+
     budgetRows.innerHTML = budgets.map((b, i) => {
-      const spent = exp.filter(e=>e.category===b.category).reduce((s,e)=>s+e.amount,0);
-      const pct   = b.limit > 0 ? Math.min(100, Math.round(spent / b.limit * 100)) : 0;
-      const color = pct >= 100 ? 'var(--red)' : pct >= 70 ? 'var(--accent)' : 'var(--green)';
-      const rem   = pct < 100 ? fmt(b.limit-spent)+' remaining' : '⚠️ Over budget';
+      // Smart: match category name loosely (strip emoji prefix for matching)
+      const catName = b.category.replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\s]+/u,'').trim();
+      const spent = allMonthExp.filter(e => {
+        const eName = (e.category||'').replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\s]+/u,'').trim();
+        return eName.toLowerCase() === catName.toLowerCase() || (e.category||'') === b.category;
+      }).reduce((s,e)=>s+e.amount,0);
+      const pct       = b.limit > 0 ? Math.min(100, Math.round(spent/b.limit*100)) : 0;
+      const color     = pct >= 100 ? 'var(--red)' : pct >= 70 ? 'var(--accent)' : 'var(--green)';
+      const remaining = b.limit - spent;
+      const remStr    = pct >= 100 ? `⚠️ Over by ${fmt(Math.abs(remaining))}` : `${fmt(remaining)} remaining`;
+      const periodLabel = b.period ? ` (${b.period})` : '';
       return `
         <div class="db-budget-row">
           <div class="db-budget-row-top">
-            <div class="db-budget-cat">${b.category}</div>
+            <div class="db-budget-cat">${b.category}${periodLabel}</div>
             <div style="display:flex;align-items:center;gap:8px;">
               <div class="db-budget-amt">${fmt(spent)} / ${fmt(b.limit)}</div>
               <button onclick="deleteDbBudget(${i})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:2px 4px;">✕</button>
             </div>
           </div>
           <div class="db-bar-track"><div class="db-bar-fill" style="width:${pct}%;background:${color};"></div></div>
-          <div class="db-bar-labels"><span>${pct}% used</span><span style="color:${pct>=100?'var(--red)':'var(--muted)'};">${rem}</span></div>
+          <div class="db-bar-labels">
+            <span>${pct}% used</span>
+            <span style="color:${pct>=100?'var(--red)':'var(--muted)'};">${remStr}</span>
+          </div>
         </div>`;
     }).join('');
   }
@@ -5797,7 +5947,7 @@ function renderDashboardPro() {
   const catSpend = {};
   exp.forEach(e => { catSpend[e.category] = (catSpend[e.category]||0) + e.amount; });
   const breakdown = document.getElementById('db-spending-breakdown');
-  const sorted = Object.entries(catSpend).sort((a,b) => b[1]-a[1]);
+  const sorted    = Object.entries(catSpend).sort((a,b) => b[1]-a[1]);
   if (!sorted.length) {
     breakdown.innerHTML = '<div class="db-empty">No expenses logged this month yet.</div>';
   } else {
@@ -5812,6 +5962,100 @@ function renderDashboardPro() {
           </div>
           <div class="db-bar-track"><div class="db-bar-fill" style="width:${pct}%;background:var(--red);"></div></div>
         </div>`;
+    }).join('');
+  }
+}
+
+// ── DB PRO PIE CHART ──────────────────────────────────────────────────────
+function renderDbPieChart(period, src) {
+  const canvas = document.getElementById('db-pie-canvas');
+  const legend = document.getElementById('db-pie-legend');
+  const pieLabel = document.getElementById('db-pie-period-label');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, 110, 110);
+
+  // Build 4 periods of data
+  const now = new Date();
+  const periods = [];
+  const allEntries = src === 'own' ? getDbEntries() :
+                     src === 'gst' ? (typeof entries!=='undefined'?entries:[]) :
+                     [...getDbEntries(), ...(typeof entries!=='undefined'?entries:[])];
+
+  if (period === 'monthly') {
+    for (let i = 3; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const mName = MONTHS[d.getMonth()];
+      const mEntries = allEntries.filter(e => e.month === mName);
+      const inc = mEntries.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
+      const exp = mEntries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+      periods.push({ label: mName.slice(0,3), profit: Math.max(0, inc-exp), isCurrent: i===0 });
+    }
+    if (pieLabel) pieLabel.textContent = 'Last 4 months';
+  } else if (period === 'weekly') {
+    for (let i = 3; i >= 0; i--) {
+      const weekStart = new Date(now); weekStart.setDate(now.getDate() - (i * 7) - now.getDay());
+      const weekEnd   = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
+      const wEntries  = allEntries.filter(e => {
+        const d = new Date(e.ts||0);
+        return d >= weekStart && d <= weekEnd;
+      });
+      const inc = wEntries.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
+      const exp = wEntries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+      const label = `W${4-i}`;
+      periods.push({ label, profit: Math.max(0, inc-exp), isCurrent: i===0 });
+    }
+    if (pieLabel) pieLabel.textContent = 'Last 4 weeks';
+  } else {
+    for (let i = 3; i >= 0; i--) {
+      const fnStart = new Date(now); fnStart.setDate(now.getDate() - (i * 14));
+      const fnEnd   = new Date(fnStart); fnEnd.setDate(fnStart.getDate() + 13);
+      const fnEntries = allEntries.filter(e => {
+        const d = new Date(e.ts||0);
+        return d >= fnStart && d <= fnEnd;
+      });
+      const inc = fnEntries.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
+      const exp = fnEntries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+      periods.push({ label: `FN${4-i}`, profit: Math.max(0, inc-exp), isCurrent: i===0 });
+    }
+    if (pieLabel) pieLabel.textContent = 'Last 4 fortnights';
+  }
+
+  const total = periods.reduce((s,p) => s+p.profit, 0) || 1;
+  const colors = ['rgba(240,180,41,0.3)','rgba(240,180,41,0.45)','rgba(240,180,41,0.65)','rgba(240,180,41,1)'];
+  let startAngle = -Math.PI / 2;
+  const cx = 55, cy = 55, r = 48;
+
+  periods.forEach((p, i) => {
+    const slice = (p.profit / total) * 2 * Math.PI || (Math.PI / 4);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, p.isCurrent ? r : r - 6, startAngle, startAngle + slice);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    if (p.isCurrent) {
+      ctx.strokeStyle = 'rgba(240,180,41,0.9)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+    startAngle += slice;
+  });
+
+  // Centre hole
+  ctx.beginPath();
+  ctx.arc(cx, cy, 22, 0, 2*Math.PI);
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim() || '#161B22';
+  ctx.fill();
+
+  // Legend
+  if (legend) {
+    legend.innerHTML = periods.map((p, i) => {
+      const opacity = p.isCurrent ? '1' : '0.55';
+      return `<div style="opacity:${opacity};display:flex;align-items:center;gap:6px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:${colors[i]};flex-shrink:0;"></div>
+        <span>${p.label}: <strong style="color:var(--accent);">${fmt(p.profit)}</strong>${p.isCurrent?' ← now':''}</span>
+      </div>`;
     }).join('');
   }
 }
@@ -5964,60 +6208,80 @@ function saveDbLogEntry() {
 }
 
 // Update Add Budget modal to use correct category list based on data source
-function openAddDbBudget() {
-  const src  = getDbDataSource();
-  const sel  = document.getElementById('db-budget-cat-sel');
-  let cats = [];
-  if (src === 'gst') cats = (typeof categories!=='undefined'?categories:[]).map(c=>c.name);
-  else if (src === 'own') cats = getDbExpCats();
-  else cats = [...new Set([...getDbExpCats(), ...(typeof categories!=='undefined'?categories:[]).map(c=>c.name)])];
-  if (sel) sel.innerHTML = cats.map(c=>`<option value="${c}">${c}</option>`).join('');
-  document.getElementById('db-budget-limit-input').value = '';
-  document.getElementById('db-add-budget-modal').classList.add('open');
-}
-function closeAddDbBudget() { document.getElementById('db-add-budget-modal').classList.remove('open'); }
-
 function openDashboardPro() {
   if (!getDashboardProEnabled()) return;
   switchDbTab('overview');
   renderDbSettings();
   updateDbCombinedMenu();
+  updateDbHamburgerSettings();
   document.getElementById('dashboard-pro-panel').classList.add('open');
 }
 function closeDashboardPro() { document.getElementById('dashboard-pro-panel').classList.remove('open'); }
 
-function getDbBudgets() {
-  return JSON.parse(localStorage.getItem('edw_db_budgets') || '[]');
-}
-function saveDbBudgets(b) {
-  localStorage.setItem('edw_db_budgets', JSON.stringify(b));
-}
+function getDbBudgets()    { return JSON.parse(localStorage.getItem('edw_db_budgets') || '[]'); }
+function saveDbBudgets(b)  { localStorage.setItem('edw_db_budgets', JSON.stringify(b)); }
 
+// Smart emoji detection for budget categories
+const DB_BUDGET_EMOJI_MAP = [
+  {keys:['rent','mortgage','home','house'],    emoji:'🏠'},
+  {keys:['phone','mobile','sim'],              emoji:'📱'},
+  {keys:['wifi','internet','broadband','nbn'], emoji:'🌐'},
+  {keys:['insurance','cover'],                emoji:'🛡️'},
+  {keys:['groceries','supermarket','food','coles','woolworths'],emoji:'🛒'},
+  {keys:['medicine','pharmacy','medical','health','doctor'],emoji:'💊'},
+  {keys:['bills','electricity','gas','water','utilities'],emoji:'⚡'},
+  {keys:['transport','uber','bus','train','petrol','fuel','car'],emoji:'🚗'},
+  {keys:['entertainment','netflix','spotify','streaming','cinema'],emoji:'🎬'},
+  {keys:['dining','restaurant','cafe','coffee','lunch','dinner'],emoji:'🍔'},
+  {keys:['gym','fitness','membership','sport'],emoji:'💪'},
+  {keys:['education','school','uni','course','tuition'],emoji:'📚'},
+  {keys:['subscription','sub'],               emoji:'🔄'},
+  {keys:['savings','investment'],             emoji:'💰'},
+];
+function detectDbBudgetEmoji() {
+  const val   = (document.getElementById('db-budget-cat-input')||{}).value || '';
+  const lower = val.toLowerCase();
+  const match = DB_BUDGET_EMOJI_MAP.find(m => m.keys.some(k => lower.includes(k)));
+  const prev  = document.getElementById('db-budget-emoji-preview');
+  if (prev) prev.textContent = match ? `${match.emoji} Suggested emoji` : '';
+}
+function selectDbBudgetCat(cat) {
+  const inp = document.getElementById('db-budget-cat-input');
+  if (inp) { inp.value = cat; detectDbBudgetEmoji(); }
+}
+function getBudgetCatWithEmoji(name) {
+  const lower = name.toLowerCase();
+  const match = DB_BUDGET_EMOJI_MAP.find(m => m.keys.some(k => lower.includes(k)));
+  const emoji = match ? match.emoji + ' ' : '';
+  return /^\p{Emoji}/u.test(name) ? name : emoji + name;
+}
 function openAddDbBudget() {
-  const sel = document.getElementById('db-budget-cat-sel');
-  if (sel) {
-    sel.innerHTML = (typeof categories !== 'undefined' ? categories : [])
-      .map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join('');
-  }
-  document.getElementById('db-budget-limit-input').value = '';
+  const inp  = document.getElementById('db-budget-cat-input');
+  const prev = document.getElementById('db-budget-emoji-preview');
+  const lim  = document.getElementById('db-budget-limit-input');
+  const pSel = document.getElementById('db-budget-period-sel');
+  if (inp)  inp.value         = '';
+  if (prev) prev.textContent  = '';
+  if (lim)  lim.value         = '';
+  if (pSel) pSel.value        = getDbBudgetPeriod();
   document.getElementById('db-add-budget-modal').classList.add('open');
 }
-function closeAddDbBudget() {
-  document.getElementById('db-add-budget-modal').classList.remove('open');
-}
+function closeAddDbBudget() { document.getElementById('db-add-budget-modal').classList.remove('open'); }
 function saveDbBudget() {
-  const cat   = document.getElementById('db-budget-cat-sel').value;
+  const rawName = (document.getElementById('db-budget-cat-input')||{}).value || '';
+  const cat   = getBudgetCatWithEmoji(rawName.trim());
   const limit = parseFloat(document.getElementById('db-budget-limit-input').value);
-  if (!cat) return toast('Please select a category.', 'error');
+  const period= (document.getElementById('db-budget-period-sel')||{}).value || 'monthly';
+  if (!rawName.trim()) return toast('Please enter a category name.', 'error');
   if (!limit || limit <= 0) return toast('Please enter a valid limit.', 'error');
-  const budgets = getDbBudgets();
+  const budgets  = getDbBudgets();
   const existing = budgets.findIndex(b => b.category === cat);
-  if (existing >= 0) budgets[existing].limit = limit;
-  else budgets.push({ category: cat, limit });
+  if (existing >= 0) { budgets[existing].limit = limit; budgets[existing].period = period; }
+  else budgets.push({ category: cat, limit, period });
   saveDbBudgets(budgets);
   closeAddDbBudget();
   renderDashboardPro();
-  toast(`🎯 Budget set for ${cat}: ${fmt(limit)}/month`, 'success');
+  toast(`🎯 Budget set for ${cat}: ${fmt(limit)}/${period}`, 'success');
 }
 function deleteDbBudget(i) {
   const budgets = getDbBudgets();
