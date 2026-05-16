@@ -248,8 +248,126 @@
   .cat-delete-btn:hover { color: var(--red); }
   .cat-default-tag { font-size: 9px; color: var(--muted); background: var(--border); border-radius: 4px; padding: 2px 6px; margin-left: 6px; }
 
-  /* ── MAIN ── */
-  main { max-width: 640px; margin: 0 auto; padding: 20px 16px 100px; }
+  /* ── DASHBOARD PRO PANEL ── */
+  #dashboard-pro-panel {
+    position: fixed; top: 0; left: -100%; width: 100%; height: 100vh;
+    background: var(--bg); z-index: 150;
+    transition: left 0.32s cubic-bezier(0.4,0,0.2,1);
+    overflow-y: auto;
+  }
+  #dashboard-pro-panel.open { left: 0; }
+  .db-header {
+    background: linear-gradient(135deg, #161B22 0%, #1C2128 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .db-header-left { display: flex; align-items: center; gap: 10px; }
+  .db-header-left h2 { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--text); }
+  .db-pro-badge {
+    background: linear-gradient(135deg, var(--accent), #d4960f);
+    color: #0D1117; font-size: 9px; font-weight: 900; letter-spacing: 0.08em;
+    padding: 3px 7px; border-radius: 6px; text-transform: uppercase;
+  }
+  .db-close-btn {
+    width: 34px; height: 34px; background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; cursor: pointer; font-size: 16px; color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .db-body { padding: 20px 16px 100px; max-width: 640px; margin: 0 auto; }
+  .db-summary-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
+  }
+  .db-sum-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px; text-align: center;
+  }
+  .db-sum-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; margin-bottom: 6px; }
+  .db-sum-val { font-size: 22px; font-weight: 700; }
+  .db-section-title {
+    font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.1em; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .db-budget-row {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 10px;
+  }
+  .db-budget-row-top {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+  }
+  .db-budget-cat { font-size: 13px; font-weight: 600; color: var(--text); }
+  .db-budget-amt { font-size: 12px; color: var(--muted); }
+  .db-bar-track {
+    background: var(--card); border-radius: 20px; height: 8px; overflow: hidden; margin-bottom: 5px;
+  }
+  .db-bar-fill { height: 100%; border-radius: 20px; transition: width 0.5s; }
+  .db-bar-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+  .db-add-budget-btn {
+    width: 100%; padding: 13px; border-radius: 12px; border: 1px dashed var(--border);
+    background: transparent; color: var(--accent); font-size: 13px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 4px; transition: all 0.15s;
+  }
+  .db-add-budget-btn:hover { background: rgba(240,180,41,0.06); border-color: var(--accent); }
+  .db-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 28px 0; }
+  .db-swipe-hint {
+    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+    background: rgba(240,180,41,0.15); border: 1px solid rgba(240,180,41,0.3);
+    border-right: none; border-radius: 12px 0 0 12px;
+    padding: 14px 8px; writing-mode: vertical-rl; text-orientation: mixed;
+    font-size: 10px; font-weight: 700; color: var(--accent); letter-spacing: 0.1em;
+    cursor: pointer; z-index: 90; user-select: none;
+    transition: opacity 0.3s;
+  }
+
+  /* ── PIN LENGTH SELECTOR ── */
+  .pin-type-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px;
+  }
+  .pin-type-btn {
+    padding: 10px 8px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--card); color: var(--muted); font-size: 12px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif; cursor: pointer; text-align: center; transition: all 0.18s;
+  }
+  .pin-type-btn.selected { border-color: var(--accent); color: var(--accent); background: rgba(240,180,41,0.08); }
+
+  /* ── PATTERN LOCK ── */
+  .pattern-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    padding: 20px; max-width: 260px; margin: 0 auto 14px;
+  }
+  .pattern-dot-wrap {
+    display: flex; align-items: center; justify-content: center; aspect-ratio: 1;
+  }
+  .pattern-dot {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--card); border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.15s; position: relative; user-select: none;
+  }
+  .pattern-dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 12px rgba(240,180,41,0.5); }
+  .pattern-dot.active::after { content: ''; width: 14px; height: 14px; border-radius: 50%; background: #0D1117; }
+  .pattern-canvas {
+    position: absolute; pointer-events: none; top: 0; left: 0; width: 100%; height: 100%;
+  }
+  .pattern-wrap { position: relative; max-width: 260px; margin: 0 auto; }
+
+  /* ── LOCK SCREEN DYNAMIC DOTS ── */
+  .pin-dots-dynamic { display: flex; gap: 12px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
+  .pin-dot-dyn {
+    width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--muted); transition: all 0.15s;
+  }
+  .pin-dot-dyn.filled { background: var(--accent); border-color: var(--accent); }
+
+  /* ── DASHBOARD PRO TOGGLE IN SETTINGS ── */
+  .db-pro-settings-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: linear-gradient(135deg, rgba(240,180,41,0.15), rgba(240,180,41,0.08));
+    border: 1px solid rgba(240,180,41,0.4); border-radius: 6px;
+    padding: 2px 7px; font-size: 10px; font-weight: 700; color: var(--accent);
+  }
+
+
 
   /* ── TABS ── */
   .tabs {
@@ -645,7 +763,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 2.1.2</div>
+  <div class="splash-ver">Version 3.0.0</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -724,19 +842,26 @@
   </div>
 </div>
 
-<!-- ── PIN LOCK SCREEN ── -->
+<!-- ── APP LOCK SCREEN ── -->
 <div id="pin-lock">
-  <div class="pin-lock-logo">🔐</div>
+  <div class="pin-lock-logo" id="lock-screen-icon">🔐</div>
   <div class="pin-lock-title">Smart GST Tracker</div>
-  <div class="pin-lock-sub">Enter your 4-digit PIN to continue</div>
-  <div class="pin-dots" id="lock-dots">
-    <div class="pin-dot" id="ld0"></div>
-    <div class="pin-dot" id="ld1"></div>
-    <div class="pin-dot" id="ld2"></div>
-    <div class="pin-dot" id="ld3"></div>
+  <div class="pin-lock-sub" id="lock-screen-sub">Enter your PIN to continue</div>
+
+  <!-- Dynamic digit dots -->
+  <div class="pin-dots-dynamic" id="lock-dots-dynamic"></div>
+
+  <!-- Pattern lock area -->
+  <div id="lock-pattern-area" style="display:none;padding:10px 0;">
+    <div class="pattern-wrap" id="lock-pattern-wrap">
+      <div class="pattern-grid" id="lock-pattern-grid"></div>
+    </div>
   </div>
+
   <div class="pin-lock-error" id="lock-error"></div>
-  <div class="pin-pad">
+
+  <!-- Numpad (shown for PIN modes) -->
+  <div class="pin-pad" id="lock-numpad">
     <button class="pin-key" onclick="pinLockKey('1')">1</button>
     <button class="pin-key" onclick="pinLockKey('2')">2</button>
     <button class="pin-key" onclick="pinLockKey('3')">3</button>
@@ -748,6 +873,106 @@
     <button class="pin-key" onclick="pinLockKey('9')">9</button>
     <button class="pin-key" onclick="pinLockKey('0')">0</button>
     <button class="pin-key del" onclick="pinLockDel()">⌫</button>
+  </div>
+</div>
+
+<!-- ── DASHBOARD PRO SWIPE HINT ── -->
+<div id="db-swipe-hint" class="db-swipe-hint" onclick="openDashboardPro()" style="display:none;">
+  ◀ DASHBOARD PRO
+</div>
+
+<!-- ── DASHBOARD PRO PANEL ── -->
+<div id="dashboard-pro-panel">
+  <div class="db-header">
+    <div class="db-header-left">
+      <span style="font-size:22px;">📊</span>
+      <h2>Dashboard Pro</h2>
+      <span class="db-pro-badge">PRO</span>
+    </div>
+    <button class="db-close-btn" onclick="closeDashboardPro()">✕</button>
+  </div>
+  <div class="db-body">
+
+    <!-- Summary strip -->
+    <div class="db-summary-grid" id="db-summary-grid">
+      <div class="db-sum-card">
+        <div class="db-sum-label">This Month Income</div>
+        <div class="db-sum-val" id="db-month-income" style="color:var(--green);">$0.00</div>
+      </div>
+      <div class="db-sum-card">
+        <div class="db-sum-label">This Month Expenses</div>
+        <div class="db-sum-val" id="db-month-expense" style="color:var(--red);">$0.00</div>
+      </div>
+      <div class="db-sum-card">
+        <div class="db-sum-label">Net Profit</div>
+        <div class="db-sum-val" id="db-month-profit" style="color:var(--accent);">$0.00</div>
+      </div>
+      <div class="db-sum-card">
+        <div class="db-sum-label">GST Payable</div>
+        <div class="db-sum-val" id="db-month-gst" style="color:var(--purple);">$0.00</div>
+      </div>
+    </div>
+
+    <!-- Category budgets -->
+    <div class="db-section-title">
+      <span>🎯 Category Budgets</span>
+      <span id="db-month-label" style="font-size:11px;color:var(--accent);font-weight:600;text-transform:none;letter-spacing:0;"></span>
+    </div>
+
+    <div id="db-budget-rows"></div>
+
+    <button class="db-add-budget-btn" onclick="openAddDbBudget()">+ Set Category Budget</button>
+
+    <!-- Spending breakdown -->
+    <div class="db-section-title" style="margin-top:24px;">
+      <span>💸 Spending Breakdown</span>
+    </div>
+    <div id="db-spending-breakdown" style="margin-bottom:20px;"></div>
+
+    <!-- Income vs Expense bar -->
+    <div class="db-section-title" style="margin-top:4px;">
+      <span>📈 Income vs Expenses</span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;">
+      <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;">
+        <div style="flex:1;background:var(--card);border-radius:20px;height:14px;overflow:hidden;">
+          <div id="db-inc-bar" style="height:100%;border-radius:20px;background:var(--green);transition:width 0.5s;width:0%;"></div>
+        </div>
+        <span id="db-inc-pct" style="font-size:11px;color:var(--green);font-weight:700;min-width:36px;text-align:right;"></span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div style="flex:1;background:var(--card);border-radius:20px;height:14px;overflow:hidden;">
+          <div id="db-exp-bar" style="height:100%;border-radius:20px;background:var(--red);transition:width 0.5s;width:0%;"></div>
+        </div>
+        <span id="db-exp-pct" style="font-size:11px;color:var(--red);font-weight:700;min-width:36px;text-align:right;"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--muted);">
+        <span>💰 Income</span><span>💸 Expenses</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── ADD BUDGET MODAL (DB Pro) ── -->
+<div id="db-add-budget-modal" class="generic-modal">
+  <div class="modal-box" style="max-width:400px;">
+    <div class="modal-header">
+      <h2>🎯 Set Category Budget</h2>
+      <button class="modal-close" onclick="closeAddDbBudget()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:12px;">
+        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Category</label>
+        <select id="db-budget-cat-sel" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;"></select>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Monthly Limit ($)</label>
+        <input type="number" id="db-budget-limit-input" placeholder="e.g. 200" min="0" step="1"
+          style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;">
+      </div>
+      <button onclick="saveDbBudget()" style="width:100%;padding:14px;border-radius:12px;border:none;background:var(--accent);color:#0D1117;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">Save Budget ➔</button>
+    </div>
   </div>
 </div>
 
@@ -785,6 +1010,13 @@
 
   <div class="drawer-section">
     <div class="drawer-section-title">Features</div>
+    <div class="drawer-row" id="db-pro-drawer-row" onclick="openDashboardPro(); closeDrawer();" style="display:none;">
+      <div class="drawer-row-icon">📊</div>
+      <div>
+        <div class="drawer-row-label">Dashboard Pro <span style="font-size:9px;font-weight:900;background:linear-gradient(135deg,var(--accent),#d4960f);color:#0D1117;border-radius:5px;padding:2px 5px;vertical-align:middle;margin-left:4px;">PRO</span></div>
+        <div class="drawer-row-sub">Budget by category · Live spending tracker</div>
+      </div>
+    </div>
     <div class="drawer-row" onclick="openLogsModal(); closeDrawer();">
       <div class="drawer-row-icon">📂</div>
       <div>
@@ -849,7 +1081,7 @@
       <div class="drawer-row-icon">⚙️</div>
       <div>
         <div class="drawer-row-label">Settings</div>
-        <div class="drawer-row-sub">PIN, GST rate, Sheet URL & Notifications</div>
+        <div class="drawer-row-sub">App Lock, GST rate, Sheet URL & Notifications</div>
       </div>
     </div>
     <div class="drawer-row" onclick="openHelpModal(); closeDrawer();">
@@ -870,7 +1102,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 2.1.2</strong>
+    <strong style="color:var(--accent);">Version 3.0.0</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -882,7 +1114,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v2.1.2</p>
+        <p>Endless Digital World · v3.0.0</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -1279,8 +1511,8 @@
 
       <div class="toggle-row">
         <div>
-          <div class="toggle-label">Enable PIN Lock</div>
-          <div class="toggle-sub">Require PIN when opening app</div>
+          <div class="toggle-label">Enable App Lock</div>
+          <div class="toggle-sub">Require lock when opening app</div>
         </div>
         <label class="toggle-switch">
           <input type="checkbox" id="pin-enabled-toggle" onchange="onPinToggle()">
@@ -1288,27 +1520,62 @@
         </label>
       </div>
       <div id="pin-setup-section" style="display:none;margin-top:14px;">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;" id="pin-setup-hint">Set a 4-digit PIN:</div>
-        <div class="pin-dots" id="setup-dots">
-          <div class="pin-dot" id="sd0"></div>
-          <div class="pin-dot" id="sd1"></div>
-          <div class="pin-dot" id="sd2"></div>
-          <div class="pin-dot" id="sd3"></div>
+
+        <!-- Lock Type Selector -->
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Choose Lock Type:</div>
+        <div class="pin-type-grid" id="pin-type-grid">
+          <div class="pin-type-btn" id="locktype-pin4" onclick="selectLockType('pin4')">🔢 4-Digit PIN</div>
+          <div class="pin-type-btn" id="locktype-pin6" onclick="selectLockType('pin6')">🔢 6-Digit PIN</div>
+          <div class="pin-type-btn" id="locktype-pin8" onclick="selectLockType('pin8')">🔢 8-Digit PIN</div>
+          <div class="pin-type-btn" id="locktype-pattern" onclick="selectLockType('pattern')">🔲 Pattern</div>
         </div>
-        <div class="pin-pad" style="max-width:280px;margin:10px auto 0;">
-          <button class="pin-key" onclick="pinSetupKey('1')">1</button>
-          <button class="pin-key" onclick="pinSetupKey('2')">2</button>
-          <button class="pin-key" onclick="pinSetupKey('3')">3</button>
-          <button class="pin-key" onclick="pinSetupKey('4')">4</button>
-          <button class="pin-key" onclick="pinSetupKey('5')">5</button>
-          <button class="pin-key" onclick="pinSetupKey('6')">6</button>
-          <button class="pin-key" onclick="pinSetupKey('7')">7</button>
-          <button class="pin-key" onclick="pinSetupKey('8')">8</button>
-          <button class="pin-key" onclick="pinSetupKey('9')">9</button>
-          <button class="pin-key" onclick="pinSetupKey('0')">0</button>
-          <button class="pin-key del" onclick="pinSetupDel()">⌫</button>
+
+        <!-- PIN setup (shown for pin4/6/8) -->
+        <div id="pin-digit-setup">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;" id="pin-setup-hint">Select a lock type above</div>
+          <div class="pin-dots-dynamic" id="setup-dots-dynamic"></div>
+          <div class="pin-pad" style="max-width:280px;margin:10px auto 0;">
+            <button class="pin-key" onclick="pinSetupKey('1')">1</button>
+            <button class="pin-key" onclick="pinSetupKey('2')">2</button>
+            <button class="pin-key" onclick="pinSetupKey('3')">3</button>
+            <button class="pin-key" onclick="pinSetupKey('4')">4</button>
+            <button class="pin-key" onclick="pinSetupKey('5')">5</button>
+            <button class="pin-key" onclick="pinSetupKey('6')">6</button>
+            <button class="pin-key" onclick="pinSetupKey('7')">7</button>
+            <button class="pin-key" onclick="pinSetupKey('8')">8</button>
+            <button class="pin-key" onclick="pinSetupKey('9')">9</button>
+            <button class="pin-key" onclick="pinSetupKey('0')">0</button>
+            <button class="pin-key del" onclick="pinSetupDel()">⌫</button>
+          </div>
         </div>
+
+        <!-- Pattern setup (shown for pattern) -->
+        <div id="pattern-setup-section" style="display:none;">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;" id="pattern-setup-hint">Draw your pattern (at least 4 dots):</div>
+          <div class="pattern-wrap" id="setup-pattern-wrap">
+            <div class="pattern-grid" id="setup-pattern-grid"></div>
+          </div>
+          <div style="text-align:center;margin-top:8px;">
+            <button onclick="clearSetupPattern()" style="background:none;border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:12px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;">Reset Pattern</button>
+          </div>
+        </div>
+
         <div class="pin-hint" id="pin-setup-msg"></div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="modal-section-title">📊 Dashboard Pro <span class="db-pro-settings-badge">PRO</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Enable the budgeting dashboard, accessible by swiping right on the main screen.</div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Enable Dashboard Pro</div>
+          <div class="toggle-sub">Swipe right to access budgeting features</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="db-pro-toggle" onchange="onDashboardProToggle()">
+          <span class="toggle-slider"></span>
+        </label>
       </div>
 
       <hr class="divider">
@@ -1401,7 +1668,7 @@
       This app uses Google Fonts (DM Sans, DM Serif Display) for display purposes only. No analytics, no tracking scripts, no advertising SDKs are included.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v2.1.2 · Endless Digital World · For personal record-keeping only</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v3.0.0 · Endless Digital World · For personal record-keeping only</p>
 
       <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:14px;">
         <button onclick="openTerms()" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:11px;font-family:'DM Sans',sans-serif;padding:6px 12px;cursor:pointer;">📜 Terms &amp; Conditions</button>
@@ -1763,7 +2030,7 @@
       <div style="text-align:center;padding:16px 0 20px;">
         <div style="font-size:36px;margin-bottom:6px;">💰</div>
         <div style="font-size:17px;font-weight:700;color:var(--accent);">Smart GST Tracker</div>
-        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 2.1.2</div>
+        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 3.0.0</div>
       </div>
 
       <div class="modal-section-title">📱 Web App Features</div>
@@ -1910,7 +2177,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '2.1.2';
+const APP_VERSION = '3.0.0';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -1955,6 +2222,18 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '3.0.0',
+    items: [
+      '🆕 Dashboard Pro (Pro only) — a full budgeting dashboard accessible by swiping right from the main screen; set budgets by category, track spending vs limits, and see live progress bars for each category',
+      'Dashboard Pro can be toggled on or off under ☰ Menu → Settings → Dashboard Pro',
+      'Dashboard Pro is a Pro-only feature — a 🔒 Pro badge is shown in the menu and settings when it is available',
+      '🆕 Custom App Lock — choose your preferred lock type: 4-digit PIN, 6-digit PIN, 8-digit PIN, or a 9-dot Pattern lock',
+      'Pattern lock uses a 3×3 dot grid — draw any pattern of at least 4 dots to set your lock',
+      'App lock type is selected when enabling security under ☰ Menu → Settings → Security',
+      'Existing PIN lock users are prompted to choose their preferred lock type on next settings visit',
+    ]
+  },
   {
     version: '2.1.2',
     items: [
@@ -2460,7 +2739,8 @@ setTimeout(async () => {
     // Normal returning user
     updateDrawerProfile(profileName);
     if (!url) showSetupScreen();
-    else if (getPinEnabled() && getPin()) {
+    else if (getPinEnabled() && (getPin() || localStorage.getItem('edw_pattern_hash'))) {
+      buildLockScreen();
       document.getElementById('pin-lock').classList.add('active');
     }
     updateConnectionStatus();
@@ -3182,69 +3462,156 @@ async function tryBiometricLogin() {
 
 // ── OPEN SETTINGS ─────────────────────────────────────────────────────────
 function openSettings() {
-  updateGstLabels();
-  document.getElementById('pin-enabled-toggle').checked = getPinEnabled();
-  document.getElementById('pin-setup-section').style.display = getPinEnabled() ? 'block' : 'none';
-  if (getPinEnabled()) {
-    document.getElementById('pin-setup-hint').textContent = 'Change PIN (enter new 4-digit PIN):';
+  // PIN / lock toggle
+  const pinEl = document.getElementById('pin-enabled-toggle');
+  if (pinEl) {
+    pinEl.checked = getPinEnabled();
+    const section = document.getElementById('pin-setup-section');
+    if (getPinEnabled()) {
+      section.style.display = 'block';
+      currentLockType = getLockType();
+      document.querySelectorAll('.pin-type-btn').forEach(b => b.classList.remove('selected'));
+      const btn = document.getElementById('locktype-' + currentLockType);
+      if (btn) btn.classList.add('selected');
+      const isPattern = currentLockType === 'pattern';
+      document.getElementById('pin-digit-setup').style.display = isPattern ? 'none' : '';
+      document.getElementById('pattern-setup-section').style.display = isPattern ? '' : 'none';
+      if (!isPattern) {
+        const len = currentLockType==='pin8'?8:currentLockType==='pin6'?6:4;
+        document.getElementById('pin-setup-hint').textContent = `Change ${len}-digit PIN:`;
+        pinSetupBuffer = ''; pinSetupPhase = 'set'; pinSetupTemp = '';
+        buildSetupDotsDynamic(len);
+      } else {
+        initSetupPatternGrid();
+      }
+    } else {
+      section.style.display = 'none';
+    }
   }
-  pinSetupBuffer = ''; pinSetupPhase = 'set'; pinSetupTemp = '';
-  updateSetupDots();
-  document.getElementById('pin-setup-msg').textContent = '';
-  // Load notification settings
+  // Dashboard Pro toggle
+  const dbToggle = document.getElementById('db-pro-toggle');
+  if (dbToggle) dbToggle.checked = getDashboardProEnabled();
+  updateGstLabels();
   loadNotifSettings();
   document.getElementById('settings-modal').classList.add('open');
 }
 function closeSettings() { document.getElementById('settings-modal').classList.remove('open'); }
 
+// ── LOCK TYPE SYSTEM ──────────────────────────────────────────────────────
+// lockType: 'pin4' | 'pin6' | 'pin8' | 'pattern'
+function getLockType()    { return localStorage.getItem('edw_lock_type') || 'pin4'; }
+function setLockType(t)   { localStorage.setItem('edw_lock_type', t); }
+function getPinLength()   { const t=getLockType(); return t==='pin8'?8:t==='pin6'?6:4; }
+
+function getPinEnabled() { return localStorage.getItem('pin_enabled') === 'true'; }
+function getPin()        { return localStorage.getItem('pin_hash') || ''; }
+function hashPin(pin)    { return btoa(pin + '_edw_gst'); }
+
+// ── SETUP: Lock type selection ─────────────────────────────────────────────
+let currentLockType = 'pin4';
+
+function selectLockType(type) {
+  currentLockType = type;
+  document.querySelectorAll('.pin-type-btn').forEach(b => b.classList.remove('selected'));
+  const btn = document.getElementById('locktype-' + type);
+  if (btn) btn.classList.add('selected');
+
+  const isPattern = type === 'pattern';
+  document.getElementById('pin-digit-setup').style.display = isPattern ? 'none' : '';
+  document.getElementById('pattern-setup-section').style.display = isPattern ? '' : 'none';
+
+  if (!isPattern) {
+    const len = type==='pin8'?8:type==='pin6'?6:4;
+    document.getElementById('pin-setup-hint').textContent = `Set a ${len}-digit PIN:`;
+    pinSetupBuffer = ''; pinSetupPhase = 'set'; pinSetupTemp = '';
+    buildSetupDotsDynamic(len);
+    document.getElementById('pin-setup-msg').textContent = '';
+  } else {
+    document.getElementById('pattern-setup-hint').textContent = 'Draw your pattern (at least 4 dots):';
+    initSetupPatternGrid();
+  }
+}
+
+// Dynamic dots for setup
+function buildSetupDotsDynamic(len) {
+  const c = document.getElementById('setup-dots-dynamic');
+  if (!c) return;
+  c.innerHTML = '';
+  for (let i=0;i<len;i++) {
+    const d = document.createElement('div');
+    d.className = 'pin-dot-dyn';
+    d.id = 'setup-dyn-dot-' + i;
+    c.appendChild(d);
+  }
+}
+function updateSetupDotsDynamic() {
+  const len = currentLockType==='pin8'?8:currentLockType==='pin6'?6:4;
+  for (let i=0;i<len;i++) {
+    const d = document.getElementById('setup-dyn-dot-' + i);
+    if (d) d.classList.toggle('filled', i < pinSetupBuffer.length);
+  }
+}
+
+// PIN Setup
 function onPinToggle() {
   const enabled = document.getElementById('pin-enabled-toggle').checked;
   const section = document.getElementById('pin-setup-section');
   if (enabled) {
     section.style.display = 'block';
-    document.getElementById('pin-setup-hint').textContent = 'Set a 4-digit PIN:';
-    pinSetupBuffer = ''; pinSetupPhase = 'set'; pinSetupTemp = '';
-    updateSetupDots();
+    currentLockType = getLockType() || 'pin4';
+    // Pre-select current type
+    document.querySelectorAll('.pin-type-btn').forEach(b => b.classList.remove('selected'));
+    const btn = document.getElementById('locktype-' + currentLockType);
+    if (btn) btn.classList.add('selected');
+    // Show correct UI
+    const isPattern = currentLockType === 'pattern';
+    document.getElementById('pin-digit-setup').style.display = isPattern ? 'none' : '';
+    document.getElementById('pattern-setup-section').style.display = isPattern ? '' : 'none';
+    if (!isPattern) {
+      const len = currentLockType==='pin8'?8:currentLockType==='pin6'?6:4;
+      document.getElementById('pin-setup-hint').textContent = `Set a ${len}-digit PIN:`;
+      pinSetupBuffer = ''; pinSetupPhase = 'set'; pinSetupTemp = '';
+      buildSetupDotsDynamic(len);
+    } else {
+      initSetupPatternGrid();
+    }
     document.getElementById('pin-setup-msg').textContent = '';
   } else {
     section.style.display = 'none';
     localStorage.setItem('pin_enabled', 'false');
     localStorage.removeItem('pin_hash');
-    toast('PIN lock disabled.', 'info');
+    localStorage.removeItem('edw_pattern_hash');
+    toast('App lock disabled.', 'info');
   }
 }
 
-// PIN Setup
-function updateSetupDots() {
-  for (let i=0;i<4;i++) {
-    document.getElementById('sd'+i).classList.toggle('filled', i < pinSetupBuffer.length);
-  }
-}
 function pinSetupKey(k) {
-  if (pinSetupBuffer.length >= 4) return;
+  const len = currentLockType==='pin8'?8:currentLockType==='pin6'?6:4;
+  if (pinSetupBuffer.length >= len) return;
   pinSetupBuffer += k;
-  updateSetupDots();
-  if (pinSetupBuffer.length === 4) {
+  updateSetupDotsDynamic();
+  if (pinSetupBuffer.length === len) {
     setTimeout(() => {
       if (pinSetupPhase === 'set') {
         pinSetupTemp   = pinSetupBuffer;
         pinSetupBuffer = '';
         pinSetupPhase  = 'confirm';
         document.getElementById('pin-setup-hint').textContent = 'Confirm your PIN:';
-        updateSetupDots();
+        updateSetupDotsDynamic();
         document.getElementById('pin-setup-msg').textContent = '';
       } else {
         if (pinSetupBuffer === pinSetupTemp) {
+          setLockType(currentLockType);
           localStorage.setItem('pin_enabled', 'true');
           localStorage.setItem('pin_hash', hashPin(pinSetupBuffer));
           pinSetupBuffer = ''; pinSetupPhase = 'set'; pinSetupTemp = '';
-          updateSetupDots();
-          document.getElementById('pin-setup-hint').textContent = 'PIN saved! Change PIN (enter new 4-digit PIN):';
+          updateSetupDotsDynamic();
+          document.getElementById('pin-setup-hint').textContent = `PIN saved! Change PIN (enter new ${len}-digit PIN):`;
           document.getElementById('pin-setup-msg').textContent = '✅ PIN saved successfully!';
-          toast('🔐 PIN lock enabled!', 'success');
+          toast('🔐 App lock enabled!', 'success');
         } else {
           pinSetupBuffer = ''; pinSetupTemp = ''; pinSetupPhase = 'set';
-          updateSetupDots();
+          updateSetupDotsDynamic();
           document.getElementById('pin-setup-hint').textContent = 'PINs didn\'t match — try again:';
           document.getElementById('pin-setup-msg').textContent = '❌ PINs did not match. Please try again.';
         }
@@ -3254,38 +3621,177 @@ function pinSetupKey(k) {
 }
 function pinSetupDel() {
   pinSetupBuffer = pinSetupBuffer.slice(0,-1);
-  updateSetupDots();
+  updateSetupDotsDynamic();
 }
 
-// PIN Lock Screen
-function updateLockDots() {
-  for (let i=0;i<4;i++) {
-    document.getElementById('ld'+i).classList.toggle('filled', i < pinLockBuffer.length);
+// ── PATTERN SETUP ─────────────────────────────────────────────────────────
+let setupPatternSelected = [];
+let setupPatternPhase = 'set'; // 'set' | 'confirm'
+let setupPatternTemp = '';
+
+function initSetupPatternGrid() {
+  setupPatternSelected = [];
+  setupPatternPhase = 'set';
+  setupPatternTemp = '';
+  buildPatternGrid('setup-pattern-grid', (idx) => onSetupPatternDot(idx), setupPatternSelected);
+}
+
+function buildPatternGrid(containerId, dotCallback, selectedArr) {
+  const grid = document.getElementById(containerId);
+  if (!grid) return;
+  grid.innerHTML = '';
+  for (let i=0;i<9;i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'pattern-dot-wrap';
+    const dot = document.createElement('div');
+    dot.className = 'pattern-dot';
+    dot.id = containerId + '-dot-' + i;
+    if (selectedArr && selectedArr.includes(i)) dot.classList.add('active');
+    dot.addEventListener('click', () => dotCallback(i));
+    // Touch support
+    dot.addEventListener('touchstart', (e) => { e.preventDefault(); dotCallback(i); }, {passive:false});
+    wrap.appendChild(dot);
+    grid.appendChild(wrap);
   }
 }
+
+function onSetupPatternDot(idx) {
+  if (setupPatternSelected.includes(idx)) return;
+  setupPatternSelected.push(idx);
+  const dot = document.getElementById('setup-pattern-grid-dot-' + idx);
+  if (dot) dot.classList.add('active');
+}
+
+function clearSetupPattern() {
+  setupPatternSelected = [];
+  document.querySelectorAll('#setup-pattern-grid .pattern-dot').forEach(d => d.classList.remove('active'));
+  document.getElementById('pin-setup-msg').textContent = '';
+  document.getElementById('pattern-setup-hint').textContent = 'Draw your pattern (at least 4 dots):';
+}
+
+function confirmSetupPattern() {
+  if (setupPatternSelected.length < 4) {
+    toast('Please connect at least 4 dots.', 'error');
+    return;
+  }
+  const patStr = setupPatternSelected.join('-');
+  if (setupPatternPhase === 'set') {
+    setupPatternTemp = patStr;
+    setupPatternPhase = 'confirm';
+    setupPatternSelected = [];
+    buildPatternGrid('setup-pattern-grid', (idx) => onSetupPatternDot(idx), []);
+    document.getElementById('pattern-setup-hint').textContent = 'Confirm your pattern:';
+    document.getElementById('pin-setup-msg').textContent = '';
+    toast('Pattern set — draw it again to confirm', 'info');
+  } else {
+    if (patStr === setupPatternTemp) {
+      setLockType('pattern');
+      localStorage.setItem('pin_enabled', 'true');
+      localStorage.setItem('edw_pattern_hash', hashPin(patStr));
+      localStorage.removeItem('pin_hash');
+      setupPatternSelected = []; setupPatternPhase = 'set'; setupPatternTemp = '';
+      buildPatternGrid('setup-pattern-grid', (idx) => onSetupPatternDot(idx), []);
+      document.getElementById('pattern-setup-hint').textContent = 'Pattern saved! Draw a new pattern to change it:';
+      document.getElementById('pin-setup-msg').textContent = '✅ Pattern lock saved!';
+      toast('🔐 Pattern lock enabled!', 'success');
+    } else {
+      setupPatternSelected = []; setupPatternPhase = 'set'; setupPatternTemp = '';
+      buildPatternGrid('setup-pattern-grid', (idx) => onSetupPatternDot(idx), []);
+      document.getElementById('pattern-setup-hint').textContent = 'Patterns didn\'t match — try again:';
+      document.getElementById('pin-setup-msg').textContent = '❌ Patterns did not match. Please try again.';
+    }
+  }
+}
+
+// ── LOCK SCREEN ───────────────────────────────────────────────────────────
+let lockPatternSelected = [];
+
+function buildLockScreen() {
+  const type = getLockType();
+  const isPattern = type === 'pattern';
+  const numpad = document.getElementById('lock-numpad');
+  const patArea = document.getElementById('lock-pattern-area');
+  const dotsContainer = document.getElementById('lock-dots-dynamic');
+  const sub = document.getElementById('lock-screen-sub');
+
+  if (isPattern) {
+    numpad.style.display = 'none';
+    patArea.style.display = '';
+    dotsContainer.innerHTML = '';
+    sub.textContent = 'Draw your pattern to continue';
+    lockPatternSelected = [];
+    buildPatternGrid('lock-pattern-grid', (idx) => onLockPatternDot(idx), []);
+  } else {
+    numpad.style.display = '';
+    patArea.style.display = 'none';
+    const len = type==='pin8'?8:type==='pin6'?6:4;
+    sub.textContent = `Enter your ${len}-digit PIN to continue`;
+    dotsContainer.innerHTML = '';
+    for (let i=0;i<len;i++) {
+      const d = document.createElement('div');
+      d.className = 'pin-dot-dyn';
+      d.id = 'lock-dyn-dot-' + i;
+      dotsContainer.appendChild(d);
+    }
+    pinLockBuffer = '';
+  }
+}
+
+function updateLockDotsDynamic() {
+  const len = getPinLength();
+  for (let i=0;i<len;i++) {
+    const d = document.getElementById('lock-dyn-dot-' + i);
+    if (d) d.classList.toggle('filled', i < pinLockBuffer.length);
+  }
+}
+
 function pinLockKey(k) {
-  if (pinLockBuffer.length >= 4) return;
+  const len = getPinLength();
+  if (pinLockBuffer.length >= len) return;
   pinLockBuffer += k;
-  updateLockDots();
+  updateLockDotsDynamic();
   document.getElementById('lock-error').textContent = '';
-  if (pinLockBuffer.length === 4) {
+  if (pinLockBuffer.length === len) {
     setTimeout(() => {
       if (hashPin(pinLockBuffer) === getPin()) {
         document.getElementById('pin-lock').classList.remove('active');
         pinLockBuffer = '';
-        updateLockDots();
+        updateLockDotsDynamic();
       } else {
         document.getElementById('lock-error').textContent = '❌ Incorrect PIN. Try again.';
         pinLockBuffer = '';
-        updateLockDots();
+        updateLockDotsDynamic();
       }
     }, 120);
   }
 }
 function pinLockDel() {
   pinLockBuffer = pinLockBuffer.slice(0,-1);
-  updateLockDots();
+  updateLockDotsDynamic();
   document.getElementById('lock-error').textContent = '';
+}
+
+// Pattern lock screen
+function onLockPatternDot(idx) {
+  if (lockPatternSelected.includes(idx)) return;
+  lockPatternSelected.push(idx);
+  const dot = document.getElementById('lock-pattern-grid-dot-' + idx);
+  if (dot) dot.classList.add('active');
+}
+
+function confirmLockPattern() {
+  if (lockPatternSelected.length < 4) { return; }
+  const patStr = lockPatternSelected.join('-');
+  const stored = localStorage.getItem('edw_pattern_hash') || '';
+  if (hashPin(patStr) === stored) {
+    document.getElementById('pin-lock').classList.remove('active');
+    lockPatternSelected = [];
+    toast('✅ Unlocked!', 'success');
+  } else {
+    document.getElementById('lock-error').textContent = '❌ Incorrect pattern. Try again.';
+    lockPatternSelected = [];
+    buildPatternGrid('lock-pattern-grid', (idx) => onLockPatternDot(idx), []);
+  }
 }
 
 async function biometricLogin() {
@@ -3297,7 +3803,7 @@ async function biometricLogin() {
     toast('✅ Biometric login successful!', 'success');
   } else {
     if (btn) { btn.innerHTML = '<span style="font-size:22px;">🔏</span> Use Face ID / Touch ID'; }
-    document.getElementById('lock-error').textContent = 'Biometric verification failed — try your PIN.';
+    document.getElementById('lock-error').textContent = 'Biometric verification failed — try your lock.';
   }
 }
 
@@ -4903,6 +5409,220 @@ function playWalletSyncAnimation() {
     overlay.querySelectorAll('.sync-dollar').forEach(el => el.remove());
   }, 3200);
 }
+
+// ── DASHBOARD PRO ─────────────────────────────────────────────────────────
+function getDashboardProEnabled() { return localStorage.getItem('edw_db_pro') === 'true'; }
+
+function onDashboardProToggle() {
+  const on = document.getElementById('db-pro-toggle').checked;
+  localStorage.setItem('edw_db_pro', on ? 'true' : 'false');
+  updateDashboardProVisibility();
+  toast(on ? '📊 Dashboard Pro enabled! Swipe right to open.' : 'Dashboard Pro disabled.', on ? 'success' : 'info');
+}
+
+function updateDashboardProVisibility() {
+  const on = getDashboardProEnabled();
+  const hint = document.getElementById('db-swipe-hint');
+  const drawerRow = document.getElementById('db-pro-drawer-row');
+  if (hint) hint.style.display = on ? '' : 'none';
+  if (drawerRow) drawerRow.style.display = on ? '' : 'none';
+}
+
+function openDashboardPro() {
+  if (!getDashboardProEnabled()) return;
+  renderDashboardPro();
+  document.getElementById('dashboard-pro-panel').classList.add('open');
+}
+function closeDashboardPro() {
+  document.getElementById('dashboard-pro-panel').classList.remove('open');
+}
+
+function renderDashboardPro() {
+  const currentMonth = MONTHS[new Date().getMonth()];
+  document.getElementById('db-month-label').textContent = currentMonth;
+
+  const monthEntries = (typeof entries !== 'undefined' ? entries : []).filter(e => e.month === currentMonth);
+  const monthIncome  = monthEntries.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
+  const monthExpense = monthEntries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+  const monthProfit  = monthIncome - monthExpense;
+  const monthGst     = Math.max(0, monthEntries.filter(e=>e.type==='income').reduce((s,e)=>s+e.gst,0)
+                                  - monthEntries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.gst,0));
+
+  document.getElementById('db-month-income').textContent  = fmt(monthIncome);
+  document.getElementById('db-month-expense').textContent = fmt(monthExpense);
+  document.getElementById('db-month-profit').textContent  = fmt(monthProfit);
+  document.getElementById('db-month-profit').style.color  = monthProfit >= 0 ? 'var(--accent)' : 'var(--red)';
+  document.getElementById('db-month-gst').textContent     = fmt(monthGst);
+
+  // Income vs expense bars
+  const total = monthIncome + monthExpense;
+  const incPct = total ? Math.round(monthIncome / total * 100) : 0;
+  const expPct = total ? Math.round(monthExpense / total * 100) : 0;
+  document.getElementById('db-inc-bar').style.width = incPct + '%';
+  document.getElementById('db-exp-bar').style.width = expPct + '%';
+  document.getElementById('db-inc-pct').textContent = incPct + '%';
+  document.getElementById('db-exp-pct').textContent = expPct + '%';
+
+  // Category budgets
+  const budgets = getDbBudgets();
+  const budgetRows = document.getElementById('db-budget-rows');
+  if (!budgets.length) {
+    budgetRows.innerHTML = '<div class="db-empty">No category budgets set yet.<br>Tap below to add your first one.</div>';
+  } else {
+    budgetRows.innerHTML = budgets.map((b, i) => {
+      const spent = monthEntries.filter(e=>e.type==='expense' && e.category===b.category).reduce((s,e)=>s+e.amount,0);
+      const pct   = b.limit > 0 ? Math.min(100, Math.round(spent / b.limit * 100)) : 0;
+      const color = pct >= 100 ? 'var(--red)' : pct >= 70 ? 'var(--accent)' : 'var(--green)';
+      return `
+        <div class="db-budget-row">
+          <div class="db-budget-row-top">
+            <div class="db-budget-cat">${b.category}</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="db-budget-amt">${fmt(spent)} / ${fmt(b.limit)}</div>
+              <button onclick="deleteDbBudget(${i})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:2px 4px;" title="Remove">✕</button>
+            </div>
+          </div>
+          <div class="db-bar-track">
+            <div class="db-bar-fill" style="width:${pct}%;background:${color};"></div>
+          </div>
+          <div class="db-bar-labels">
+            <span>${pct}% used</span>
+            <span style="color:${pct>=100?'var(--red)':'var(--muted)'};">${pct>=100?'⚠️ Over budget':'${fmt(b.limit-spent)} remaining'}</span>
+          </div>
+        </div>`;
+    }).join('');
+    // Fix the remaining text (template literals don't nest properly in map)
+    budgetRows.querySelectorAll('.db-bar-labels span:last-child').forEach((el, i) => {
+      const b = budgets[i];
+      if (!b) return;
+      const spent = monthEntries.filter(e=>e.type==='expense' && e.category===b.category).reduce((s,e)=>s+e.amount,0);
+      const pct   = b.limit > 0 ? Math.min(100, Math.round(spent / b.limit * 100)) : 0;
+      if (pct < 100) el.textContent = fmt(b.limit - spent) + ' remaining';
+    });
+  }
+
+  // Spending breakdown by category
+  const catSpend = {};
+  monthEntries.filter(e=>e.type==='expense').forEach(e => {
+    catSpend[e.category] = (catSpend[e.category]||0) + e.amount;
+  });
+  const breakdown = document.getElementById('db-spending-breakdown');
+  const sorted = Object.entries(catSpend).sort((a,b) => b[1]-a[1]);
+  if (!sorted.length) {
+    breakdown.innerHTML = '<div class="db-empty">No expenses logged this month yet.</div>';
+  } else {
+    const maxAmt = sorted[0][1];
+    breakdown.innerHTML = sorted.map(([cat, amt]) => {
+      const pct = maxAmt > 0 ? Math.round(amt/maxAmt*100) : 0;
+      const catObj = (typeof categories!=='undefined' ? categories : []).find(c=>c.name===cat);
+      const icon = catObj ? catObj.icon : '💸';
+      return `
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;">
+            <span style="color:var(--text);font-weight:500;">${icon} ${cat}</span>
+            <span style="color:var(--red);font-weight:700;">${fmt(amt)}</span>
+          </div>
+          <div class="db-bar-track">
+            <div class="db-bar-fill" style="width:${pct}%;background:var(--red);"></div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+}
+
+function getDbBudgets() {
+  return JSON.parse(localStorage.getItem('edw_db_budgets') || '[]');
+}
+function saveDbBudgets(b) {
+  localStorage.setItem('edw_db_budgets', JSON.stringify(b));
+}
+
+function openAddDbBudget() {
+  const sel = document.getElementById('db-budget-cat-sel');
+  if (sel) {
+    sel.innerHTML = (typeof categories !== 'undefined' ? categories : [])
+      .map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join('');
+  }
+  document.getElementById('db-budget-limit-input').value = '';
+  document.getElementById('db-add-budget-modal').classList.add('open');
+}
+function closeAddDbBudget() {
+  document.getElementById('db-add-budget-modal').classList.remove('open');
+}
+function saveDbBudget() {
+  const cat   = document.getElementById('db-budget-cat-sel').value;
+  const limit = parseFloat(document.getElementById('db-budget-limit-input').value);
+  if (!cat) return toast('Please select a category.', 'error');
+  if (!limit || limit <= 0) return toast('Please enter a valid limit.', 'error');
+  const budgets = getDbBudgets();
+  const existing = budgets.findIndex(b => b.category === cat);
+  if (existing >= 0) budgets[existing].limit = limit;
+  else budgets.push({ category: cat, limit });
+  saveDbBudgets(budgets);
+  closeAddDbBudget();
+  renderDashboardPro();
+  toast(`🎯 Budget set for ${cat}: ${fmt(limit)}/month`, 'success');
+}
+function deleteDbBudget(i) {
+  const budgets = getDbBudgets();
+  const b = budgets[i];
+  budgets.splice(i, 1);
+  saveDbBudgets(budgets);
+  renderDashboardPro();
+  toast(`Removed budget for "${b.category}"`, 'info');
+}
+
+// ── SWIPE GESTURE for Dashboard Pro ───────────────────────────────────────
+(function() {
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (!getDashboardProEnabled()) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    // Swipe right: dx > 80, and not a vertical swipe
+    if (dx > 80 && Math.abs(dy) < 60) {
+      const panel = document.getElementById('dashboard-pro-panel');
+      if (panel && !panel.classList.contains('open')) {
+        openDashboardPro();
+      }
+    }
+    // Swipe left inside panel: close
+    if (dx < -80 && Math.abs(dy) < 60) {
+      const panel = document.getElementById('dashboard-pro-panel');
+      if (panel && panel.classList.contains('open')) {
+        closeDashboardPro();
+      }
+    }
+  }, { passive: true });
+})();
+
+// Add confirm pattern button to settings pattern section
+document.addEventListener('DOMContentLoaded', () => {
+  // Inject confirm pattern button into setup
+  const patSection = document.getElementById('pattern-setup-section');
+  if (patSection) {
+    const btn = document.createElement('button');
+    btn.onclick = confirmSetupPattern;
+    btn.style.cssText = 'width:100%;margin-top:10px;padding:12px;border-radius:10px;border:none;background:var(--accent);color:#0D1117;font-size:13px;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;';
+    btn.textContent = '✅ Confirm Pattern';
+    patSection.appendChild(btn);
+  }
+  // Inject confirm pattern button into lock screen pattern area
+  const lockPatArea = document.getElementById('lock-pattern-area');
+  if (lockPatArea) {
+    const lockBtn = document.createElement('button');
+    lockBtn.onclick = confirmLockPattern;
+    lockBtn.style.cssText = 'display:block;margin:10px auto 0;padding:12px 28px;border-radius:10px;border:none;background:var(--accent);color:#0D1117;font-size:13px;font-weight:700;font-family:\'DM Sans\',sans-serif;cursor:pointer;';
+    lockBtn.textContent = '✅ Confirm Pattern';
+    lockPatArea.appendChild(lockBtn);
+  }
+  // Init dashboard pro visibility
+  updateDashboardProVisibility();
+});
 
 let toastTimer;
 let toastHideTimer;
