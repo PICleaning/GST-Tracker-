@@ -645,7 +645,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 2.1</div>
+  <div class="splash-ver">Version 2.1.2</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -866,11 +866,18 @@
         <div class="drawer-row-sub">How your data is handled</div>
       </div>
     </div>
+    <div class="drawer-row" onclick="openTerms(); closeDrawer();">
+      <div class="drawer-row-icon">📜</div>
+      <div>
+        <div class="drawer-row-label">Terms &amp; Conditions</div>
+        <div class="drawer-row-sub">Points, rewards &amp; eligibility</div>
+      </div>
+    </div>
   </div>
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 2.1</strong>
+    <strong style="color:var(--accent);">Version 2.1.2</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -882,7 +889,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v2.1</p>
+        <p>Endless Digital World · v2.1.2</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -1401,7 +1408,27 @@
       This app uses Google Fonts (DM Sans, DM Serif Display) for display purposes only. No analytics, no tracking scripts, no advertising SDKs are included.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v2.1 · Endless Digital World · For personal record-keeping only</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v2.1.2 · Endless Digital World · For personal record-keeping only</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── TERMS & CONDITIONS MODAL ── -->
+<div id="terms-modal" class="generic-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>📜 Terms &amp; Conditions</h2>
+      <button class="modal-close" onclick="closeTerms()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="privacy-badge">🏅 Rewards &amp; Eligibility</div>
+      <p class="privacy-p"><strong style="color:var(--text);">Points &amp; Rewards Program</strong><br>
+      Earning points through Smart GST Tracker may qualify you for our exclusive offers available only to eligible members. Stay tuned for more updates on how your points can be redeemed.</p>
+      <p class="privacy-p"><strong style="color:var(--text);">Eligibility</strong><br>
+      Exclusive offers and rewards are available to eligible members only. Eligibility criteria may be updated from time to time. Check back regularly or contact us for the latest information.</p>
+      <p class="privacy-p"><strong style="color:var(--text);">Questions?</strong><br>
+      If you have any questions about our rewards program, eligibility, or these terms, please contact us via email at <strong style="color:var(--accent);">endlessdigitalworld@gmail.com</strong> and we'll be happy to help.</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v2.1.2 · Endless Digital World · Terms subject to change without notice.</p>
     </div>
   </div>
 </div>
@@ -1465,7 +1492,7 @@
       </div>
       <div class="modal-section-title">📖 Setup Guide</div>
       <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6;">Download the complete 7-page setup guide covering all app features, Google Sheets integration, and how to get the most out of Smart GST Tracker.</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6;">Download the complete 8-page setup guide covering all app features, Google Sheets integration, and how to navigate every section of Smart GST Tracker.</div>
         <button onclick="openSetupGuidePDF()" style="width:100%;padding:12px 16px;border-radius:10px;border:none;background:var(--accent);color:#0D1117;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
           <span>📄</span> View Setup Guide (PDF)
         </button>
@@ -1522,6 +1549,50 @@
           <div style="font-size:14px;font-weight:700;color:var(--accent);">+5,000 pts</div>
         </div>
       </div>
+
+      <div class="modal-section-title">🌟 Exclusive Milestones</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Reach these milestones to unlock exclusive rewards from the EDW team — for eligible members only.</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+
+        <div style="background:linear-gradient(135deg,rgba(240,180,41,0.08),rgba(240,180,41,0.03));border:1px solid rgba(240,180,41,0.35);border-radius:12px;padding:14px 16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="font-size:22px;">🎯</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--accent);">25,000 Points — Early Access</div>
+              <div style="font-size:11px;color:var(--muted);">Eligible members only</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Get early access to very special upcoming features before anyone else. To enrol, tag us in a post and a Story when you score your first set of points — then tag us again in a Story once you've hit 25,000 points.</div>
+        </div>
+
+        <div style="background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(167,139,250,0.03));border:1px solid rgba(167,139,250,0.35);border-radius:12px;padding:14px 16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="font-size:22px;">🎙️</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--purple);">50,000 Points — CEO Zoom Call</div>
+              <div style="font-size:11px;color:var(--muted);">Eligible members only</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">You'll get the chance to join a 15-minute Zoom meeting with our CEO. Introduce yourself, ask any questions you have, and get to know the team behind EDW.</div>
+        </div>
+
+        <div style="background:linear-gradient(135deg,rgba(61,220,132,0.08),rgba(61,220,132,0.03));border:1px solid rgba(61,220,132,0.35);border-radius:12px;padding:14px 16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="font-size:22px;">💡</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--green);">100,000 Points — Direct Ideas Channel</div>
+              <div style="font-size:11px;color:var(--muted);">Eligible members only</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Receive a special contact email that lets you submit your ideas and thoughts on future updates directly to the EDW team. Help shape the app and collaborate with us to deliver the best experience possible.</div>
+        </div>
+
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:20px;">
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;text-align:center;">Stay tuned for more updates, or contact us via email if you have any questions.<br><strong style="color:var(--accent);">endlessdigitalworld@gmail.com</strong></div>
+      </div>
+
       <div class="modal-section-title">Share Your Score</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Proud of your score? Share it with friends on social media!</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
@@ -1689,7 +1760,7 @@
       <div style="text-align:center;padding:16px 0 20px;">
         <div style="font-size:36px;margin-bottom:6px;">💰</div>
         <div style="font-size:17px;font-weight:700;color:var(--accent);">Smart GST Tracker</div>
-        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 2.1</div>
+        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 2.1.2</div>
       </div>
 
       <div class="modal-section-title">📱 Web App Features</div>
@@ -1732,7 +1803,7 @@
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🏅 Rewards & Points</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Earn points every time you log income. Points scale with income amount — bigger entries earn more. Share your score on Instagram Stories or copy it to clipboard. Access via ☰ Menu → Rewards & Points.</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Earn points every time you log income — bigger entries earn more. Sheet-imported income also earns points if you haven't logged manually yet. Reach milestones to unlock exclusive EDW rewards: <strong style="color:var(--accent);">25,000 pts</strong> — early feature access (tag us to enrol); <strong style="color:var(--purple);">50,000 pts</strong> — 15-min Zoom with our CEO; <strong style="color:var(--green);">100,000 pts</strong> — special ideas channel to co-create future updates. Access via ☰ Menu → Rewards & Points.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">⚙️ Settings</div>
@@ -1749,6 +1820,14 @@
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">💤 Inactivity Nudge</div>
           <div style="font-size:11px;color:var(--muted);line-height:1.5;">If no entries have been added in 7 or more days, the app gently prompts you to log any income or expenses you may have missed. Toggle in Settings → Notifications.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">📧 Email Verification</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">New users verify their email address with a 6-digit one-time code before accessing the app. This links your profile securely to your email for future support.</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">📜 Terms & Conditions</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Earning points may qualify you for exclusive offers available only to eligible members. View full terms via ☰ Menu → Terms & Conditions.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🔄 Auto Updates</div>
@@ -1828,7 +1907,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '2.1';
+const APP_VERSION = '2.1.2';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -1873,6 +1952,27 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '2.1.2',
+    items: [
+      'Exclusive rewards milestones unlocked — earn your way to early feature access, a CEO Zoom call, and a direct ideas channel with the EDW team',
+      '25,000 points — tag @EDW in a post and Story when you score your first points to enrol for early access to very special upcoming features',
+      '50,000 points — earn a 15-minute Zoom meeting with our CEO: introduce yourself and ask anything',
+      '100,000 points — receive a special contact email to submit your ideas and work with the EDW team on future updates',
+      'App version v2.1.2 shown on the loading screen and at the bottom of the hamburger menu',
+      'About This App updated with full rewards milestone descriptions',
+    ]
+  },
+  {
+    version: '2.1.1',
+    items: [
+      'Google Sheet sync now awards points automatically — income imported via "Get Data from Sheet" earns points calculated using the same points-to-earnings ratio as manual entries',
+      'App version v2.1.1 shown on the loading screen, at the bottom of the hamburger menu, and in the About This App section',
+      'About This App updated — every feature in the app is now fully described',
+      'Terms & Conditions added under Privacy Policy in the hamburger menu',
+      'Setup Guide PDF updated to v2.1.1 with complete navigation guide for all features',
+    ]
+  },
   {
     version: '2.1',
     items: [
@@ -3212,6 +3312,8 @@ async function saveGstRate() {
 // ── PRIVACY ───────────────────────────────────────────────────────────────
 function openPrivacy()  { document.getElementById('privacy-modal').classList.add('open'); }
 function closePrivacy() { document.getElementById('privacy-modal').classList.remove('open'); }
+function openTerms()    { document.getElementById('terms-modal').classList.add('open'); }
+function closeTerms()   { document.getElementById('terms-modal').classList.remove('open'); }
 
 // ── NOTIFICATION SETTINGS ─────────────────────────────────────────────────
 const NOTIF_DEFAULTS = {
@@ -3880,6 +3982,10 @@ async function fetchSheetData() {
     // Remove any previously imported sheet entries to avoid duplication
     entries = entries.filter(e => e.source !== 'sheet-import');
 
+    // Check if user had NO manually logged income before this sync
+    const hadNoAppIncome = !entries.some(e => e.type === 'income' && e.source !== 'sheet-import');
+    let sheetPointsAwarded = 0;
+
     loaded.forEach(r => {
       if (r.income > 0) {
         entries.push({
@@ -3888,6 +3994,10 @@ async function fetchSheetData() {
           gst: r.incomeGst || calcGst(r.income),
           ts: new Date().toISOString(), source: 'sheet-import'
         });
+        // Award points for sheet-imported income if user had no prior app-logged income
+        if (hadNoAppIncome) {
+          sheetPointsAwarded += calcPointsForIncome(r.income);
+        }
       }
       if (r.expense > 0) {
         entries.push({
@@ -3898,6 +4008,13 @@ async function fetchSheetData() {
         });
       }
     });
+
+    // Grant accumulated points for sheet-imported income
+    if (hadNoAppIncome && sheetPointsAwarded > 0) {
+      const newTotal = getPoints() + sheetPointsAwarded;
+      setPoints(newTotal);
+      toast(`🏅 +${sheetPointsAwarded} points awarded for your imported earnings! Total: ${newTotal} pts.`, 'success');
+    }
 
     localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0,APP_STORAGE_LIMIT)));
     renderLog(); updateTotals(); renderProgress();
@@ -4187,12 +4304,12 @@ function openSetupGuidePDF() {
     <div class="cover-title">Smart GST Tracker</div>
     <div class="cover-sub">Complete Setup &amp; User Guide</div>
     <div class="cover-sub" style="margin-top:4px;">by <strong>Endless Digital World</strong></div>
-    <div class="cover-version">Version 1.8.6</div>
+    <div class="cover-version">Version 2.1.1</div>
     <div style="height:30mm;"></div>
     <div style="background:#f9f9f9;border:1px solid #eee;border-radius:10px;padding:16px 20px;text-align:center;">
-      <p style="margin:0;font-size:12px;color:#555;">This guide covers everything you need to set up and use<br>Smart GST Tracker and your connected Google Sheet.</p>
+      <p style="margin:0;font-size:12px;color:#555;">This guide covers everything you need to set up and use<br>Smart GST Tracker v2.1.1 and your connected Google Sheet.</p>
     </div>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 1 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 1 of 8</span></div>
   </div>
 
   <!-- PAGE 2: GETTING STARTED -->
@@ -4219,25 +4336,31 @@ function openSetupGuidePDF() {
       <p>Open Smart GST Tracker in your browser. On the setup screen, paste your Apps Script URL and tap <strong>Connect My Sheet</strong>. Done!</p>
     </div>
     <div class="tip">💡 Tip: Bookmark the app in your browser for instant access.</div>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 2 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 2 of 8</span></div>
   </div>
 
   <!-- PAGE 3: LOGGING INCOME & EXPENSES -->
   <div class="page">
     <h1>Logging Income &amp; Expenses</h1>
     <h2>Recording Income</h2>
-    <p>Tap <strong>Income</strong> on the main screen to record an income entry.</p>
+    <p>Tap <strong>💰 Income</strong> on the main screen to record an income entry.</p>
     <ul>
       <li><strong>Month:</strong> Select the month this income belongs to.</li>
-      <li><strong>Period:</strong> Choose Week 1–4 or Full Month.</li>
+      <li><strong>Log Income By:</strong> Choose how to log your income:
+        <ul>
+          <li><strong>📅 Weekly</strong> — Select Week 1–4 (dates auto-calculated per month).</li>
+          <li><strong>📆 Monthly</strong> — Log a full-month lump sum.</li>
+          <li><strong>🏷️ Category</strong> — Log by income source (e.g. Uber, DoorDash, Freelance). Manage income categories via the ✏️ link below the grid.</li>
+        </ul>
+      </li>
       <li><strong>Amount:</strong> Enter the total amount <em>including GST</em>. The app automatically splits out the GST and ex-GST amounts.</li>
       <li><strong>Note:</strong> Optionally add a description.</li>
     </ul>
     <div class="tip">💡 Always enter the full amount including GST — the app calculates everything automatically.</div>
     <h2>Recording Expenses</h2>
-    <p>Tap <strong>Expense</strong> on the main screen to record an expense.</p>
+    <p>Tap <strong>💸 Expense</strong> on the main screen to record an expense.</p>
     <ul>
-      <li><strong>Category:</strong> Select or create a category (e.g. Fuel, Insurance, Tolls).</li>
+      <li><strong>Category:</strong> Select or create a category (e.g. Fuel, Insurance, Tolls). Tap ✏️ Manage categories to add your own.</li>
       <li><strong>Amount:</strong> Enter the total amount including GST.</li>
       <li><strong>Note:</strong> Add a description for your records.</li>
       <li><strong>Receipt (optional):</strong> Attach a photo or PDF receipt — saved to My Documents.</li>
@@ -4245,7 +4368,7 @@ function openSetupGuidePDF() {
     <h2>Receipt Scanning</h2>
     <p>When submitting an expense you can attach a photo or PDF receipt. Access saved receipts at any time via <strong>☰ Menu → My Documents</strong>.</p>
     <div class="warn">⚠️ Receipts are stored locally. Export important receipts for long-term backup.</div>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 3 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 3 of 8</span></div>
   </div>
 
   <!-- PAGE 4: GOOGLE SHEETS FEATURES -->
@@ -4268,26 +4391,28 @@ function openSetupGuidePDF() {
       <tr><td>Dashboard</td><td>Full-year overview &amp; charts</td></tr>
       <tr><td>Quarterly</td><td>ATO BAS period breakdowns</td></tr>
     </table>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 4 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 4 of 8</span></div>
   </div>
 
   <!-- PAGE 5: APP FEATURES & SETTINGS -->
   <div class="page">
     <h1>App Features &amp; Settings</h1>
     <h2>Rewards &amp; Points</h2>
-    <p>Every time you log income you earn points. Access your total via <strong>☰ Menu → Rewards &amp; Points</strong>. Share your score on Instagram Stories or copy it to clipboard.</p>
+    <p>Every time you log income you earn points. Points are also awarded when you import income from Google Sheet (if you haven't previously logged income in the app). Access your total via <strong>☰ Menu → Rewards &amp; Points</strong>. Share your score on Instagram Stories or copy it to clipboard.</p>
     <h2>My Progress</h2>
-    <p>Access <strong>☰ Menu → My Progress</strong> for monthly profit rankings with 🥇🥈🥉 medals, interactive charts, and statistics.</p>
+    <p>Access <strong>☰ Menu → My Progress</strong> (or tap the tab at the top of the screen) for monthly profit rankings with 🥇🥈🥉 medals, interactive charts (Profit, Income, Expenses, GST), and overall stats. Tap <strong>☁️ Get Data from Sheet</strong> to sync all 12 months from your Google Sheet.</p>
+    <h2>Budget Goals</h2>
+    <p>Set a monthly income target via <strong>☰ Menu → Budget Goals</strong>. Your progress is shown inline on the Progress tab and as a bar at the top of the hamburger menu.</p>
+    <h2>Recurring Expenses</h2>
+    <p>Set up subscriptions, memberships, and bills that auto-log monthly, quarterly, or yearly via <strong>☰ Menu → Recurring Expenses</strong>. Tap <strong>Process Recurring Now</strong> at the start of each month to log all due expenses and sync them to your sheet.</p>
     <h2>PIN Lock</h2>
     <p>Protect the app with a 4-digit PIN under <strong>☰ Menu → Settings → Security → Enable PIN Lock</strong>.</p>
     <h2>GST Rate</h2>
     <p>The default is Australia's 10% GST rate. Change it under <strong>☰ Menu → Settings → GST Rate</strong>. The new rate syncs to your sheet automatically.</p>
-    <h2>Personal Profile</h2>
-    <p>Your profile and data are stored permanently using IndexedDB — a browser storage system that survives clearing browser history. Re-enter your name after clearing history to restore all data.</p>
     <h2>My Documents</h2>
     <p>Receipts attached to expense entries are stored here. Access via <strong>☰ Menu → My Documents</strong>.</p>
     <div class="tip">💡 Use "Get Data from Sheet" regularly to keep charts and rankings current.</div>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 5 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 5 of 8</span></div>
   </div>
 
   <!-- PAGE 6: TROUBLESHOOTING & FAQ -->
@@ -4309,26 +4434,41 @@ function openSetupGuidePDF() {
     <p>Endless Digital World (EDW) may collect your name and email address for the purpose of informing you about new services, product updates, or launches — such as bookkeeping services offered by EDW. Rest assured your details are <strong>never shared with any third party</strong>. You may contact us at any time at endlessdigitalworld@gmail.com to have your details removed from our records.</p>
     <br><br>
     <p class="disclaimer">The sole purpose of this app is for personal record keeping and EDW (Endless Digital World) doesn't constitute to any liabilities and you should always seek an advice from your financial advisor.</p>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 6 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 6 of 8</span></div>
   </div>
 
-  <!-- PAGE 7: QUICK REFERENCE -->
+  <!-- PAGE 7: NAVIGATING THE APP -->
   <div class="page">
-    <h1>Quick Reference</h1>
-    <h2>Menu Overview</h2>
+    <h1>Navigating the App</h1>
+    <h2>Main Tabs (top of screen)</h2>
+    <table>
+      <tr><th>Tab</th><th>What It Does</th></tr>
+      <tr><td>💰 Income</td><td>Log income — select Weekly, Monthly, or Category mode, enter amount and optional note</td></tr>
+      <tr><td>💸 Expense</td><td>Log expenses — select a category, enter amount, attach an optional receipt</td></tr>
+    </table>
+    <h2>☰ Hamburger Menu (top-right)</h2>
     <table>
       <tr><th>Menu Item</th><th>What It Does</th></tr>
-      <tr><td>📂 My Logs</td><td>Browse entries, filter by month/type, export PDF</td></tr>
-      <tr><td>📁 My Documents</td><td>View and manage saved receipts</td></tr>
-      <tr><td>🗂️ Manage Categories</td><td>Add, remove, and reorder expense categories</td></tr>
-      <tr><td>🏆 My Progress</td><td>Rankings, charts, stats and Google Sheet sync</td></tr>
-      <tr><td>✨ What's New</td><td>Latest updates for each version</td></tr>
-      <tr><td>ℹ️ About This App</td><td>Feature guide and tips</td></tr>
-      <tr><td>🏅 Rewards &amp; Points</td><td>View and share your points score</td></tr>
-      <tr><td>⚙️ Settings</td><td>PIN lock, GST rate, sheet URL</td></tr>
-      <tr><td>🆘 Help &amp; Support</td><td>Email support + setup guide</td></tr>
-      <tr><td>🔒 Privacy Policy</td><td>How your data is handled</td></tr>
+      <tr><td>📂 My Logs</td><td>Browse all entries, filter by month/type, export a PDF report, manage or delete data</td></tr>
+      <tr><td>📁 My Documents</td><td>View and download all receipts attached to expense entries</td></tr>
+      <tr><td>🔁 Recurring Expenses</td><td>Set up subscriptions &amp; bills that auto-log monthly, quarterly or yearly</td></tr>
+      <tr><td>🎯 Budget Goals</td><td>Set a monthly income target and track your progress with a live progress bar</td></tr>
+      <tr><td>🏆 My Progress</td><td>Monthly rankings, interactive charts, stats and Google Sheet sync</td></tr>
+      <tr><td>✨ What's New</td><td>Latest updates for the current version; becomes Release Notes after 3 views</td></tr>
+      <tr><td>ℹ️ About This App</td><td>Full feature guide and tips for every section of the app</td></tr>
+      <tr><td>🏅 Rewards &amp; Points</td><td>View your total points and share your score on social media</td></tr>
+      <tr><td>⚙️ Settings</td><td>PIN lock, GST rate, Sheet URL, and Notification preferences</td></tr>
+      <tr><td>🆘 Help &amp; Support</td><td>Download the Setup Guide PDF or email Endless Digital World</td></tr>
+      <tr><td>🔒 Privacy Policy</td><td>How your data is handled — stored locally, never shared</td></tr>
+      <tr><td>📜 Terms &amp; Conditions</td><td>Points eligibility and exclusive rewards information</td></tr>
     </table>
+    <div class="tip">💡 The budget progress bar at the very top of the menu shows your current month's income progress at a glance.</div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide</span><span>Page 7 of 8</span></div>
+  </div>
+
+  <!-- PAGE 8: QUICK REFERENCE -->
+  <div class="page">
+    <h1>Quick Reference</h1>
     <h2>Points Tiers</h2>
     <table>
       <tr><th>Income Amount</th><th>Points Awarded</th></tr>
@@ -4338,14 +4478,23 @@ function openSetupGuidePDF() {
       <tr><td>Over $1,000</td><td>+2,000 points</td></tr>
       <tr><td>Over $2,000</td><td>+5,000 points</td></tr>
     </table>
+    <div class="tip">💡 Points are also awarded when you import earnings from Google Sheet (if you had no prior app-logged income).</div>
     <h2>GST Quick Reference</h2>
     <ul>
       <li>Always enter amounts <strong>including GST</strong></li>
       <li>Australian GST rate: 10% (divisor ÷11)</li>
       <li>GST = Amount ÷ 11 &nbsp;|&nbsp; Ex-GST = Amount − GST</li>
     </ul>
+    <h2>ATO BAS Deadlines (approx.)</h2>
+    <table>
+      <tr><th>Quarter</th><th>Period</th><th>Due Date</th></tr>
+      <tr><td>Q1</td><td>Jul–Sep</td><td>28 October</td></tr>
+      <tr><td>Q2</td><td>Oct–Dec</td><td>28 February</td></tr>
+      <tr><td>Q3</td><td>Jan–Mar</td><td>28 April</td></tr>
+      <tr><td>Q4</td><td>Apr–Jun</td><td>28 July</td></tr>
+    </table>
     <div class="tip">💡 Export a PDF from My Logs at the end of each quarter for your BAS records.</div>
-    <div class="footer"><span>Smart GST Tracker — Setup Guide · v1.8.5 · Endless Digital World</span><span>Page 7 of 7</span></div>
+    <div class="footer"><span>Smart GST Tracker — Setup Guide · v2.1.1 · Endless Digital World</span><span>Page 8 of 8</span></div>
   </div>
 
   <${'script'}>window.onload = () => window.print();</${'script'}>
