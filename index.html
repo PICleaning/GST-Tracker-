@@ -866,13 +866,6 @@
         <div class="drawer-row-sub">How your data is handled</div>
       </div>
     </div>
-    <div class="drawer-row" onclick="openTerms(); closeDrawer();">
-      <div class="drawer-row-icon">📜</div>
-      <div>
-        <div class="drawer-row-label">Terms &amp; Conditions</div>
-        <div class="drawer-row-sub">Points, rewards &amp; eligibility</div>
-      </div>
-    </div>
   </div>
 
   <div class="drawer-version">
@@ -1409,6 +1402,10 @@
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
       <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v2.1.2 · Endless Digital World · For personal record-keeping only</p>
+
+      <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:14px;">
+        <button onclick="openTerms()" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:11px;font-family:'DM Sans',sans-serif;padding:6px 12px;cursor:pointer;">📜 Terms &amp; Conditions</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1426,6 +1423,33 @@
       Earning points through Smart GST Tracker may qualify you for our exclusive offers available only to eligible members. Stay tuned for more updates on how your points can be redeemed.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Eligibility</strong><br>
       Exclusive offers and rewards are available to eligible members only. Eligibility criteria may be updated from time to time. Check back regularly or contact us for the latest information.</p>
+
+      <div class="modal-section-title">🌟 Exclusive Milestones</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+        <div style="background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(167,139,250,0.03));border:1px solid rgba(167,139,250,0.35);border-radius:12px;padding:14px 16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="font-size:22px;">🎙️</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--purple);">500,000 Points — CEO Zoom Call</div>
+              <div style="font-size:11px;color:var(--muted);">Eligible members only</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">You'll get the chance to join a 15-minute Zoom meeting with our CEO. Introduce yourself, ask any questions you have, and get to know the team behind EDW.</div>
+        </div>
+
+        <div style="background:linear-gradient(135deg,rgba(61,220,132,0.08),rgba(61,220,132,0.03));border:1px solid rgba(61,220,132,0.35);border-radius:12px;padding:14px 16px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="font-size:22px;">💡</div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--green);">1,000,000 Points — Direct Ideas Channel</div>
+              <div style="font-size:11px;color:var(--muted);">Eligible members only</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">Receive a special contact email that lets you submit your ideas and thoughts on future updates directly to the EDW team. Help shape the app and collaborate with us to deliver the best experience possible.</div>
+        </div>
+      </div>
+
       <p class="privacy-p"><strong style="color:var(--text);">Questions?</strong><br>
       If you have any questions about our rewards program, eligibility, or these terms, please contact us via email at <strong style="color:var(--accent);">endlessdigitalworld@gmail.com</strong> and we'll be happy to help.</p>
       <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v2.1.2 · Endless Digital World · Terms subject to change without notice.</p>
@@ -1551,7 +1575,7 @@
       </div>
 
       <div class="modal-section-title">🌟 Exclusive Milestones</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Reach these milestones to unlock exclusive rewards from the EDW team — for eligible members only.</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Reach this milestone to unlock an exclusive reward from the EDW team — for eligible members only.</div>
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
 
         <div style="background:linear-gradient(135deg,rgba(240,180,41,0.08),rgba(240,180,41,0.03));border:1px solid rgba(240,180,41,0.35);border-radius:12px;padding:14px 16px;">
@@ -1563,34 +1587,13 @@
             </div>
           </div>
           <div style="font-size:12px;color:var(--text);line-height:1.6;">Get early access to very special upcoming features before anyone else. To enrol, tag us in a post and a Story when you score your first set of points — then tag us again in a Story once you've hit 25,000 points.</div>
-        </div>
-
-        <div style="background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(167,139,250,0.03));border:1px solid rgba(167,139,250,0.35);border-radius:12px;padding:14px 16px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="font-size:22px;">🎙️</div>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--purple);">50,000 Points — CEO Zoom Call</div>
-              <div style="font-size:11px;color:var(--muted);">Eligible members only</div>
-            </div>
-          </div>
-          <div style="font-size:12px;color:var(--text);line-height:1.6;">You'll get the chance to join a 15-minute Zoom meeting with our CEO. Introduce yourself, ask any questions you have, and get to know the team behind EDW.</div>
-        </div>
-
-        <div style="background:linear-gradient(135deg,rgba(61,220,132,0.08),rgba(61,220,132,0.03));border:1px solid rgba(61,220,132,0.35);border-radius:12px;padding:14px 16px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="font-size:22px;">💡</div>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--green);">100,000 Points — Direct Ideas Channel</div>
-              <div style="font-size:11px;color:var(--muted);">Eligible members only</div>
-            </div>
-          </div>
-          <div style="font-size:12px;color:var(--text);line-height:1.6;">Receive a special contact email that lets you submit your ideas and thoughts on future updates directly to the EDW team. Help shape the app and collaborate with us to deliver the best experience possible.</div>
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(240,180,41,0.08);border-radius:8px;font-size:12px;color:var(--accent);font-weight:600;">📸 Tag us: <span style="text-decoration:underline;">@Edwfinance</span> on Instagram</div>
         </div>
 
       </div>
 
       <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:20px;">
-        <div style="font-size:11px;color:var(--muted);line-height:1.6;text-align:center;">Stay tuned for more updates, or contact us via email if you have any questions.<br><strong style="color:var(--accent);">endlessdigitalworld@gmail.com</strong></div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;text-align:center;">Stay tuned for more updates, or contact us via email if you have any questions.<br><strong style="color:var(--accent);">endlessdigitalworld@gmail.com</strong><br><span style="color:var(--accent);font-weight:600;">@Edwfinance</span> on Instagram</div>
       </div>
 
       <div class="modal-section-title">Share Your Score</div>
@@ -1803,7 +1806,7 @@
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🏅 Rewards & Points</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Earn points every time you log income — bigger entries earn more. Sheet-imported income also earns points if you haven't logged manually yet. Reach milestones to unlock exclusive EDW rewards: <strong style="color:var(--accent);">25,000 pts</strong> — early feature access (tag us to enrol); <strong style="color:var(--purple);">50,000 pts</strong> — 15-min Zoom with our CEO; <strong style="color:var(--green);">100,000 pts</strong> — special ideas channel to co-create future updates. Access via ☰ Menu → Rewards & Points.</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Earn points every time you log income — bigger entries earn more. Sheet-imported income also earns points if you haven't logged manually yet. Reach milestones to unlock exclusive EDW rewards: <strong style="color:var(--accent);">25,000 pts</strong> — early feature access (tag <strong>@Edwfinance</strong> on Instagram to enrol). Higher milestones available — see Privacy Policy → Terms & Conditions for full details. Access via ☰ Menu → Rewards & Points.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">⚙️ Settings</div>
@@ -1827,7 +1830,7 @@
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">📜 Terms & Conditions</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Earning points may qualify you for exclusive offers available only to eligible members. View full terms via ☰ Menu → Terms & Conditions.</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Earning points may qualify you for exclusive offers available only to eligible members. View full terms via ☰ Menu → Privacy Policy → Terms & Conditions.</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">🔄 Auto Updates</div>
@@ -1955,12 +1958,12 @@ const WHATS_NEW = [
   {
     version: '2.1.2',
     items: [
-      'Exclusive rewards milestones unlocked — earn your way to early feature access, a CEO Zoom call, and a direct ideas channel with the EDW team',
-      '25,000 points — tag @EDW in a post and Story when you score your first points to enrol for early access to very special upcoming features',
-      '50,000 points — earn a 15-minute Zoom meeting with our CEO: introduce yourself and ask anything',
-      '100,000 points — receive a special contact email to submit your ideas and work with the EDW team on future updates',
+      '25,000 points milestone — tag @Edwfinance in a post and Story when you score your first points, then tag us again in a Story once you\'ve hit 25,000 to enrol for early access to very special upcoming features',
+      '500,000 points milestone — earn a 15-minute Zoom meeting with our CEO: introduce yourself and ask anything (details in Privacy Policy → Terms & Conditions)',
+      '1,000,000 points milestone — receive a special contact email to submit your ideas and work with the EDW team on future updates (details in Privacy Policy → Terms & Conditions)',
       'App version v2.1.2 shown on the loading screen and at the bottom of the hamburger menu',
-      'About This App updated with full rewards milestone descriptions',
+      'About This App updated with full feature descriptions',
+      '@Edwfinance Instagram handle added to the Rewards & Points section',
     ]
   },
   {
