@@ -774,7 +774,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 3.0.2</div>
+  <div class="splash-ver">Version 3.0.3</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -1316,7 +1316,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 3.0.2</strong>
+    <strong style="color:var(--accent);">Version 3.0.3</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -1328,7 +1328,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v3.0.0</p>
+        <p>Endless Digital World · v3.0.3</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -1882,7 +1882,7 @@
       This app uses Google Fonts (DM Sans, DM Serif Display) for display purposes only. No analytics, no tracking scripts, no advertising SDKs are included.</p>
       <p class="privacy-p"><strong style="color:var(--text);">Data deletion?</strong><br>
       You can delete all locally stored data at any time via Settings → Delete All My Data in the menu.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v3.0.0 · Endless Digital World · For personal record-keeping only</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v3.0.3 · Endless Digital World · For personal record-keeping only</p>
 
       <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:14px;">
         <button onclick="openTerms()" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:11px;font-family:'DM Sans',sans-serif;padding:6px 12px;cursor:pointer;">📜 Terms &amp; Conditions</button>
@@ -1933,7 +1933,7 @@
 
       <p class="privacy-p"><strong style="color:var(--text);">Questions?</strong><br>
       If you have any questions about our rewards program, eligibility, or these terms, please contact us via email at <strong style="color:var(--accent);">endlessdigitalworld@gmail.com</strong> and we'll be happy to help.</p>
-      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v2.1.2 · Endless Digital World · Terms subject to change without notice.</p>
+      <p class="privacy-p" style="margin-top:16px;font-size:11px;">Smart GST Tracker v3.0.3 · Endless Digital World · Terms subject to change without notice.</p>
     </div>
   </div>
 </div>
@@ -2244,7 +2244,7 @@
       <div style="text-align:center;padding:16px 0 20px;">
         <div style="font-size:36px;margin-bottom:6px;">💰</div>
         <div style="font-size:17px;font-weight:700;color:var(--accent);">Smart GST Tracker</div>
-        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 3.0.2</div>
+        <div style="font-size:12px;color:var(--muted);">by Endless Digital World · Version 3.0.3</div>
       </div>
 
       <div class="modal-section-title">📱 Web App Features</div>
@@ -2391,7 +2391,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '3.0.2';
+const APP_VERSION = '3.0.3';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -2437,9 +2437,20 @@ const EMOJI_MAP = [
 
 const WHATS_NEW = [
   {
+    version: '3.0.3',
+    items: [
+      'Inactivity penalty — no income or expenses logged for 2 weeks straight deducts 4,000 points',
+      'Inactivity penalty — no income or expenses logged for 1 full month deducts 10,000 points',
+      'Monthly points cap raised to 22,500 — earning stops completely once the cap is reached each month',
+      'Monthly cap is a hard stop — no points are awarded at all after 22,500 is reached in a calendar month',
+      'Points program resets automatically on the 1st of each new month — total balance is always kept',
+      'Rewards & Points modal updated with Monthly Cap & Rules section explaining all penalty and cap details',
+    ]
+  },
+  {
     version: '3.0.2',
     items: [
-      'Points cap — once you hit 20,000 points/month, reduced 1:1 ratio kicks in automatically',
+      'Points cap — once you hit 22,500 points/month, earning stops until next month (resets automatically)',
       'Smart budget categories — type any name and the app auto-assigns the right emoji',
       'Default budget categories: 🏠 Rent, 📱 Phone Bill, 🌐 WiFi, 🛡️ Insurance, 🛒 Groceries, 💊 Medicine, ⚡ Bills',
       'Budgets are now period-aware — set weekly, fortnightly or monthly limits per category',
@@ -3020,13 +3031,20 @@ document.addEventListener('DOMContentLoaded', () => {
   updateDrawerPointsSub();
   localStorage.setItem('gst_entries', JSON.stringify(entries));
 
+  // Seed last-log timestamp for existing users who have entries but no ts yet
+  if (entries.length && !localStorage.getItem('edw_last_log_ts')) {
+    const latestTs = Math.max(...entries.map(e => new Date(e.ts).getTime()));
+    if (latestTs) localStorage.setItem('edw_last_log_ts', latestTs);
+  }
+
   // Private browser warning (every 6 hours)
   setTimeout(checkPrivateBrowser, 1500);
   // Notification checks — staggered to avoid overwhelming on load
-  setTimeout(checkInactivityNudge,    3000);
-  setTimeout(checkWeeklyIncomeReminder, 4500);
-  setTimeout(checkMonthlySummary,     5500);
-  setTimeout(checkBasAlert,           6500);
+  setTimeout(checkInactivityNudge,       3000);
+  setTimeout(checkWeeklyIncomeReminder,  4500);
+  setTimeout(checkMonthlySummary,        5500);
+  setTimeout(checkBasAlert,             6500);
+  setTimeout(checkInactivityPenalties,  7500);
 });
 
 function updateDrawerProfile(name) {
@@ -3248,6 +3266,7 @@ async function submitIncome() {
   entries.unshift(entry);
   localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0,APP_STORAGE_LIMIT)));
   backupToProfileDB();
+  resetPenaltyState();
   awardPoints(amount);
 
   // Strict category matching: ensure income category row exists in sheet before lodging
@@ -3283,6 +3302,7 @@ async function submitExpense() {
   entries.unshift(entry);
   localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0,APP_STORAGE_LIMIT)));
   backupToProfileDB();
+  resetPenaltyState();
 
   // Save receipt if attached
   if (pendingReceiptData) {
@@ -4863,39 +4883,84 @@ function addMonthlyPointsEarned(pts) {
   const cur  = getMonthlyPointsEarned();
   localStorage.setItem(key, cur + pts);
 }
-const MONTHLY_POINTS_CAP = 20000;
+const MONTHLY_POINTS_CAP = 22500;
 
 function calcPointsForIncome(amount) {
   const monthlyEarned = getMonthlyPointsEarned();
-  const isCapped = monthlyEarned >= MONTHLY_POINTS_CAP;
+  // Hard cap — no points at all once 22,500 reached this month
+  if (monthlyEarned >= MONTHLY_POINTS_CAP) return 0;
 
-  if (isCapped) {
-    // Reduced 1-1 ratio after cap
-    if (amount >= 2000) return 2000;
-    if (amount >= 1000) return 1000;
-    if (amount >= 100)  return 100;
-    if (amount >= 50)   return 10;
-    return Math.floor(amount);
-  } else {
-    // Normal tier before cap
-    if (amount > 2000) return 5000;
-    if (amount > 1000) return 2000;
-    if (amount > 100)  return 500;
-    if (amount > 50)   return 15;
-    if (amount > 1)    return 5;
-    return 0;
-  }
+  let pts;
+  // Normal tier
+  if (amount > 2000) pts = 5000;
+  else if (amount > 1000) pts = 2000;
+  else if (amount > 100)  pts = 500;
+  else if (amount > 50)   pts = 15;
+  else if (amount > 1)    pts = 5;
+  else return 0;
+
+  // Clamp so total monthly never exceeds cap
+  const remaining = MONTHLY_POINTS_CAP - monthlyEarned;
+  return Math.min(pts, remaining);
 }
 function awardPoints(amount) {
-  const pts   = calcPointsForIncome(amount);
-  if (pts <= 0) return;
   const monthlyEarned = getMonthlyPointsEarned();
-  const isCapped      = monthlyEarned >= MONTHLY_POINTS_CAP;
-  const total         = getPoints() + pts;
+  if (monthlyEarned >= MONTHLY_POINTS_CAP) {
+    toast('🏅 Monthly points cap of 22,500 reached! Points reset next month.', 'info');
+    return;
+  }
+  const pts = calcPointsForIncome(amount);
+  if (pts <= 0) return;
+  const total = getPoints() + pts;
   setPoints(total);
   addMonthlyPointsEarned(pts);
-  const capNote = isCapped ? ' (reduced rate — monthly cap reached)' : '';
-  toast(`🏅 +${pts} points${capNote}! Total: ${total.toLocaleString()} pts.`, 'success');
+  const newMonthly = getMonthlyPointsEarned();
+  const capNote = newMonthly >= MONTHLY_POINTS_CAP ? ' 🎉 Monthly cap reached!' : '';
+  toast(`🏅 +${pts} points${capNote} Total: ${total.toLocaleString()} pts.`, 'success');
+}
+
+// ── INACTIVITY POINT PENALTIES ────────────────────────────────────────────
+function getLastLogTimestamp() {
+  return parseInt(localStorage.getItem('edw_last_log_ts') || '0');
+}
+function setLastLogTimestamp() {
+  localStorage.setItem('edw_last_log_ts', Date.now());
+}
+function getPenaltyState() {
+  const raw = localStorage.getItem('edw_penalty_state');
+  return raw ? JSON.parse(raw) : { twoWeekApplied: false, oneMonthApplied: false };
+}
+function savePenaltyState(state) {
+  localStorage.setItem('edw_penalty_state', JSON.stringify(state));
+}
+function checkInactivityPenalties() {
+  const lastLog = getLastLogTimestamp();
+  if (!lastLog) return; // no entries ever — no penalty
+  const now = Date.now();
+  const daysSince = (now - lastLog) / (1000 * 60 * 60 * 24);
+  const state = getPenaltyState();
+
+  if (daysSince >= 30 && !state.oneMonthApplied) {
+    // Apply 1-month penalty (10,000 pts)
+    state.oneMonthApplied = true;
+    state.twoWeekApplied  = true; // mark 2-week as applied too so it doesn't double-fire
+    savePenaltyState(state);
+    const newTotal = Math.max(0, getPoints() - 10000);
+    setPoints(newTotal);
+    toast('⚠️ -10,000 points: No income or expenses logged for 1 month!', 'error');
+  } else if (daysSince >= 14 && !state.twoWeekApplied) {
+    // Apply 2-week penalty (4,000 pts)
+    state.twoWeekApplied = true;
+    savePenaltyState(state);
+    const newTotal = Math.max(0, getPoints() - 4000);
+    setPoints(newTotal);
+    toast('⚠️ -4,000 points: No income or expenses logged for 2 weeks!', 'error');
+  }
+}
+function resetPenaltyState() {
+  // Called whenever the user successfully logs an income or expense
+  savePenaltyState({ twoWeekApplied: false, oneMonthApplied: false });
+  setLastLogTimestamp();
 }
 function updateDrawerPointsSub() {
   const sub = document.getElementById('drawer-points-sub');
