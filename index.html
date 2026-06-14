@@ -21,11 +21,115 @@
     --muted:    #8B949E;
     --income-bg:#0D2218;
     --expense-bg:#2A0D0D;
+    --teal:      #2DD4BF;
+    --orange:    #FB923C;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+
+  /* ── UI ENHANCEMENTS v3.1.0 ── */
+  :root {
+    --radius-card: 18px;
+    --radius-btn:  12px;
+    --shadow-card: 0 2px 12px rgba(0,0,0,0.25);
+    --teal:        #2DD4BF;
+    --orange:      #FB923C;
+  }
+
+  /* Better card shadows */
+  .card { box-shadow: var(--shadow-card); }
+
+  /* Refined header */
+  header { box-shadow: 0 4px 32px rgba(0,0,0,0.5); }
+
+  /* Improved tabs */
+  .tabs { border: 1px solid var(--border); background: var(--surface); }
+  .tab { transition: all 0.22s cubic-bezier(0.4,0,0.2,1); font-weight: 600; }
+
+  /* Better DB Nav tabs */
+  .db-nav-btn { font-size: 12px; font-weight: 600; letter-spacing: 0.01em; padding: 14px 4px; }
+
+  /* Quick-stats bar for Dashboard Pro */
+  .db-quick-stats {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px;
+  }
+  .db-qs-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 10px; text-align: center;
+  }
+  .db-qs-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; margin-bottom: 4px; }
+  .db-qs-val { font-size: 15px; font-weight: 800; }
+  .db-qs-sub { font-size: 9px; color: var(--muted); margin-top: 2px; }
+
+  /* Savings rate widget */
+  .db-savings-widget {
+    background: linear-gradient(135deg, rgba(45,212,191,0.08) 0%, rgba(45,212,191,0.03) 100%);
+    border: 1px solid rgba(45,212,191,0.25); border-radius: 14px;
+    padding: 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px;
+  }
+  .db-savings-ring { position: relative; width: 60px; height: 60px; flex-shrink: 0; }
+  .db-savings-ring canvas { position: absolute; top: 0; left: 0; }
+  .db-savings-ring-text {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    font-size: 12px; font-weight: 800; color: var(--teal); line-height: 1; text-align: center;
+  }
+  .db-savings-info { flex: 1; }
+  .db-savings-title { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .db-savings-detail { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* Trends chart section */
+  .db-trends-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 20px; }
+  .db-trends-wrap canvas { width: 100% !important; }
+
+  /* Category expense donut */
+  .db-cat-donut-wrap {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px; margin-bottom: 20px;
+  }
+  .db-cat-legend { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+  .db-cat-legend-item {
+    display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text);
+  }
+  .db-cat-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .db-cat-legend-bar { flex: 1; background: var(--card); border-radius: 4px; height: 6px; overflow: hidden; }
+  .db-cat-legend-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+  .db-cat-legend-amt { font-size: 11px; font-weight: 700; color: var(--text); min-width: 56px; text-align: right; }
+
+  /* Improved budget progress bars */
+  .db-bar-outer { background: var(--card); border-radius: 20px; height: 10px; overflow: hidden; margin-bottom: 5px; }
+
+  /* Reward points negative style */
+  .points-negative { color: var(--red) !important; }
+
+  /* Better drawer items */
+  .drawer-row { border-radius: 12px; transition: background 0.2s, transform 0.1s; }
+  .drawer-row:active { transform: scale(0.98); }
+
+  /* Pill badges for tabs */
+  .tab-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--accent); color: #0D1117;
+    font-size: 9px; font-weight: 800; border-radius: 8px;
+    padding: 1px 5px; margin-left: 4px; vertical-align: middle;
+  }
+
+  /* Income mode buttons improved */
+  .inc-mode-btn { font-weight: 600; transition: all 0.2s; }
+  .inc-mode-btn.selected-income { font-weight: 700; }
+
+  /* Smooth panel transitions */
+  #panel-income, #panel-expense, #panel-log, #panel-progress { animation: fadePanel 0.2s ease; }
+  @keyframes fadePanel { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Better summary cards */
+  .db-sum-card { transition: transform 0.15s, box-shadow 0.15s; cursor: default; }
+  .db-sum-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+
+  /* Improved main tabs with icons */
+  .tab { display: flex; align-items: center; justify-content: center; gap: 5px; }
 
   /* ── SPLASH SCREEN ── */
   #splash {
@@ -310,8 +414,10 @@
     background: var(--card); border: 1px solid var(--border); border-radius: 8px;
     padding: 8px 12px; margin-bottom: 6px; font-size: 12px; color: var(--text);
   }
+  .db-bar-bg {
     background: var(--card); border-radius: 20px; height: 8px; overflow: hidden; margin-bottom: 5px;
   }
+  .db-bar-track { background: var(--card); border-radius: 20px; height: 10px; overflow: hidden; margin-bottom: 5px; }
   .db-bar-fill { height: 100%; border-radius: 20px; transition: width 0.5s; }
   .db-bar-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
   .db-add-budget-btn {
@@ -382,13 +488,14 @@
 
   /* ── TABS ── */
   .tabs {
-    display: flex; gap: 8px; margin-bottom: 24px;
-    background: var(--surface); border-radius: 14px; padding: 6px; border: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px;
+    background: var(--surface); border-radius: 14px; padding: 5px; border: 1px solid var(--border);
   }
   .tab {
-    flex: 1; padding: 10px; border-radius: 10px; border: none; background: transparent;
-    color: var(--muted); font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif;
-    cursor: pointer; transition: all 0.2s; text-align: center;
+    flex: 1; padding: 9px 4px; border-radius: 10px; border: none; background: transparent;
+    color: var(--muted); font-size: 11px; font-weight: 600; font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: all 0.22s cubic-bezier(0.4,0,0.2,1); text-align: center;
+    display: flex; align-items: center; justify-content: center; gap: 4px; line-height: 1.2;
   }
   .tab.active-income { background: var(--income-bg); color: var(--green); border: 1px solid var(--green); }
   .tab.active-expense { background: var(--expense-bg); color: var(--red); border: 1px solid var(--red); }
@@ -774,7 +881,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 3.0.3</div>
+  <div class="splash-ver">Version 3.1.0</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -925,6 +1032,25 @@
       <!-- Data source notice -->
       <div id="db-data-source-notice" style="display:none;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.25);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:var(--purple);line-height:1.5;"></div>
 
+      <!-- Quick Stats Bar -->
+      <div class="db-quick-stats" id="db-quick-stats">
+        <div class="db-qs-card">
+          <div class="db-qs-label">Daily Avg Spend</div>
+          <div class="db-qs-val" id="db-qs-daily" style="color:var(--red);">$0</div>
+          <div class="db-qs-sub">this month</div>
+        </div>
+        <div class="db-qs-card">
+          <div class="db-qs-label">Top Category</div>
+          <div class="db-qs-val" id="db-qs-topcat" style="color:var(--accent);font-size:20px;">—</div>
+          <div class="db-qs-sub" id="db-qs-topcat-name">no data</div>
+        </div>
+        <div class="db-qs-card">
+          <div class="db-qs-label">Savings Rate</div>
+          <div class="db-qs-val" id="db-qs-saverate" style="color:var(--teal);">0%</div>
+          <div class="db-qs-sub">of income saved</div>
+        </div>
+      </div>
+
       <!-- Summary strip -->
       <div class="db-summary-grid" id="db-summary-grid">
         <div class="db-sum-card">
@@ -943,6 +1069,18 @@
           <div class="db-sum-label" id="db-gst-label">GST Payable</div>
           <div class="db-sum-val" id="db-month-gst" style="color:var(--purple);">$0.00</div>
         </div>
+        <div class="db-sum-card" style="grid-column:1/-1;background:linear-gradient(135deg,rgba(240,180,41,0.07),rgba(240,180,41,0.03));border-color:rgba(240,180,41,0.25);">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div class="db-sum-label">Cash in Hand</div>
+              <div class="db-sum-val" id="db-month-cash" style="color:var(--teal);font-size:26px;">$0.00</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="db-sum-label">After GST</div>
+              <div style="font-size:13px;font-weight:700;color:var(--muted);" id="db-month-after-gst">$0.00</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Log income / expense buttons (own data mode) -->
@@ -959,6 +1097,34 @@
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
         <canvas id="db-pie-canvas" width="110" height="110" style="flex-shrink:0;"></canvas>
         <div id="db-pie-legend" style="flex:1;font-size:11px;line-height:1.9;color:var(--muted);"></div>
+      </div>
+
+      <!-- Savings Rate Widget -->
+      <div class="db-section-title" style="margin-top:4px;"><span>💚 Savings Rate</span></div>
+      <div class="db-savings-widget" id="db-savings-widget">
+        <div class="db-savings-ring">
+          <canvas id="db-savings-ring-canvas" width="60" height="60"></canvas>
+          <div class="db-savings-ring-text" id="db-savings-ring-text">0%</div>
+        </div>
+        <div class="db-savings-info">
+          <div class="db-savings-title" id="db-savings-title">No data yet</div>
+          <div class="db-savings-detail" id="db-savings-detail">Log income and expenses to see your savings rate this month.</div>
+        </div>
+      </div>
+
+      <!-- Expense Category Donut -->
+      <div class="db-section-title" style="margin-top:4px;"><span>🍩 Spending by Category</span></div>
+      <div class="db-cat-donut-wrap" id="db-cat-donut-wrap">
+        <div style="display:flex;gap:14px;align-items:center;">
+          <canvas id="db-cat-donut-canvas" width="100" height="100" style="flex-shrink:0;"></canvas>
+          <div id="db-cat-donut-legend" class="db-cat-legend" style="flex:1;"></div>
+        </div>
+      </div>
+
+      <!-- Monthly Trends Chart -->
+      <div class="db-section-title" style="margin-top:4px;"><span>📈 6-Month Trends</span></div>
+      <div class="db-trends-wrap">
+        <canvas id="db-trends-canvas" height="160"></canvas>
       </div>
 
       <!-- Category budgets -->
@@ -1316,7 +1482,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 3.0.3</strong>
+    <strong style="color:var(--accent);">Version 3.1.0</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -1328,7 +1494,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v3.0.3</p>
+        <p>Endless Digital World · v3.1.0</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -1342,6 +1508,8 @@
   <div class="tabs">
     <button class="tab active-income" id="tab-income"    onclick="switchTab('income')">💰 Income</button>
     <button class="tab"               id="tab-expense"   onclick="switchTab('expense')">💸 Expense</button>
+    <button class="tab"               id="tab-log"       onclick="switchTab('log')">📋 Log</button>
+    <button class="tab"               id="tab-progress"  onclick="switchTab('progress')">📈 Progress</button>
   </div>
 
   <!-- ═══ INCOME PANEL ═══ -->
@@ -2077,6 +2245,34 @@
         <div style="font-size:11px;color:var(--muted);line-height:1.6;text-align:center;">Stay tuned for more updates, or contact us via email if you have any questions.<br><strong style="color:var(--accent);">endlessdigitalworld@gmail.com</strong><br><span style="color:var(--accent);font-weight:600;">@Edwfinance</span> on Instagram</div>
       </div>
 
+      <div class="modal-section-title">📋 Points Rules &amp; Penalties</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:13px;color:var(--text);">Monthly earning cap</div>
+            <div style="font-size:11px;color:var(--muted);">Resets 1st of each month</div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:var(--accent);">22,500 pts</div>
+        </div>
+        <div style="background:rgba(255,107,107,0.07);border-radius:10px;padding:11px 14px;border:1px solid rgba(255,107,107,0.2);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:13px;color:var(--text);">3 weeks inactivity</div>
+            <div style="font-size:11px;color:var(--muted);">No entries for 21 days</div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:var(--red);">&#8722;10,000 pts</div>
+        </div>
+        <div style="background:rgba(255,107,107,0.1);border-radius:10px;padding:11px 14px;border:1px solid rgba(255,107,107,0.3);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:13px;color:var(--text);">1 month inactivity</div>
+            <div style="font-size:11px;color:var(--muted);">No entries for 30 days</div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:var(--red);">&#8722;20,000 pts</div>
+        </div>
+        <div style="background:rgba(255,107,107,0.05);border-radius:10px;padding:9px 12px;border:1px solid rgba(255,107,107,0.15);">
+          <div style="font-size:11px;color:var(--muted);line-height:1.6;">&#9888;&#65039; Points <strong style="color:var(--red);">can go negative</strong> if your balance is below the penalty amount. Log income or expenses regularly to avoid deductions.</div>
+        </div>
+      </div>
+
       <div class="modal-section-title">Share Your Score</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Proud of your score? Share it with friends on social media!</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
@@ -2391,7 +2587,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '3.0.3';
+const APP_VERSION = '3.1.0';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -2436,6 +2632,19 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '3.1.0',
+    items: [
+      'Updated inactivity penalty — 3 weeks without any entry now deducts 10,000 points',
+      'Updated inactivity penalty — 1 full month without any entry now deducts 20,000 points',
+      'Points can now go NEGATIVE — if balance is below the penalty amount, it continues below zero',
+      'Dashboard Pro — new Expense Breakdown pie chart shows spending by category with emoji labels',
+      'Dashboard Pro — new Savings Rate widget shows % of income saved this month',
+      'Dashboard Pro — new Monthly Trends chart shows income vs expense across past 6 months',
+      'Dashboard Pro — Quick Stats bar shows daily average spend and top spending category',
+      'UI refresh — improved styling, better typography, and more intuitive navigation',
+    ]
+  },
   {
     version: '3.0.3',
     items: [
@@ -4928,7 +5137,12 @@ function setLastLogTimestamp() {
 }
 function getPenaltyState() {
   const raw = localStorage.getItem('edw_penalty_state');
-  return raw ? JSON.parse(raw) : { twoWeekApplied: false, oneMonthApplied: false };
+  const state = raw ? JSON.parse(raw) : {};
+  // Support both old twoWeekApplied key and new threeWeekApplied key
+  return {
+    threeWeekApplied: state.threeWeekApplied || state.twoWeekApplied || false,
+    oneMonthApplied:  state.oneMonthApplied  || false
+  };
 }
 function savePenaltyState(state) {
   localStorage.setItem('edw_penalty_state', JSON.stringify(state));
@@ -4941,33 +5155,40 @@ function checkInactivityPenalties() {
   const state = getPenaltyState();
 
   if (daysSince >= 30 && !state.oneMonthApplied) {
-    // Apply 1-month penalty (10,000 pts)
+    // Apply 1-month penalty (20,000 pts) — can go negative
     state.oneMonthApplied = true;
-    state.twoWeekApplied  = true; // mark 2-week as applied too so it doesn't double-fire
+    state.threeWeekApplied = true; // mark 3-week as applied too so it doesn’t double-fire
     savePenaltyState(state);
-    const newTotal = Math.max(0, getPoints() - 10000);
+    const newTotal = getPoints() - 20000; // NO Math.max — allow negative
     setPoints(newTotal);
-    toast('⚠️ -10,000 points: No income or expenses logged for 1 month!', 'error');
-  } else if (daysSince >= 14 && !state.twoWeekApplied) {
-    // Apply 2-week penalty (4,000 pts)
-    state.twoWeekApplied = true;
+    toast('⚠️ -20,000 points: No entries logged for 1 month! Balance: ' + newTotal.toLocaleString() + ' pts', 'error');
+  } else if (daysSince >= 21 && !state.threeWeekApplied) {
+    // Apply 3-week penalty (10,000 pts) — can go negative
+    state.threeWeekApplied = true;
     savePenaltyState(state);
-    const newTotal = Math.max(0, getPoints() - 4000);
+    const newTotal = getPoints() - 10000; // NO Math.max — allow negative
     setPoints(newTotal);
-    toast('⚠️ -4,000 points: No income or expenses logged for 2 weeks!', 'error');
+    toast('⚠️ -10,000 points: No entries logged for 3 weeks! Balance: ' + newTotal.toLocaleString() + ' pts', 'error');
   }
 }
 function resetPenaltyState() {
   // Called whenever the user successfully logs an income or expense
-  savePenaltyState({ twoWeekApplied: false, oneMonthApplied: false });
+  savePenaltyState({ threeWeekApplied: false, oneMonthApplied: false });
   setLastLogTimestamp();
 }
 function updateDrawerPointsSub() {
   const sub = document.getElementById('drawer-points-sub');
-  if (sub) sub.textContent = `${getPoints()} points earned`;
+  const pts = getPoints();
+  if (sub) {
+    sub.textContent = pts.toLocaleString() + (pts < 0 ? ' points (negative)' : ' points earned');
+    sub.style.color = pts < 0 ? 'var(--red)' : '';
+  }
 }
 function openRewardsModal() {
-  document.getElementById('rewards-points-display').textContent = getPoints();
+  const pts = getPoints();
+  const el = document.getElementById('rewards-points-display');
+  el.textContent = pts.toLocaleString();
+  el.className = pts < 0 ? 'points-negative' : '';
   document.getElementById('rewards-modal').classList.add('open');
 }
 function closeRewardsModal() {
@@ -5954,6 +6175,11 @@ function renderDashboardPro() {
   document.getElementById('db-month-profit').textContent  = fmt(monthProfit);
   document.getElementById('db-month-profit').style.color  = monthProfit >= 0 ? 'var(--accent)' : 'var(--red)';
   if (gstCard) gstCard.textContent = fmt(monthGst);
+  // New: Cash in hand & After-GST
+  const cashEl = document.getElementById('db-month-cash');
+  const afterGstEl = document.getElementById('db-month-after-gst');
+  if (cashEl) { cashEl.textContent = fmt(monthProfit); cashEl.style.color = monthProfit >= 0 ? 'var(--teal)' : 'var(--red)'; }
+  if (afterGstEl) { const afterGst = monthProfit - monthGst; afterGstEl.textContent = fmt(afterGst); afterGstEl.style.color = afterGst >= 0 ? 'var(--green)' : 'var(--red)'; }
 
   // Income vs expense bars
   const total  = monthIncome + monthExpense;
@@ -5966,6 +6192,10 @@ function renderDashboardPro() {
 
   // ── PIE CHART ──────────────────────────────────────────────────────────
   renderDbPieChart(period, src);
+  renderDbQuickStats();
+  renderDbSavingsRing();
+  renderDbExpenseDonut();
+  renderDbTrendsChart();
 
   // ── CATEGORY BUDGETS (smart: aware of all prior logged data) ──────────
   const budgets    = getDbBudgets();
@@ -6356,6 +6586,202 @@ function deleteDbBudget(i) {
   renderDashboardPro();
   toast(`Removed budget for "${b.category}"`, 'info');
 }
+
+// ── DASHBOARD PRO ENHANCED WIDGETS ──────────────────────────────────────
+
+const DB_CAT_COLORS = ['#F0B429','#3DDC84','#A78BFA','#FF6B6B','#2DD4BF','#FB923C','#60A5FA','#F472B6','#34D399','#FBBF24'];
+
+function getDbAllEntries() {
+  const src = getDbDataSource ? getDbDataSource() : 'own';
+  let all = [];
+  if (src === 'own' || src === 'both') all = [...all, ...(getDbEntries ? getDbEntries() : [])];
+  if (src === 'gst' || src === 'both') all = [...all, ...(typeof entries !== 'undefined' ? entries : [])];
+  return all;
+}
+
+function renderDbQuickStats() {
+  const all = getDbAllEntries();
+  const now = new Date();
+  const currentMonth = MONTHS[now.getMonth()];
+  const dayOfMonth = Math.max(1, now.getDate());
+  const monthExp = all.filter(e => e.type === 'expense' && e.month === currentMonth).reduce((s,e) => s + e.amount, 0);
+  const monthInc = all.filter(e => e.type === 'income'  && e.month === currentMonth).reduce((s,e) => s + e.amount, 0);
+  const dailyAvg = monthExp / dayOfMonth;
+
+  const catTotals = {};
+  all.filter(e => e.type === 'expense' && e.month === currentMonth).forEach(e => {
+    const cat = e.category || 'Other';
+    catTotals[cat] = (catTotals[cat] || 0) + e.amount;
+  });
+  const topCatEntry = Object.entries(catTotals).sort((a,b) => b[1]-a[1])[0];
+
+  const dailyEl = document.getElementById('db-qs-daily');
+  const topcatEl = document.getElementById('db-qs-topcat');
+  const topcatName = document.getElementById('db-qs-topcat-name');
+  const saverateEl = document.getElementById('db-qs-saverate');
+
+  if (dailyEl) dailyEl.textContent = '$' + dailyAvg.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+
+  if (topCatEntry && topcatEl) {
+    const catName = topCatEntry[0];
+    const emojiMatch = catName.match(/^\p{Emoji}/u);
+    topcatEl.textContent = emojiMatch ? emojiMatch[0] : '\u{1F4B8}';
+    if (topcatName) topcatName.textContent = catName.replace(/^\p{Emoji}\s*/u, '').slice(0, 12) || catName.slice(0,12);
+  } else if (topcatEl) {
+    topcatEl.textContent = '\u2014';
+    if (topcatName) topcatName.textContent = 'no data';
+  }
+
+  const savingsRate = monthInc > 0 ? Math.max(0, Math.round(((monthInc - monthExp) / monthInc) * 100)) : 0;
+  if (saverateEl) {
+    saverateEl.textContent = savingsRate + '%';
+    saverateEl.style.color = savingsRate >= 20 ? 'var(--teal)' : savingsRate >= 10 ? 'var(--accent)' : 'var(--red)';
+  }
+}
+
+function renderDbSavingsRing() {
+  const all = getDbAllEntries();
+  const currentMonth = MONTHS[new Date().getMonth()];
+  const monthInc = all.filter(e => e.type === 'income'  && e.month === currentMonth).reduce((s,e) => s+e.amount, 0);
+  const monthExp = all.filter(e => e.type === 'expense' && e.month === currentMonth).reduce((s,e) => s+e.amount, 0);
+  const saved = monthInc - monthExp;
+  const rate = monthInc > 0 ? Math.max(0, Math.min(100, (saved / monthInc) * 100)) : 0;
+
+  const canvas = document.getElementById('db-savings-ring-canvas');
+  const ringText = document.getElementById('db-savings-ring-text');
+  const titleEl = document.getElementById('db-savings-title');
+  const detailEl = document.getElementById('db-savings-detail');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  const cx = 30, cy = 30, r = 24;
+  ctx.clearRect(0, 0, 60, 60);
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2*Math.PI);
+  ctx.strokeStyle = '#30363D'; ctx.lineWidth = 6; ctx.stroke();
+
+  if (rate > 0) {
+    const color = rate >= 20 ? '#2DD4BF' : rate >= 10 ? '#F0B429' : '#FF6B6B';
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, -Math.PI/2, (-Math.PI/2) + (2*Math.PI * rate/100));
+    ctx.strokeStyle = color; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.stroke();
+  }
+
+  if (ringText) ringText.textContent = Math.round(rate) + '%';
+  if (titleEl) {
+    if (monthInc === 0) titleEl.textContent = 'No income logged yet';
+    else if (rate >= 20) titleEl.textContent = '\u{1F4AA} Great savings this month!';
+    else if (rate >= 10) titleEl.textContent = '\u{1F44D} Decent savings rate';
+    else if (saved > 0) titleEl.textContent = '\u26A0\uFE0F Low savings \u2014 watch expenses';
+    else titleEl.textContent = '\u{1F6A8} Spending exceeds income!';
+  }
+  if (detailEl && monthInc > 0) {
+    detailEl.textContent = fmt(Math.max(0, saved)) + ' saved of ' + fmt(monthInc) + ' earned in ' + currentMonth + '.';
+  }
+}
+
+function renderDbExpenseDonut() {
+  const all = getDbAllEntries();
+  const currentMonth = MONTHS[new Date().getMonth()];
+  const catTotals = {};
+  all.filter(e => e.type === 'expense' && e.month === currentMonth).forEach(e => {
+    const cat = e.category || 'Other';
+    catTotals[cat] = (catTotals[cat] || 0) + e.amount;
+  });
+
+  const canvas = document.getElementById('db-cat-donut-canvas');
+  const legend = document.getElementById('db-cat-donut-legend');
+  if (!canvas) return;
+
+  const entriesSorted = Object.entries(catTotals).sort((a,b) => b[1]-a[1]).slice(0,8);
+  const total = entriesSorted.reduce((s,[,v]) => s+v, 0);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,100,100);
+
+  if (!entriesSorted.length || total === 0) {
+    ctx.beginPath(); ctx.arc(50,50,38,0,2*Math.PI);
+    ctx.strokeStyle = '#30363D'; ctx.lineWidth = 14; ctx.stroke();
+    if (legend) legend.innerHTML = '<div style="font-size:11px;color:var(--muted);padding:8px 0;">No expenses this month</div>';
+    return;
+  }
+
+  let startAngle = -Math.PI / 2;
+  entriesSorted.forEach(([,amt], i) => {
+    const slice = (amt / total) * 2 * Math.PI;
+    ctx.beginPath(); ctx.moveTo(50, 50);
+    ctx.arc(50, 50, 42, startAngle, startAngle + slice);
+    ctx.closePath();
+    ctx.fillStyle = DB_CAT_COLORS[i % DB_CAT_COLORS.length]; ctx.fill();
+    startAngle += slice;
+  });
+
+  ctx.beginPath(); ctx.arc(50,50,26,0,2*Math.PI);
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim() || '#161B22';
+  ctx.fill();
+
+  if (legend) {
+    legend.innerHTML = entriesSorted.map(([cat, amt], i) => {
+      const pct = Math.round((amt/total)*100);
+      const color = DB_CAT_COLORS[i % DB_CAT_COLORS.length];
+      const emojiMatch = cat.match(/^\p{Emoji}/u);
+      const emoji = emojiMatch ? emojiMatch[0] : '';
+      const name = cat.replace(/^\p{Emoji}\s*/u, '').slice(0,14) || cat.slice(0,14);
+      return `<div class="db-cat-legend-item">
+        <div class="db-cat-legend-dot" style="background:${color}"></div>
+        <span style="min-width:16px">${emoji}</span>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;">${name}</span>
+        <div class="db-cat-legend-bar">
+          <div class="db-cat-legend-fill" style="width:${pct}%;background:${color}"></div>
+        </div>
+        <span class="db-cat-legend-amt">${fmt(amt)}</span>
+      </div>`;
+    }).join('');
+  }
+}
+
+let dbTrendsChart = null;
+function renderDbTrendsChart() {
+  const all = getDbAllEntries();
+  const now = new Date();
+  const last6 = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    last6.push(MONTHS[d.getMonth()]);
+  }
+
+  const incData  = last6.map(m => all.filter(e=>e.type==='income' &&e.month===m).reduce((s,e)=>s+e.amount,0));
+  const expData  = last6.map(m => all.filter(e=>e.type==='expense'&&e.month===m).reduce((s,e)=>s+e.amount,0));
+  const profData = incData.map((v,i) => v - expData[i]);
+
+  const canvas = document.getElementById('db-trends-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  if (dbTrendsChart) { try { dbTrendsChart.destroy(); } catch(e){} dbTrendsChart = null; }
+
+  dbTrendsChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: last6.map(m => m.slice(0,3)),
+      datasets: [
+        { label: 'Income',   data: incData,  borderColor: '#3DDC84', backgroundColor: 'rgba(61,220,132,0.08)', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#3DDC84', fill: true, tension: 0.4 },
+        { label: 'Expenses', data: expData,  borderColor: '#FF6B6B', backgroundColor: 'rgba(255,107,107,0.08)', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#FF6B6B', fill: true, tension: 0.4 },
+        { label: 'Profit',   data: profData, borderColor: '#F0B429', backgroundColor: 'rgba(240,180,41,0.04)', borderWidth: 2, borderDash: [4,3], pointRadius: 3, pointBackgroundColor: '#F0B429', fill: false, tension: 0.4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { color: '#8B949E', font: { size: 10 }, boxWidth: 12, padding: 8 } },
+        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.raw) } }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(48,54,61,0.5)' }, ticks: { color: '#8B949E', font: { size: 10 } } },
+        y: { grid: { color: 'rgba(48,54,61,0.5)' }, ticks: { color: '#8B949E', font: { size: 10 }, callback: v => '$'+v.toLocaleString() } }
+      }
+    }
+  });
+}
+
 
 // ── SWIPE GESTURE for Dashboard Pro ───────────────────────────────────────
 (function() {
