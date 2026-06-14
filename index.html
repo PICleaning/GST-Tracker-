@@ -881,7 +881,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 3.1.0</div>
+  <div class="splash-ver">Version 3.1.1</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -1482,7 +1482,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 3.1.0</strong>
+    <strong style="color:var(--accent);">Version 3.1.1</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -1494,7 +1494,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v3.1.0</p>
+        <p>Endless Digital World · v3.1.1</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -2587,7 +2587,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '3.1.0';
+const APP_VERSION = '3.1.1';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -2632,6 +2632,14 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '3.1.1',
+    items: [
+      'Expenses now earn points — every expense you log rewards points based on the amount',
+      'Expense points: $0.01–$10 earns 0.5 pts · $10–$50 earns 1 pt · $50–$500 earns 2 pts · $501–$1,000 earns 3 pts · $1,001–$10,000 earns 5 pts',
+      'Expense points count toward the monthly 22,500 cap alongside income points',
+    ]
+  },
   {
     version: '3.1.0',
     items: [
@@ -3512,6 +3520,7 @@ async function submitExpense() {
   localStorage.setItem('gst_entries', JSON.stringify(entries.slice(0,APP_STORAGE_LIMIT)));
   backupToProfileDB();
   resetPenaltyState();
+  awardExpensePoints(amount);
 
   // Save receipt if attached
   if (pendingReceiptData) {
@@ -5126,6 +5135,40 @@ function awardPoints(amount) {
   const newMonthly = getMonthlyPointsEarned();
   const capNote = newMonthly >= MONTHLY_POINTS_CAP ? ' 🎉 Monthly cap reached!' : '';
   toast(`🏅 +${pts} points${capNote} Total: ${total.toLocaleString()} pts.`, 'success');
+}
+
+function calcPointsForExpense(amount) {
+  const monthlyEarned = getMonthlyPointsEarned();
+  // Hard cap — no points at all once monthly cap reached
+  if (monthlyEarned >= MONTHLY_POINTS_CAP) return 0;
+
+  let pts;
+  if (amount >= 1001)      pts = 5;
+  else if (amount >= 501)  pts = 3;
+  else if (amount >= 50)   pts = 2;
+  else if (amount >= 10)   pts = 1;
+  else if (amount > 0)     pts = 0.5;
+  else return 0;
+
+  // Clamp so total monthly never exceeds cap
+  const remaining = MONTHLY_POINTS_CAP - monthlyEarned;
+  return Math.min(pts, remaining);
+}
+
+function awardExpensePoints(amount) {
+  const monthlyEarned = getMonthlyPointsEarned();
+  if (monthlyEarned >= MONTHLY_POINTS_CAP) {
+    toast('🏅 Monthly points cap of 22,500 reached! Points reset next month.', 'info');
+    return;
+  }
+  const pts = calcPointsForExpense(amount);
+  if (pts <= 0) return;
+  const total = getPoints() + pts;
+  setPoints(total);
+  addMonthlyPointsEarned(pts);
+  const newMonthly = getMonthlyPointsEarned();
+  const capNote = newMonthly >= MONTHLY_POINTS_CAP ? ' 🎉 Monthly cap reached!' : '';
+  toast(`🏅 +${pts} pts for expense logged!${capNote} Total: ${total.toLocaleString()} pts.`, 'success');
 }
 
 // ── INACTIVITY POINT PENALTIES ────────────────────────────────────────────
