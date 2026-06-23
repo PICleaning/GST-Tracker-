@@ -278,6 +278,13 @@
   .wn-clicks-left { font-size: 11px; color: var(--muted); text-align: center; padding: 14px; border-top: 1px solid var(--border); }
   .wn-clicks-left span { color: var(--accent); font-weight: 700; }
 
+  /* ── UPDATES HISTORY MODAL ── */
+  #updates-history-modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300;
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  #updates-history-modal.open { display: flex; }
+
   /* ── MY LOGS MODAL ── */
   #logs-modal {
     position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300;
@@ -413,6 +420,16 @@
     display: flex; align-items: center; justify-content: space-between;
     background: var(--card); border: 1px solid var(--border); border-radius: 8px;
     padding: 8px 12px; margin-bottom: 6px; font-size: 12px; color: var(--text);
+  }
+  .db-quick-cat-btn {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 12px; font-size: 12px; font-weight: 600; color: var(--text);
+    cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: left;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+  }
+  .db-quick-cat-btn:active { transform: scale(0.97); }
+  .db-quick-cat-btn.selected {
+    background: rgba(240,180,41,0.12); border-color: var(--accent); color: var(--accent);
   }
   .db-bar-bg {
     background: var(--card); border-radius: 20px; height: 8px; overflow: hidden; margin-bottom: 5px;
@@ -881,7 +898,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 3.1.1</div>
+  <div class="splash-ver">Version 3.1.3</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -1332,11 +1349,22 @@
           style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;box-sizing:border-box;">
         <div id="db-budget-emoji-preview" style="font-size:11px;color:var(--accent);margin-top:5px;min-height:16px;"></div>
       </div>
-      <div style="margin-bottom:10px;">
-        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Quick Select (Default Categories)</label>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          ${['🏠 Rent/Mortgage','📱 Phone Bill','🌐 WiFi','🛡️ Insurance','🛒 Groceries','💊 Medicine','⚡ Bills','🚗 Transport','🎬 Entertainment','🍔 Dining Out','💪 Gym','📚 Education'].map(c=>`<button onclick="selectDbBudgetCat('${c}')" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;">${c}</button>`).join('')}
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Quick Select (Default Categories)</label>
+        <div id="db-budget-quick-select" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <button type="button" class="db-quick-cat-btn" data-cat="Rent/Mortgage" onclick="selectDbBudgetCat('Rent/Mortgage')">Rent/Mortgage</button>
+          <button type="button" class="db-quick-cat-btn" data-cat="Groceries" onclick="selectDbBudgetCat('Groceries')">Groceries</button>
+          <button type="button" class="db-quick-cat-btn" data-cat="Entertainment" onclick="selectDbBudgetCat('Entertainment')">Entertainment</button>
+          <button type="button" class="db-quick-cat-btn" data-cat="Health" onclick="selectDbBudgetCat('Health')">Health</button>
+          <button type="button" class="db-quick-cat-btn" data-cat="Emergency Fund" onclick="selectDbBudgetCat('Emergency Fund')">Emergency Fund</button>
+          <button type="button" class="db-quick-cat-btn" data-cat="Insurance" onclick="selectDbBudgetCat('Insurance')">Insurance</button>
+          <button type="button" class="db-quick-cat-btn" data-cat="Transport" onclick="selectDbBudgetCat('Transport')">Transport</button>
+          <button type="button" class="db-quick-cat-btn" data-cat="Education" onclick="selectDbBudgetCat('Education')">Education</button>
+          <button type="button" class="db-quick-cat-btn" data-cat="Bills" onclick="selectDbBudgetCat('Bills')">Bills</button>
+          <button type="button" class="db-quick-cat-btn" data-cat="WiFi" onclick="selectDbBudgetCat('WiFi')">WiFi</button>
+          <button type="button" class="db-quick-cat-btn" data-cat="Phone" onclick="selectDbBudgetCat('Phone')">Phone</button>
         </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5;">Or type your own custom category name above ☝️</div>
       </div>
       <div style="margin-bottom:10px;">
         <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Budget Period</label>
@@ -1439,6 +1467,13 @@
         <div class="drawer-row-sub" id="wn-sub-text">See latest updates</div>
       </div>
     </div>
+    <div class="drawer-row" onclick="openUpdatesHistory(); closeDrawer();">
+      <div class="drawer-row-icon">📚</div>
+      <div>
+        <div class="drawer-row-label">Updates History</div>
+        <div class="drawer-row-sub">Browse every past app update</div>
+      </div>
+    </div>
     <div class="drawer-row" onclick="openAboutApp(); closeDrawer();">
       <div class="drawer-row-icon">ℹ️</div>
       <div>
@@ -1482,7 +1517,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 3.1.1</strong>
+    <strong style="color:var(--accent);">Version 3.1.3</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -1494,7 +1529,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v3.1.1</p>
+        <p>Endless Digital World · v3.1.3</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -1749,6 +1784,17 @@
     </div>
     <div id="wn-content"></div>
     <div class="wn-clicks-left" id="wn-clicks-info"></div>
+  </div>
+</div>
+
+<!-- ── UPDATES HISTORY MODAL ── -->
+<div id="updates-history-modal">
+  <div class="whats-new-box">
+    <div class="whats-new-header">
+      <h2>📚 Updates History</h2>
+      <button class="wn-close" onclick="closeUpdatesHistory()">✕</button>
+    </div>
+    <div id="uh-content"></div>
   </div>
 </div>
 
@@ -2587,7 +2633,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '3.1.1';
+const APP_VERSION = '3.1.3';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -2632,6 +2678,17 @@ const EMOJI_MAP = [
 ];
 
 const WHATS_NEW = [
+  {
+    version: '3.1.3',
+    items: [
+      'Fixed a display bug in Dashboard Pro → Set Category Budget where Quick Select categories showed as broken code instead of buttons',
+      'Dashboard Pro budgets — Quick Select redesigned into a clean, tappable grid of default categories',
+      'New default budget categories: Rent/Mortgage, Groceries, Entertainment, Health, Emergency Fund, Insurance, Transport, Education, Bills, WiFi, Phone',
+      'You can still create your own custom budget category at any time by typing a name instead of tapping a default',
+      'What\'s New now shows only the latest update — older release notes have moved to a new "Updates History" screen',
+      'Added "Updates History" under the hamburger menu — browse every past app update in one place, automatically archived as new versions release',
+    ]
+  },
   {
     version: '3.1.1',
     items: [
@@ -3755,46 +3812,27 @@ async function deleteCategory(index) {
 }
 
 // ── WHAT'S NEW ────────────────────────────────────────────────────────────
+// Shows ONLY the current app version's release notes. Anything older lives
+// in the separate "Updates History" screen, which auto-archives every past
+// version automatically the moment a new version is added to WHATS_NEW and
+// APP_VERSION is bumped — no manual migration step needed.
 function updateWhatsNewBadge() {
-  const clicks = parseInt(localStorage.getItem('wn_clicks_v'+APP_VERSION)||'0');
+  const seen  = localStorage.getItem('wn_seen_v'+APP_VERSION) === 'true';
   const sub   = document.getElementById('wn-sub-text');
   const label = document.getElementById('wn-label');
-  if (clicks >= 3) {
-    if (label) label.textContent = 'Release Notes';
-    sub.textContent = 'Update history for all versions';
-    sub.style.color = 'var(--muted)';
-  } else {
-    if (label) label.textContent = "What's New";
-    sub.textContent = `New in v${APP_VERSION} · ${3-clicks} view${3-clicks===1?'':'s'} remaining`;
-    sub.style.color = 'var(--accent)';
+  if (label) label.textContent = "What's New";
+  if (sub) {
+    sub.textContent = seen ? `Viewed · v${APP_VERSION}` : `New in v${APP_VERSION}`;
+    sub.style.color = seen ? 'var(--muted)' : 'var(--accent)';
   }
 }
 
 function openWhatsNew() {
-  const clicks    = parseInt(localStorage.getItem('wn_clicks_v'+APP_VERSION)||'0');
-  const newClicks = clicks + 1;
-  localStorage.setItem('wn_clicks_v'+APP_VERSION, newClicks);
-
-  // Cycle label after 3 views — resets to "What's New" on next app version
-  const label = document.getElementById('wn-label');
-  if (newClicks >= 3) {
-    if (label) label.textContent = 'Release Notes';
-  } else {
-    if (label) label.textContent = "What's New";
-  }
-
-  const modalTitle = document.querySelector('#whats-new-modal .whats-new-header h2');
-  if (modalTitle) {
-    modalTitle.innerHTML = newClicks >= 3
-      ? '📋 Release Notes'
-      : '✨ What\'s New';
-  }
+  localStorage.setItem('wn_seen_v'+APP_VERSION, 'true');
 
   const content = document.getElementById('wn-content');
-  // Current version at top, then previous versions collapsible section
   const currentVer = WHATS_NEW.find(v => v.version === APP_VERSION);
-  const prevVersions = WHATS_NEW.filter(v => v.version !== APP_VERSION).reverse();
-  
+
   let html = '';
   if (currentVer) {
     html += `<div class="wn-version-block">
@@ -3802,33 +3840,42 @@ function openWhatsNew() {
       ${currentVer.items.map(item => `<div class="wn-item">${item}</div>`).join('')}
     </div>`;
   }
-  // Previous versions section
-  if (prevVersions.length) {
-    html += `<div style="padding:14px 20px 6px;border-top:1px solid var(--border);">
-      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:10px;">📚 Previous Versions</div>
-    </div>`;
-    html += prevVersions.map(v => `
+  content.innerHTML = html;
+
+  const info = document.getElementById('wn-clicks-info');
+  if (info) {
+    info.innerHTML = `Looking for older updates? Check <strong style="color:var(--accent);">☰ Menu → Updates History</strong>`;
+  }
+
+  document.getElementById('whats-new-modal').classList.add('open');
+  updateWhatsNewBadge();
+  document.getElementById('whats-new-row').style.opacity = '1';
+}
+function closeWhatsNew() { document.getElementById('whats-new-modal').classList.remove('open'); }
+
+// ── UPDATES HISTORY ────────────────────────────────────────────────────────
+// Archive of every version EXCEPT the current one. This list updates itself
+// automatically: as soon as a new version is pushed to WHATS_NEW (with a
+// newer APP_VERSION), the previously-current version drops out of What's New
+// and appears here instead — no manual "move to history" step required.
+function openUpdatesHistory() {
+  const content = document.getElementById('uh-content');
+  const pastVersions = WHATS_NEW.filter(v => v.version !== APP_VERSION);
+
+  let html = '';
+  if (!pastVersions.length) {
+    html = `<div style="padding:24px 20px;text-align:center;color:var(--muted);font-size:13px;">No past updates yet — check back after the next release!</div>`;
+  } else {
+    html = pastVersions.map(v => `
     <div class="wn-version-block">
       <div class="wn-ver-tag">v${v.version}</div>
       ${v.items.map(item => `<div class="wn-item">${item}</div>`).join('')}
     </div>`).join('');
   }
   content.innerHTML = html;
-
-  const remaining = Math.max(0, 3 - newClicks);
-  const info = document.getElementById('wn-clicks-info');
-  if (remaining > 0) {
-    info.innerHTML = `Showing as <strong>What's New</strong> for <span>${remaining} more view${remaining===1?'':'s'}</span>, then becomes Release Notes`;
-  } else {
-    info.innerHTML = `<span style="color:var(--muted)">Viewing as <strong style="color:var(--text)">Release Notes</strong> — resets to What's New when v${parseFloat(APP_VERSION)+0.1} releases</span>`;
-  }
-
-  document.getElementById('whats-new-modal').classList.add('open');
-  updateWhatsNewBadge();
-
-  document.getElementById('whats-new-row').style.opacity = newClicks >= 3 ? '0.6' : '1';
+  document.getElementById('updates-history-modal').classList.add('open');
 }
-function closeWhatsNew() { document.getElementById('whats-new-modal').classList.remove('open'); }
+function closeUpdatesHistory() { document.getElementById('updates-history-modal').classList.remove('open'); }
 
 // ── ABOUT APP ──────────────────────────────────────────────────────────────
 function openAboutApp()  { document.getElementById('about-modal').classList.add('open'); }
@@ -6564,6 +6611,7 @@ const DB_BUDGET_EMOJI_MAP = [
   {keys:['rent','mortgage','home','house'],    emoji:'🏠'},
   {keys:['phone','mobile','sim'],              emoji:'📱'},
   {keys:['wifi','internet','broadband','nbn'], emoji:'🌐'},
+  {keys:['emergency'],                        emoji:'🚨'},
   {keys:['insurance','cover'],                emoji:'🛡️'},
   {keys:['groceries','supermarket','food','coles','woolworths'],emoji:'🛒'},
   {keys:['medicine','pharmacy','medical','health','doctor'],emoji:'💊'},
@@ -6582,6 +6630,10 @@ function detectDbBudgetEmoji() {
   const match = DB_BUDGET_EMOJI_MAP.find(m => m.keys.some(k => lower.includes(k)));
   const prev  = document.getElementById('db-budget-emoji-preview');
   if (prev) prev.textContent = match ? `${match.emoji} Suggested emoji` : '';
+  // Keep quick-select highlight in sync if the user types a value that matches (or no longer matches) a pill
+  document.querySelectorAll('.db-quick-cat-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.cat === val);
+  });
 }
 function selectDbBudgetCat(cat) {
   const inp = document.getElementById('db-budget-cat-input');
@@ -6602,6 +6654,7 @@ function openAddDbBudget() {
   if (prev) prev.textContent  = '';
   if (lim)  lim.value         = '';
   if (pSel) pSel.value        = getDbBudgetPeriod();
+  document.querySelectorAll('.db-quick-cat-btn').forEach(btn => btn.classList.remove('selected'));
   document.getElementById('db-add-budget-modal').classList.add('open');
 }
 function closeAddDbBudget() { document.getElementById('db-add-budget-modal').classList.remove('open'); }
