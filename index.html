@@ -260,6 +260,11 @@
     display: none; align-items: center; justify-content: center; padding: 20px;
   }
   #whats-new-modal.open { display: flex; }
+  #updates-history-modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300;
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  #updates-history-modal.open { display: flex; }
   .whats-new-box {
     background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
     width: 100%; max-width: 400px; max-height: 80vh; overflow-y: auto;
@@ -277,13 +282,6 @@
   .wn-item::before { content: '✦'; color: var(--accent); font-size: 10px; margin-top: 3px; flex-shrink: 0; }
   .wn-clicks-left { font-size: 11px; color: var(--muted); text-align: center; padding: 14px; border-top: 1px solid var(--border); }
   .wn-clicks-left span { color: var(--accent); font-weight: 700; }
-
-  /* ── UPDATES HISTORY MODAL ── */
-  #updates-history-modal {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300;
-    display: none; align-items: center; justify-content: center; padding: 20px;
-  }
-  #updates-history-modal.open { display: flex; }
 
   /* ── MY LOGS MODAL ── */
   #logs-modal {
@@ -420,16 +418,6 @@
     display: flex; align-items: center; justify-content: space-between;
     background: var(--card); border: 1px solid var(--border); border-radius: 8px;
     padding: 8px 12px; margin-bottom: 6px; font-size: 12px; color: var(--text);
-  }
-  .db-quick-cat-btn {
-    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-    padding: 10px 12px; font-size: 12px; font-weight: 600; color: var(--text);
-    cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: left;
-    transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
-  }
-  .db-quick-cat-btn:active { transform: scale(0.97); }
-  .db-quick-cat-btn.selected {
-    background: rgba(240,180,41,0.12); border-color: var(--accent); color: var(--accent);
   }
   .db-bar-bg {
     background: var(--card); border-radius: 20px; height: 8px; overflow: hidden; margin-bottom: 5px;
@@ -898,7 +886,7 @@
   <div class="splash-edw">EDW</div>
   <div class="splash-full">Endless Digital World</div>
   <div class="splash-app">Smart GST Tracker</div>
-  <div class="splash-ver">Version 3.1.3</div>
+  <div class="splash-ver">Version 3.1.4</div>
 </div>
 
 <!-- ── FIRST-TIME SETUP SCREEN ── -->
@@ -1349,22 +1337,11 @@
           style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;box-sizing:border-box;">
         <div id="db-budget-emoji-preview" style="font-size:11px;color:var(--accent);margin-top:5px;min-height:16px;"></div>
       </div>
-      <div style="margin-bottom:14px;">
-        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Quick Select (Default Categories)</label>
-        <div id="db-budget-quick-select" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <button type="button" class="db-quick-cat-btn" data-cat="Rent/Mortgage" onclick="selectDbBudgetCat('Rent/Mortgage')">Rent/Mortgage</button>
-          <button type="button" class="db-quick-cat-btn" data-cat="Groceries" onclick="selectDbBudgetCat('Groceries')">Groceries</button>
-          <button type="button" class="db-quick-cat-btn" data-cat="Entertainment" onclick="selectDbBudgetCat('Entertainment')">Entertainment</button>
-          <button type="button" class="db-quick-cat-btn" data-cat="Health" onclick="selectDbBudgetCat('Health')">Health</button>
-          <button type="button" class="db-quick-cat-btn" data-cat="Emergency Fund" onclick="selectDbBudgetCat('Emergency Fund')">Emergency Fund</button>
-          <button type="button" class="db-quick-cat-btn" data-cat="Insurance" onclick="selectDbBudgetCat('Insurance')">Insurance</button>
-          <button type="button" class="db-quick-cat-btn" data-cat="Transport" onclick="selectDbBudgetCat('Transport')">Transport</button>
-          <button type="button" class="db-quick-cat-btn" data-cat="Education" onclick="selectDbBudgetCat('Education')">Education</button>
-          <button type="button" class="db-quick-cat-btn" data-cat="Bills" onclick="selectDbBudgetCat('Bills')">Bills</button>
-          <button type="button" class="db-quick-cat-btn" data-cat="WiFi" onclick="selectDbBudgetCat('WiFi')">WiFi</button>
-          <button type="button" class="db-quick-cat-btn" data-cat="Phone" onclick="selectDbBudgetCat('Phone')">Phone</button>
+      <div style="margin-bottom:10px;">
+        <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Quick Select (Default Categories)</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${['🏠 Rent/Mortgage','📱 Phone Bill','🌐 WiFi','🛡️ Insurance','🛒 Groceries','💊 Medicine','⚡ Bills','🚗 Transport','🎬 Entertainment','🍔 Dining Out','💪 Gym','📚 Education'].map(c=>`<button onclick="selectDbBudgetCat('${c}')" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;">${c}</button>`).join('')}
         </div>
-        <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5;">Or type your own custom category name above ☝️</div>
       </div>
       <div style="margin-bottom:10px;">
         <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Budget Period</label>
@@ -1467,13 +1444,6 @@
         <div class="drawer-row-sub" id="wn-sub-text">See latest updates</div>
       </div>
     </div>
-    <div class="drawer-row" onclick="openUpdatesHistory(); closeDrawer();">
-      <div class="drawer-row-icon">📚</div>
-      <div>
-        <div class="drawer-row-label">Updates History</div>
-        <div class="drawer-row-sub">Browse every past app update</div>
-      </div>
-    </div>
     <div class="drawer-row" onclick="openAboutApp(); closeDrawer();">
       <div class="drawer-row-icon">ℹ️</div>
       <div>
@@ -1517,7 +1487,7 @@
 
   <div class="drawer-version">
     Smart GST Tracker · Endless Digital World<br>
-    <strong style="color:var(--accent);">Version 3.1.3</strong>
+    <strong style="color:var(--accent);">Version 3.1.4</strong>
     <div style="font-size:10px;color:var(--muted);margin-top:4px;">© 2025 Endless Digital World</div>
   </div>
 </div>
@@ -1529,7 +1499,7 @@
       <div class="logo-icon">💰</div>
       <div class="logo-text">
         <h1>Smart GST Tracker</h1>
-        <p>Endless Digital World · v3.1.3</p>
+        <p>Endless Digital World · v3.1.4</p>
       </div>
     </div>
     <button class="hamburger-btn" onclick="openDrawer()">
@@ -1783,15 +1753,20 @@
       <button class="wn-close" onclick="closeWhatsNew()">✕</button>
     </div>
     <div id="wn-content"></div>
-    <div class="wn-clicks-left" id="wn-clicks-info"></div>
+    <div style="padding:14px 20px;border-top:1px solid var(--border);">
+      <button onclick="openUpdatesHistory()" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+        📚 Updates History
+      </button>
+    </div>
   </div>
 </div>
 
-<!-- ── UPDATES HISTORY MODAL ── -->
+<!-- ── UPDATES HISTORY MODAL (accessible only via What's New) ── -->
 <div id="updates-history-modal">
   <div class="whats-new-box">
     <div class="whats-new-header">
-      <h2>📚 Updates History</h2>
+      <button class="wn-close" onclick="closeUpdatesHistory(); openWhatsNew();" style="margin-right:auto;font-size:18px;">←</button>
+      <h2 style="flex:1;text-align:center;">📚 Updates History</h2>
       <button class="wn-close" onclick="closeUpdatesHistory()">✕</button>
     </div>
     <div id="uh-content"></div>
@@ -2244,7 +2219,35 @@
         <div style="font-size:48px;margin-bottom:8px;">⭐</div>
         <div style="font-size:28px;font-weight:700;color:var(--accent);" id="rewards-points-display">0</div>
         <div style="font-size:12px;color:var(--muted);margin-top:4px;">Total Points Earned</div>
+        <div id="rewards-tier-display" style="display:inline-block;margin-top:10px;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:6px 16px;font-size:12px;font-weight:700;color:var(--text);">No Tier Yet</div>
+        <div id="rewards-countdown-pill" style="display:none;margin:10px auto 0;width:fit-content;background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.35);border-radius:999px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--red);"></div>
       </div>
+
+      <div class="modal-section-title">🏆 Loyalty Tiers</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text);">🥉 Bronze</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);">Log entries for 2 weeks straight, with no week missed</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text);">🥇 Gold</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);">8-week logging streak, OR reach 25,000 points</div>
+        </div>
+        <div style="background:linear-gradient(135deg,rgba(240,180,41,0.08),rgba(240,180,41,0.03));border-radius:10px;padding:11px 14px;border:1px solid rgba(240,180,41,0.3);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-size:13px;font-weight:700;color:var(--accent);">💎 Platinum</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);">12-week logging streak, OR reach 100,000 points — awards a +10,000 point bonus and raises your monthly cap to 50,000 pts</div>
+        </div>
+        <div style="background:rgba(255,107,107,0.05);border-radius:10px;padding:9px 12px;border:1px solid rgba(255,107,107,0.15);">
+          <div style="font-size:11px;color:var(--muted);line-height:1.6;">⚠️ Tiers reward consistency — missing a week resets a streak-based tier, and Platinum drops to Gold after missing 1 week or Bronze after missing 2 weeks.</div>
+        </div>
+      </div>
+
       <div class="modal-section-title">How to Earn Points</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
@@ -2252,20 +2255,27 @@
           <div style="font-size:14px;font-weight:700;color:var(--accent);">+5 pts</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-size:13px;color:var(--text);">Income over $50</div>
-          <div style="font-size:14px;font-weight:700;color:var(--accent);">+15 pts</div>
+          <div style="font-size:13px;color:var(--text);">Income over $15</div>
+          <div style="font-size:14px;font-weight:700;color:var(--accent);">+10 pts</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-size:13px;color:var(--text);">Income over $100</div>
+          <div style="font-size:13px;color:var(--text);">Income $50 – $500</div>
+          <div style="font-size:14px;font-weight:700;color:var(--accent);">+100 pts</div>
+        </div>
+        <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:13px;color:var(--text);">Income $500 – $1,000</div>
           <div style="font-size:14px;font-weight:700;color:var(--accent);">+500 pts</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-size:13px;color:var(--text);">Income over $1,000</div>
-          <div style="font-size:14px;font-weight:700;color:var(--accent);">+2,000 pts</div>
+          <div style="font-size:13px;color:var(--text);">Income $1,000 – $2,000</div>
+          <div style="font-size:14px;font-weight:700;color:var(--accent);">+1,000 pts</div>
         </div>
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-size:13px;color:var(--text);">Income over $2,000</div>
-          <div style="font-size:14px;font-weight:700;color:var(--accent);">+5,000 pts</div>
+          <div style="font-size:13px;color:var(--text);">Income above $2,000</div>
+          <div style="font-size:14px;font-weight:700;color:var(--accent);">+2,000 pts</div>
+        </div>
+        <div style="background:rgba(45,212,191,0.05);border-radius:10px;padding:9px 12px;border:1px solid rgba(45,212,191,0.15);">
+          <div style="font-size:11px;color:var(--muted);line-height:1.6;">✅ Dashboard Pro income entries earn points using the exact same tiers above.</div>
         </div>
       </div>
 
@@ -2296,9 +2306,30 @@
         <div style="background:var(--card);border-radius:10px;padding:11px 14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
           <div>
             <div style="font-size:13px;color:var(--text);">Monthly earning cap</div>
-            <div style="font-size:11px;color:var(--muted);">Resets 1st of each month</div>
+            <div style="font-size:11px;color:var(--muted);">Resets 1st of each month — unused points carry over</div>
           </div>
-          <div style="font-size:14px;font-weight:700;color:var(--accent);">22,500 pts</div>
+          <div style="font-size:14px;font-weight:700;color:var(--accent);">20,000 pts</div>
+        </div>
+        <div style="background:linear-gradient(135deg,rgba(240,180,41,0.08),rgba(240,180,41,0.03));border-radius:10px;padding:11px 14px;border:1px solid rgba(240,180,41,0.3);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:13px;color:var(--text);">Platinum monthly cap</div>
+            <div style="font-size:11px;color:var(--muted);">Platinum Tier members only</div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:var(--accent);">50,000 pts</div>
+        </div>
+        <div style="background:rgba(255,107,107,0.05);border-radius:10px;padding:11px 14px;border:1px solid rgba(255,107,107,0.15);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:13px;color:var(--text);">8 days inactivity</div>
+            <div style="font-size:11px;color:var(--muted);">No entries for 8 days</div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:var(--red);">&#8722;75 pts</div>
+        </div>
+        <div style="background:rgba(255,107,107,0.06);border-radius:10px;padding:11px 14px;border:1px solid rgba(255,107,107,0.18);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:13px;color:var(--text);">16 days inactivity</div>
+            <div style="font-size:11px;color:var(--muted);">No entries for 16 days</div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:var(--red);">&#8722;5,000 pts</div>
         </div>
         <div style="background:rgba(255,107,107,0.07);border-radius:10px;padding:11px 14px;border:1px solid rgba(255,107,107,0.2);display:flex;justify-content:space-between;align-items:center;">
           <div>
@@ -2633,7 +2664,7 @@
 
 <script>
 // ── CONSTANTS ─────────────────────────────────────────────────────────────
-const APP_VERSION = '3.1.3';
+const APP_VERSION = '3.1.4';
 const APP_STORAGE_LIMIT = 50000; // ~7 years of daily entries
 const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -2679,14 +2710,19 @@ const EMOJI_MAP = [
 
 const WHATS_NEW = [
   {
-    version: '3.1.3',
+    version: '3.1.4',
     items: [
-      'Fixed a display bug in Dashboard Pro → Set Category Budget where Quick Select categories showed as broken code instead of buttons',
-      'Dashboard Pro budgets — Quick Select redesigned into a clean, tappable grid of default categories',
-      'New default budget categories: Rent/Mortgage, Groceries, Entertainment, Health, Emergency Fund, Insurance, Transport, Education, Bills, WiFi, Phone',
-      'You can still create your own custom budget category at any time by typing a name instead of tapping a default',
-      'What\'s New now shows only the latest update — older release notes have moved to a new "Updates History" screen',
-      'Added "Updates History" under the hamburger menu — browse every past app update in one place, automatically archived as new versions release',
+      'What\'s New simplified — now shows only the current version. Browse every past update via the new "Updates History" button inside What\'s New',
+      'Welcome bonus — new installs now start with 100 points automatically',
+      'New inactivity penalty — 8 days without any entry now deducts 75 points',
+      'New inactivity penalty — 16 days without any entry now deducts 5,000 points (balance can go negative)',
+      'Rewards & Points now shows a countdown pill telling you how many days are left before your next point loss — covers the 8-day, 16-day, 3-week, and 1-month timeframes',
+      'Monthly earning cap reduced from 22,500 to 20,000 points — unused points carry over month to month as long as you don\'t miss a no-entry timeframe',
+      'Reworked income point tiers: $1+ = 5 pts · $15+ = 10 pts · $50–$500 = 100 pts · $500–$1,000 = 500 pts · $1,000–$2,000 = 1,000 pts · above $2,000 = 2,000 pts',
+      'Dashboard Pro income entries now earn points using the exact same tiers as GST Tracker income',
+      'New Loyalty Tiers — Bronze (2 weeks logging streak), Gold (8-week streak or 25,000 points), and Platinum (12-week streak or 100,000 points)',
+      'Platinum unlocks a 10,000-point bonus and raises your monthly earning cap from 20,000 to 50,000 points',
+      'Tiers reward consistency — missing a week drops Platinum to Gold, missing 2 weeks drops back to Bronze, and missing any week resets your streak to zero',
     ]
   },
   {
@@ -3055,6 +3091,16 @@ async function saveProfileName(name) {
   }
 }
 
+// ── WELCOME SIGN-UP BONUS (new installs only — fires exactly once) ────────
+function grantWelcomeBonus() {
+  if (localStorage.getItem('edw_welcome_bonus_granted') === 'true') return;
+  localStorage.setItem('edw_welcome_bonus_granted', 'true');
+  const total = getPoints() + 100;
+  setPoints(total);
+  setLastLogTimestamp(); // start the inactivity clock from install, not from first entry
+  toast('🎉 Welcome! +100 points sign-up bonus. Total: ' + total.toLocaleString() + ' pts.', 'success');
+}
+
 async function restoreProfileFromDB() {
   // If user deleted data, never restore from backup
   if (localStorage.getItem('edw_data_deleted') === 'true') return;
@@ -3239,6 +3285,7 @@ setTimeout(async () => {
       showEmailVerify(() => {
         showNamePrompt(async (name) => {
           updateDrawerProfile(name);
+          grantWelcomeBonus();
           if (!url) showSetupScreen();
           else updateConnectionStatus();
         });
@@ -3246,6 +3293,7 @@ setTimeout(async () => {
     } else {
       showNamePrompt(async (name) => {
         updateDrawerProfile(name);
+        grantWelcomeBonus();
         if (!url) showSetupScreen();
         else updateConnectionStatus();
       });
@@ -3542,6 +3590,7 @@ async function submitIncome() {
   backupToProfileDB();
   resetPenaltyState();
   awardPoints(amount);
+  evaluateLoyaltyTierProgress();
 
   // Strict category matching: ensure income category row exists in sheet before lodging
   if (incomeMode === 'category' && selectedIncCat) {
@@ -3578,6 +3627,7 @@ async function submitExpense() {
   backupToProfileDB();
   resetPenaltyState();
   awardExpensePoints(amount);
+  evaluateLoyaltyTierProgress();
 
   // Save receipt if attached
   if (pendingReceiptData) {
@@ -3812,10 +3862,10 @@ async function deleteCategory(index) {
 }
 
 // ── WHAT'S NEW ────────────────────────────────────────────────────────────
-// Shows ONLY the current app version's release notes. Anything older lives
-// in the separate "Updates History" screen, which auto-archives every past
-// version automatically the moment a new version is added to WHATS_NEW and
-// APP_VERSION is bumped — no manual migration step needed.
+// ── WHAT'S NEW ────────────────────────────────────────────────────────────
+// Shows ONLY the current app version's release notes. All older versions
+// are accessible exclusively via the "Updates History" button inside this
+// modal — there is no separate hamburger-menu entry for history.
 function updateWhatsNewBadge() {
   const seen  = localStorage.getItem('wn_seen_v'+APP_VERSION) === 'true';
   const sub   = document.getElementById('wn-sub-text');
@@ -3842,23 +3892,14 @@ function openWhatsNew() {
   }
   content.innerHTML = html;
 
-  const info = document.getElementById('wn-clicks-info');
-  if (info) {
-    info.innerHTML = `Looking for older updates? Check <strong style="color:var(--accent);">☰ Menu → Updates History</strong>`;
-  }
-
   document.getElementById('whats-new-modal').classList.add('open');
   updateWhatsNewBadge();
-  document.getElementById('whats-new-row').style.opacity = '1';
 }
 function closeWhatsNew() { document.getElementById('whats-new-modal').classList.remove('open'); }
 
-// ── UPDATES HISTORY ────────────────────────────────────────────────────────
-// Archive of every version EXCEPT the current one. This list updates itself
-// automatically: as soon as a new version is pushed to WHATS_NEW (with a
-// newer APP_VERSION), the previously-current version drops out of What's New
-// and appears here instead — no manual "move to history" step required.
+// ── UPDATES HISTORY (only reachable via the What's New modal) ─────────────
 function openUpdatesHistory() {
+  closeWhatsNew();
   const content = document.getElementById('uh-content');
   const pastVersions = WHATS_NEW.filter(v => v.version !== APP_VERSION);
 
@@ -5148,30 +5189,36 @@ function addMonthlyPointsEarned(pts) {
   const cur  = getMonthlyPointsEarned();
   localStorage.setItem(key, cur + pts);
 }
-const MONTHLY_POINTS_CAP = 22500;
+// Base monthly cap is 20,000. Platinum tier raises it to 50,000 (see getMonthlyPointsCap()).
+const MONTHLY_POINTS_CAP = 20000;
+const PLATINUM_MONTHLY_POINTS_CAP = 50000;
+function getMonthlyPointsCap() {
+  return getLoyaltyTier() === 'platinum' ? PLATINUM_MONTHLY_POINTS_CAP : MONTHLY_POINTS_CAP;
+}
 
+// Shared income point tiers — used for BOTH GST Tracker income and Dashboard Pro income.
 function calcPointsForIncome(amount) {
   const monthlyEarned = getMonthlyPointsEarned();
-  // Hard cap — no points at all once 22,500 reached this month
-  if (monthlyEarned >= MONTHLY_POINTS_CAP) return 0;
+  const cap = getMonthlyPointsCap();
+  if (monthlyEarned >= cap) return 0;
 
   let pts;
-  // Normal tier
-  if (amount > 2000) pts = 5000;
-  else if (amount > 1000) pts = 2000;
-  else if (amount > 100)  pts = 500;
-  else if (amount > 50)   pts = 15;
-  else if (amount > 1)    pts = 5;
+  if (amount > 2000)      pts = 2000;
+  else if (amount >= 1000) pts = 1000;
+  else if (amount >= 500)  pts = 500;
+  else if (amount >= 50)   pts = 100;
+  else if (amount >= 15)   pts = 10;
+  else if (amount >= 1)    pts = 5;
   else return 0;
 
-  // Clamp so total monthly never exceeds cap
-  const remaining = MONTHLY_POINTS_CAP - monthlyEarned;
+  const remaining = cap - monthlyEarned;
   return Math.min(pts, remaining);
 }
 function awardPoints(amount) {
   const monthlyEarned = getMonthlyPointsEarned();
-  if (monthlyEarned >= MONTHLY_POINTS_CAP) {
-    toast('🏅 Monthly points cap of 22,500 reached! Points reset next month.', 'info');
+  const cap = getMonthlyPointsCap();
+  if (monthlyEarned >= cap) {
+    toast(`🏅 Monthly points cap of ${cap.toLocaleString()} reached! Points reset next month.`, 'info');
     return;
   }
   const pts = calcPointsForIncome(amount);
@@ -5180,14 +5227,14 @@ function awardPoints(amount) {
   setPoints(total);
   addMonthlyPointsEarned(pts);
   const newMonthly = getMonthlyPointsEarned();
-  const capNote = newMonthly >= MONTHLY_POINTS_CAP ? ' 🎉 Monthly cap reached!' : '';
+  const capNote = newMonthly >= cap ? ' 🎉 Monthly cap reached!' : '';
   toast(`🏅 +${pts} points${capNote} Total: ${total.toLocaleString()} pts.`, 'success');
 }
 
 function calcPointsForExpense(amount) {
   const monthlyEarned = getMonthlyPointsEarned();
-  // Hard cap — no points at all once monthly cap reached
-  if (monthlyEarned >= MONTHLY_POINTS_CAP) return 0;
+  const cap = getMonthlyPointsCap();
+  if (monthlyEarned >= cap) return 0;
 
   let pts;
   if (amount >= 1001)      pts = 5;
@@ -5197,15 +5244,15 @@ function calcPointsForExpense(amount) {
   else if (amount > 0)     pts = 0.5;
   else return 0;
 
-  // Clamp so total monthly never exceeds cap
-  const remaining = MONTHLY_POINTS_CAP - monthlyEarned;
+  const remaining = cap - monthlyEarned;
   return Math.min(pts, remaining);
 }
 
 function awardExpensePoints(amount) {
   const monthlyEarned = getMonthlyPointsEarned();
-  if (monthlyEarned >= MONTHLY_POINTS_CAP) {
-    toast('🏅 Monthly points cap of 22,500 reached! Points reset next month.', 'info');
+  const cap = getMonthlyPointsCap();
+  if (monthlyEarned >= cap) {
+    toast(`🏅 Monthly points cap of ${cap.toLocaleString()} reached! Points reset next month.`, 'info');
     return;
   }
   const pts = calcPointsForExpense(amount);
@@ -5214,8 +5261,13 @@ function awardExpensePoints(amount) {
   setPoints(total);
   addMonthlyPointsEarned(pts);
   const newMonthly = getMonthlyPointsEarned();
-  const capNote = newMonthly >= MONTHLY_POINTS_CAP ? ' 🎉 Monthly cap reached!' : '';
+  const capNote = newMonthly >= cap ? ' 🎉 Monthly cap reached!' : '';
   toast(`🏅 +${pts} pts for expense logged!${capNote} Total: ${total.toLocaleString()} pts.`, 'success');
+}
+
+// Award income points for a Dashboard Pro entry using the exact same tiers as GST Tracker income.
+function awardDbIncomePoints(amount) {
+  awardPoints(amount);
 }
 
 // ── INACTIVITY POINT PENALTIES ────────────────────────────────────────────
@@ -5228,10 +5280,11 @@ function setLastLogTimestamp() {
 function getPenaltyState() {
   const raw = localStorage.getItem('edw_penalty_state');
   const state = raw ? JSON.parse(raw) : {};
-  // Support both old twoWeekApplied key and new threeWeekApplied key
   return {
-    threeWeekApplied: state.threeWeekApplied || state.twoWeekApplied || false,
-    oneMonthApplied:  state.oneMonthApplied  || false
+    eightDayApplied:    state.eightDayApplied    || false,
+    sixteenDayApplied:  state.sixteenDayApplied  || false,
+    threeWeekApplied:   state.threeWeekApplied   || state.twoWeekApplied || false,
+    oneMonthApplied:    state.oneMonthApplied    || false
   };
 }
 function savePenaltyState(state) {
@@ -5246,26 +5299,186 @@ function checkInactivityPenalties() {
 
   if (daysSince >= 30 && !state.oneMonthApplied) {
     // Apply 1-month penalty (20,000 pts) — can go negative
-    state.oneMonthApplied = true;
-    state.threeWeekApplied = true; // mark 3-week as applied too so it doesn’t double-fire
+    state.oneMonthApplied   = true;
+    state.threeWeekApplied  = true;
+    state.sixteenDayApplied = true;
+    state.eightDayApplied   = true;
     savePenaltyState(state);
     const newTotal = getPoints() - 20000; // NO Math.max — allow negative
     setPoints(newTotal);
     toast('⚠️ -20,000 points: No entries logged for 1 month! Balance: ' + newTotal.toLocaleString() + ' pts', 'error');
   } else if (daysSince >= 21 && !state.threeWeekApplied) {
     // Apply 3-week penalty (10,000 pts) — can go negative
-    state.threeWeekApplied = true;
+    state.threeWeekApplied  = true;
+    state.sixteenDayApplied = true;
+    state.eightDayApplied   = true;
     savePenaltyState(state);
     const newTotal = getPoints() - 10000; // NO Math.max — allow negative
     setPoints(newTotal);
     toast('⚠️ -10,000 points: No entries logged for 3 weeks! Balance: ' + newTotal.toLocaleString() + ' pts', 'error');
+  } else if (daysSince >= 16 && !state.sixteenDayApplied) {
+    // Apply 16-day penalty (5,000 pts) — can go negative
+    state.sixteenDayApplied = true;
+    state.eightDayApplied   = true;
+    savePenaltyState(state);
+    const newTotal = getPoints() - 5000; // NO Math.max — allow negative
+    setPoints(newTotal);
+    toast('⚠️ -5,000 points: No entries logged for 16 days! Balance: ' + newTotal.toLocaleString() + ' pts', 'error');
+  } else if (daysSince >= 8 && !state.eightDayApplied) {
+    // Apply 8-day penalty (75 pts) — can go negative
+    state.eightDayApplied = true;
+    savePenaltyState(state);
+    const newTotal = getPoints() - 75; // NO Math.max — allow negative
+    setPoints(newTotal);
+    toast('⚠️ -75 points: No entries logged for 8 days! Balance: ' + newTotal.toLocaleString() + ' pts', 'error');
   }
+
+  checkLoyaltyTierDemotion();
 }
 function resetPenaltyState() {
   // Called whenever the user successfully logs an income or expense
-  savePenaltyState({ threeWeekApplied: false, oneMonthApplied: false });
+  savePenaltyState({ eightDayApplied: false, sixteenDayApplied: false, threeWeekApplied: false, oneMonthApplied: false });
   setLastLogTimestamp();
 }
+
+// Returns the next inactivity penalty tier and days remaining until it fires.
+// Returns null if no tier is upcoming (e.g. user never logged, or all tiers already applied).
+function getNextPenaltyCountdown() {
+  const lastLog = getLastLogTimestamp();
+  if (!lastLog) return null;
+  const daysInactive = (Date.now() - lastLog) / (1000 * 60 * 60 * 24);
+
+  const state = getPenaltyState();
+  const tiers = [
+    { days: 8,  pts: 75,    applied: state.eightDayApplied },
+    { days: 16, pts: 5000,  applied: state.sixteenDayApplied },
+    { days: 21, pts: 10000, applied: state.threeWeekApplied },
+    { days: 30, pts: 20000, applied: state.oneMonthApplied },
+  ];
+  const next = tiers.find(t => !t.applied);
+  if (!next) return null;
+  const daysUntil = Math.max(0, Math.ceil(next.days - daysInactive));
+  return { daysUntil, daysInactive: Math.floor(daysInactive), penaltyPts: next.pts, tierDays: next.days };
+}
+
+// ── LOYALTY TIERS (Bronze / Gold / Platinum) ───────────────────────────────
+// Weekly streak uses fixed calendar weeks (Mon–Sun). A "week counted" means
+// at least one income or expense entry (GST Tracker or Dashboard Pro) was
+// logged at some point during that calendar week.
+function getWeekStartMonday(d) {
+  const date = new Date(d);
+  const day = date.getDay(); // 0=Sun..6=Sat
+  const diff = (day === 0 ? -6 : 1) - day; // shift to Monday
+  date.setDate(date.getDate() + diff);
+  date.setHours(0,0,0,0);
+  return date;
+}
+function getAllEntryTimestamps() {
+  const gst = (typeof entries !== 'undefined' ? entries : []).map(e => e.ts).filter(Boolean);
+  const db  = (typeof getDbEntries === 'function' ? getDbEntries() : []).map(e => e.ts).filter(Boolean);
+  return [...gst, ...db].map(ts => new Date(ts).getTime()).filter(t => !isNaN(t));
+}
+// Counts the current consecutive run of calendar weeks (ending with the
+// current week) that have at least one logged entry. Per the spec, missing
+// any week resets the streak to zero — including for Bronze and Gold.
+function getLoyaltyStreakWeeks() {
+  const timestamps = getAllEntryTimestamps();
+  if (!timestamps.length) return 0;
+
+  const loggedWeekStarts = new Set(timestamps.map(t => getWeekStartMonday(t).getTime()));
+  let streak = 0;
+  let cursor = getWeekStartMonday(Date.now());
+  // Walk backward week by week from the current week; stop at the first gap.
+  while (loggedWeekStarts.has(cursor.getTime())) {
+    streak++;
+    cursor = new Date(cursor);
+    cursor.setDate(cursor.getDate() - 7);
+  }
+  return streak;
+}
+function getLoyaltyTierState() {
+  const raw = localStorage.getItem('edw_loyalty_tier_state');
+  return raw ? JSON.parse(raw) : { tier: 'none', platinumGrantedAt: null, lastDemotionCheckWeek: null };
+}
+function saveLoyaltyTierState(state) {
+  localStorage.setItem('edw_loyalty_tier_state', JSON.stringify(state));
+}
+const TIER_RANK = { none: 0, bronze: 1, gold: 2, platinum: 3 };
+function tierFromStreakOrPoints(streakWeeks, points) {
+  if (streakWeeks >= 12 || points >= 100000) return 'platinum';
+  if (streakWeeks >= 8  || points >= 25000)  return 'gold';
+  if (streakWeeks >= 2)                       return 'bronze';
+  return 'none';
+}
+function getLoyaltyTier() {
+  return getLoyaltyTierState().tier;
+}
+// Call whenever points or streak could have changed (after logging an entry,
+// after a penalty fires, or on app load) to evaluate tier promotions.
+function evaluateLoyaltyTierProgress() {
+  const state  = getLoyaltyTierState();
+  const streak = getLoyaltyStreakWeeks();
+  const points = getPoints();
+  const earned = tierFromStreakOrPoints(streak, points);
+
+  // Promotions only move up — demotions are handled separately by
+  // checkLoyaltyTierDemotion(), which runs on the inactivity-penalty cadence.
+  if (TIER_RANK[earned] > TIER_RANK[state.tier]) {
+    const prevTier = state.tier;
+    state.tier = earned;
+    if (earned === 'platinum' && prevTier !== 'platinum') {
+      state.platinumGrantedAt = Date.now();
+      saveLoyaltyTierState(state);
+      const total = getPoints() + 10000;
+      setPoints(total);
+      toast('💎 Platinum Tier unlocked! +10,000 bonus points. Monthly cap raised to 50,000 pts.', 'success');
+    } else {
+      saveLoyaltyTierState(state);
+      const label = earned.charAt(0).toUpperCase() + earned.slice(1);
+      toast(`🏆 ${label} Tier unlocked!`, 'success');
+    }
+  }
+}
+// Platinum users who miss a week drop to Gold; missing 2 weeks drops to Bronze.
+// Per spec, missing any week also resets the underlying weekly streak to zero
+// (getLoyaltyStreakWeeks() already reflects that automatically), so Bronze/Gold
+// earned purely by streak naturally fall away too unless held by points instead.
+function checkLoyaltyTierDemotion() {
+  const state = getLoyaltyTierState();
+  if (state.tier === 'none') return;
+
+  const lastLog = getLastLogTimestamp();
+  const daysSinceLog = lastLog ? (Date.now() - lastLog) / (1000*60*60*24) : Infinity;
+  const missedWeeks = Math.floor(daysSinceLog / 7);
+  const points = getPoints();
+
+  if (state.tier === 'platinum') {
+    if (missedWeeks >= 2) {
+      state.tier = (points >= 25000) ? 'gold' : 'bronze';
+      saveLoyaltyTierState(state);
+      toast('📉 Missed 2 weeks of entries — downgraded to Bronze Tier.', 'error');
+    } else if (missedWeeks >= 1) {
+      state.tier = 'gold';
+      saveLoyaltyTierState(state);
+      toast('📉 Missed a week of entries — downgraded to Gold Tier.', 'error');
+    }
+  } else {
+    // Bronze/Gold earned by streak drop away the moment the streak breaks,
+    // unless points alone still qualify for that tier (e.g. 25,000+ pts keeps Gold).
+    if (missedWeeks >= 1) {
+      const pointsTier = points >= 25000 ? 'gold' : (points >= 0 ? 'none' : 'none');
+      if (TIER_RANK[pointsTier] < TIER_RANK[state.tier]) {
+        state.tier = pointsTier;
+        saveLoyaltyTierState(state);
+      }
+    }
+  }
+}
+function getLoyaltyTierLabel(tier) {
+  const map = { none: 'No Tier Yet', bronze: '🥉 Bronze', gold: '🥇 Gold', platinum: '💎 Platinum' };
+  return map[tier] || 'No Tier Yet';
+}
+
 function updateDrawerPointsSub() {
   const sub = document.getElementById('drawer-points-sub');
   const pts = getPoints();
@@ -5275,10 +5488,30 @@ function updateDrawerPointsSub() {
   }
 }
 function openRewardsModal() {
+  evaluateLoyaltyTierProgress();
   const pts = getPoints();
   const el = document.getElementById('rewards-points-display');
   el.textContent = pts.toLocaleString();
   el.className = pts < 0 ? 'points-negative' : '';
+
+  const pill = document.getElementById('rewards-countdown-pill');
+  if (pill) {
+    const countdown = getNextPenaltyCountdown();
+    if (countdown) {
+      pill.style.display = 'block';
+      if (countdown.daysUntil <= 0) {
+        pill.textContent = `⏳ -${countdown.penaltyPts.toLocaleString()} pts due any moment — log an entry now!`;
+      } else {
+        pill.textContent = `⏳ ${countdown.daysUntil} day${countdown.daysUntil===1?'':'s'} left to avoid losing ${countdown.penaltyPts.toLocaleString()} pts`;
+      }
+    } else {
+      pill.style.display = 'none';
+    }
+  }
+
+  const tierEl = document.getElementById('rewards-tier-display');
+  if (tierEl) tierEl.textContent = getLoyaltyTierLabel(getLoyaltyTier());
+
   document.getElementById('rewards-modal').classList.add('open');
 }
 function closeRewardsModal() {
@@ -6587,6 +6820,9 @@ function saveDbLogEntry() {
   const arr = getDbEntries();
   arr.unshift({ type: dbLogEntryType, category: cat, amount, note, month, ts: new Date().toISOString() });
   saveDbEntries(arr);
+  resetPenaltyState(); // Dashboard Pro entries count as activity for inactivity tracking too
+  if (dbLogEntryType === 'income') awardDbIncomePoints(amount);
+  evaluateLoyaltyTierProgress();
   closeDbLogEntry();
   renderDashboardPro();
   toast(`✅ ${dbLogEntryType==='income'?'Income':'Expense'} logged!`, 'success');
@@ -6611,7 +6847,6 @@ const DB_BUDGET_EMOJI_MAP = [
   {keys:['rent','mortgage','home','house'],    emoji:'🏠'},
   {keys:['phone','mobile','sim'],              emoji:'📱'},
   {keys:['wifi','internet','broadband','nbn'], emoji:'🌐'},
-  {keys:['emergency'],                        emoji:'🚨'},
   {keys:['insurance','cover'],                emoji:'🛡️'},
   {keys:['groceries','supermarket','food','coles','woolworths'],emoji:'🛒'},
   {keys:['medicine','pharmacy','medical','health','doctor'],emoji:'💊'},
@@ -6630,10 +6865,6 @@ function detectDbBudgetEmoji() {
   const match = DB_BUDGET_EMOJI_MAP.find(m => m.keys.some(k => lower.includes(k)));
   const prev  = document.getElementById('db-budget-emoji-preview');
   if (prev) prev.textContent = match ? `${match.emoji} Suggested emoji` : '';
-  // Keep quick-select highlight in sync if the user types a value that matches (or no longer matches) a pill
-  document.querySelectorAll('.db-quick-cat-btn').forEach(btn => {
-    btn.classList.toggle('selected', btn.dataset.cat === val);
-  });
 }
 function selectDbBudgetCat(cat) {
   const inp = document.getElementById('db-budget-cat-input');
@@ -6654,7 +6885,6 @@ function openAddDbBudget() {
   if (prev) prev.textContent  = '';
   if (lim)  lim.value         = '';
   if (pSel) pSel.value        = getDbBudgetPeriod();
-  document.querySelectorAll('.db-quick-cat-btn').forEach(btn => btn.classList.remove('selected'));
   document.getElementById('db-add-budget-modal').classList.add('open');
 }
 function closeAddDbBudget() { document.getElementById('db-add-budget-modal').classList.remove('open'); }
